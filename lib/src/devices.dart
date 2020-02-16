@@ -7,6 +7,6 @@ import 'ffi/library.dart';
 
 /// Returns a list of the devices connected to the machine.
 List<Device> getDevices() => 0
-    .to(library.getDeviceCount())
-    .map((index) => Device(binding, index))
+    .to(bindings.get_device_count())
+    .map((index) => Device(bindings, index))
     .toList(growable: false);

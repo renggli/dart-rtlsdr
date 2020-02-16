@@ -311,8 +311,12 @@ class Bindings {
    *      set to 0 for default buffer length (16 * 32 * 512)
    * \return 0 on success
    */
-  final int Function(Pointer<DeviceHandle> dev, rtlsdr_read_async_cb_t cb,
-      Pointer<Void> ctx, int buf_num, int buf_len) read_async;
+  final int Function(
+      Pointer<DeviceHandle> dev,
+      void Function(Pointer<Utf8> buf, int len, Pointer<Void> ctx) cb,
+      Pointer<Void> ctx,
+      int buf_num,
+      int buf_len) read_async;
 
   /**
    * Cancel all pending asynchronous operations on the device.
@@ -330,17 +334,6 @@ class Bindings {
    * \return -1 if device is not initialized. 0 otherwise.
    */
   final int Function(Pointer<DeviceHandle> dev, int on) set_bias_tee;
-
-  /**
-   * Enable or disable the bias tee on the given GPIO pin.
-   *
-   * \param dev the device handle given by rtlsdr_open()
-   * \param gpio the gpio pin to configure as a Bias T control.
-   * \param on  1 for Bias T on. 0 for Bias T off.
-   * \return -1 if device is not initialized. 0 otherwise.
-   */
-  final int Function(Pointer<DeviceHandle> dev, int gpio, int on)
-      set_bias_tee_gpio;
 
   Bindings(this.rtlsdr)
       : get_device_count = rtlsdr
@@ -471,9 +464,5 @@ class Bindings {
             .asFunction(),
         set_bias_tee = rtlsdr
             .lookup<NativeFunction<rtlsdr_set_bias_tee>>('rtlsdr_set_bias_tee')
-            .asFunction(),
-        set_bias_tee_gpio = rtlsdr
-            .lookup<NativeFunction<rtlsdr_set_bias_tee_gpio>>(
-                'rtlsdr_set_bias_tee_gpio')
             .asFunction();
 }

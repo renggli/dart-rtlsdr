@@ -8,7 +8,7 @@ import 'package:rtlsdr/src/device_open.dart';
 import 'ffi/bindings.dart';
 import 'ffi/types.dart';
 
-abstract class Device {
+class Device {
   Device(this.bindings, this.index);
 
   /// Index of this device.
@@ -22,9 +22,10 @@ abstract class Device {
 
   /// Manufacturer name of the device, or null.
   String get manufacturerName {
-    final buffer = allocate<Utf8>(count: 256);
+    final buffer = allocate<Uint8>(count: 256).cast<Utf8>();
     try {
-      final error = bindings.get_device_usb_strings(index, buffer, nullptr, nullptr);
+      final error =
+          bindings.get_device_usb_strings(index, buffer, nullptr, nullptr);
       if (error != 0) {
         return throw ArgumentError('$error');
       }
@@ -36,9 +37,10 @@ abstract class Device {
 
   /// Product name of the device, or null.
   String get productName {
-    final buffer = allocate<Utf8>(count: 256);
+    final buffer = allocate<Uint8>(count: 256).cast<Utf8>();
     try {
-      final error = bindings.get_device_usb_strings(index, nullptr, buffer, nullptr);
+      final error =
+          bindings.get_device_usb_strings(index, nullptr, buffer, nullptr);
       if (error != 0) {
         return throw ArgumentError('$error');
       }
@@ -50,9 +52,10 @@ abstract class Device {
 
   /// Serial number of the device, or null.
   String get serialNumber {
-    final buffer = allocate<Utf8>(count: 256);
+    final buffer = allocate<Uint8>(count: 256).cast<Utf8>();
     try {
-      final error = bindings.get_device_usb_strings(index, nullptr, nullptr, buffer);
+      final error =
+          bindings.get_device_usb_strings(index, nullptr, nullptr, buffer);
       if (error != 0) {
         return throw ArgumentError('$error');
       }

@@ -1,4 +1,3 @@
-
 library rtlsdr;
 
 export 'src/device.dart';

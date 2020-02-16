@@ -27,4 +27,4 @@ DynamicLibrary loadLibrary() {
 
 Bindings cachedBindings;
 
-Bindings get bindings => cachedBindings ??= Bindings(locaLibrary());
+Bindings get bindings => cachedBindings ??= Bindings(loadLibrary());
