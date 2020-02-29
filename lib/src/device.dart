@@ -3,10 +3,12 @@ library rtlsdr.device;
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:rtlsdr/src/device_open.dart';
+import 'package:more/collection.dart';
 
+import 'device_open.dart';
 import 'ffi/bindings.dart';
 import 'ffi/types.dart';
+import 'utils/device_strings.dart';
 
 class Device {
   Device(this.bindings, this.index);
@@ -20,48 +22,23 @@ class Device {
   /// Name of the device.
   String get name => Utf8.fromUtf8(bindings.get_device_name(index));
 
-  /// Manufacturer name of the device, or null.
-  String get manufacturerName {
-    final buffer = allocate<Uint8>(count: 256).cast<Utf8>();
+  /// Strings describing the device.
+  DeviceStrings get deviceStrings {
+    final manufact = allocate<Uint8>(count: 256).cast<Utf8>();
+    final product = allocate<Uint8>(count: 256).cast<Utf8>();
+    final serial = allocate<Uint8>(count: 256).cast<Utf8>();
     try {
       final error =
-          bindings.get_device_usb_strings(index, buffer, nullptr, nullptr);
+          bindings.get_device_usb_strings(index, manufact, product, serial);
       if (error != 0) {
-        return throw ArgumentError('$error');
+        return throw ArgumentError('Unable to get device strings: $error.');
       }
-      return Utf8.fromUtf8(buffer);
+      return DeviceStrings(Utf8.fromUtf8(manufact), Utf8.fromUtf8(product),
+          Utf8.fromUtf8(serial));
     } finally {
-      free(buffer);
-    }
-  }
-
-  /// Product name of the device, or null.
-  String get productName {
-    final buffer = allocate<Uint8>(count: 256).cast<Utf8>();
-    try {
-      final error =
-          bindings.get_device_usb_strings(index, nullptr, buffer, nullptr);
-      if (error != 0) {
-        return throw ArgumentError('$error');
-      }
-      return Utf8.fromUtf8(buffer);
-    } finally {
-      free(buffer);
-    }
-  }
-
-  /// Serial number of the device, or null.
-  String get serialNumber {
-    final buffer = allocate<Uint8>(count: 256).cast<Utf8>();
-    try {
-      final error =
-          bindings.get_device_usb_strings(index, nullptr, nullptr, buffer);
-      if (error != 0) {
-        return throw ArgumentError('$error');
-      }
-      return Utf8.fromUtf8(buffer);
-    } finally {
-      free(buffer);
+      free(manufact);
+      free(product);
+      free(serial);
     }
   }
 
@@ -76,5 +53,5 @@ class Device {
   }
 
   @override
-  String toString() => name;
+  String toString() => '$name';
 }

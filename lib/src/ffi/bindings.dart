@@ -313,8 +313,8 @@ class Bindings {
    */
   final int Function(
       Pointer<DeviceHandle> dev,
-      void Function(Pointer<Utf8> buf, int len, Pointer<Void> ctx) cb,
-      Pointer<Void> ctx,
+      Pointer cb,
+      Pointer ctx,
       int buf_num,
       int buf_len) read_async;
 
