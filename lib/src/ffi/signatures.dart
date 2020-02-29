@@ -124,11 +124,11 @@ typedef rtlsdr_read_sync = IntPtr Function(Pointer<DeviceHandle> dev,
 
 // void(*rtlsdr_read_async_cb_t)(unsigned char *buf, uint32_t len, void *ctx);
 typedef rtlsdr_read_async_cb_t = Void Function(
-    Pointer<Uint8> buf, Uint32 len, Pointer ctx);
+    Pointer<Uint8> buf, Uint32 len, IntPtr ctx);
 
 // int rtlsdr_read_async(rtlsdr_dev_t *dev, rtlsdr_read_async_cb_t cb, void *ctx, uint32_t buf_num, uint32_t buf_len);
 typedef rtlsdr_read_async = IntPtr Function(Pointer<DeviceHandle> dev,
-    Pointer cb, Pointer ctx, Uint32 buf_num, Uint32 buf_len);
+    Pointer cb, IntPtr ctx, Uint32 buf_num, Uint32 buf_len);
 
 // int rtlsdr_cancel_async(rtlsdr_dev_t *dev);
 typedef rtlsdr_cancel_async = IntPtr Function(Pointer<DeviceHandle> dev);

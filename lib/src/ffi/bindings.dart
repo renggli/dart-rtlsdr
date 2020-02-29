@@ -311,12 +311,8 @@ class Bindings {
    *      set to 0 for default buffer length (16 * 32 * 512)
    * \return 0 on success
    */
-  final int Function(
-      Pointer<DeviceHandle> dev,
-      Pointer cb,
-      Pointer ctx,
-      int buf_num,
-      int buf_len) read_async;
+  final int Function(Pointer<DeviceHandle> dev, Pointer cb, int ctx,
+      int buf_num, int buf_len) read_async;
 
   /**
    * Cancel all pending asynchronous operations on the device.

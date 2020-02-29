@@ -7,6 +7,7 @@ import 'package:ffi/ffi.dart';
 
 import 'device.dart';
 import 'ffi/bindings.dart';
+import 'ffi/signatures.dart';
 import 'ffi/types.dart';
 
 class DeviceOpen extends Device {
@@ -71,6 +72,29 @@ class DeviceOpen extends Device {
     }
   }
 
+  // Asynchronously executes the callback [onData] with a buffer of the
+  // consumed data.
+  void readAsync(
+    bool Function(Uint8List data) onData, {
+    int bufferCount = 0,
+    int bufferSize = 0,
+  }) {
+    _checkOpen();
+    final context = _AsyncContext(_asyncKey++, this, onData);
+    _asyncContexts[context.key] = context;
+    try {
+      final error = bindings.read_async(
+          handle, _asyncCallbackPointer, context.key, bufferCount, bufferSize);
+      if (context.thrownError != null) {
+        throw context.thrownError;
+      } else if (error < 0) {
+        throw StateError('Failed to read asynchronously: $error.');
+      }
+    } finally {
+      _asyncContexts.remove(context.key);
+    }
+  }
+
   /// Return true, if the device has been closed.
   bool get isClosed => _isClosed;
 
@@ -88,3 +112,42 @@ class DeviceOpen extends Device {
     }
   }
 }
+
+typedef AsyncCallback = bool Function(Uint8List data);
+
+class _AsyncContext {
+  final int key;
+  final DeviceOpen device;
+  final AsyncCallback callback;
+  Error thrownError;
+  StackTrace stackTrace;
+
+  _AsyncContext(this.key, this.device, this.callback);
+
+  void close() {
+    _asyncContexts.remove(key);
+    device.bindings.cancel_async(device.handle);
+  }
+}
+
+int _asyncKey = 0;
+final Map<int, _AsyncContext> _asyncContexts = {};
+
+void _asyncCallback(Pointer<Uint8> buffer, int length, int key) {
+  final context = _asyncContexts[key];
+  if (context == null) {
+    throw StateError('Invalid async context: $key');
+  }
+  try {
+    if (!context.callback(buffer.asTypedList(length))) {
+      context.close();
+    }
+  } catch (error, stackTrace) {
+    context.thrownError = error;
+    context.stackTrace = stackTrace;
+    context.close();
+  }
+}
+
+final _asyncCallbackPointer =
+    Pointer.fromFunction<rtlsdr_read_async_cb_t>(_asyncCallback);

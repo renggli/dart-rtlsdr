@@ -3,7 +3,6 @@ library rtlsdr.device;
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:more/collection.dart';
 
 import 'device_open.dart';
 import 'ffi/bindings.dart';
