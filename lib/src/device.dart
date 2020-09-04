@@ -46,7 +46,7 @@ class Device {
     final handle = allocate<Pointer<DeviceHandle>>();
     final error = bindings.open(handle, index);
     if (error != 0) {
-      throw new StateError('Unable to open device $index: $error');
+      throw StateError('Unable to open device $index: $error');
     }
     return DeviceOpen(bindings, index, handle.value);
   }

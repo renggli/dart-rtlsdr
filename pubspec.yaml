@@ -5,7 +5,7 @@ environment:
   sdk: '>=2.7.0 <3.0.0'
 dependencies:
   ffi: ^0.1.0
-  meta: ^1.1.0
-  more: ^2.2.0
+  meta: ^1.2.0
+  more: ^2.7.0
 dev_dependencies:
-  test: ^1.12.0
+  test: ^1.15.0
