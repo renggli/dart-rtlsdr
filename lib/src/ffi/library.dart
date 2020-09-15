@@ -1,5 +1,3 @@
-library rtlsdr.ffi.library;
-
 import 'dart:ffi';
 
 import 'bindings.dart';

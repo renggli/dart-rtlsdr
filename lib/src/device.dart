@@ -1,5 +1,3 @@
-library rtlsdr.device;
-
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';

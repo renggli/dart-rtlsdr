@@ -1,11 +1,10 @@
-library rtlsdr.device_open;
-
 import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 
 import 'device.dart';
+import 'enums.dart';
 import 'ffi/bindings.dart';
 import 'ffi/signatures.dart';
 import 'ffi/types.dart';
@@ -29,7 +28,66 @@ class DeviceOpen extends Device {
     _checkOpen();
     final error = bindings.set_center_freq(handle, frequency);
     if (error < 0) {
-      throw StateError('Failed to set center freqency: ${frequency}Hz.');
+      throw StateError('Failed to set center frequency: ${frequency}Hz');
+    }
+  }
+
+  /// Get actual frequency correction value of the device in parts per million.
+  int get frequencyCorrection {
+    _checkOpen();
+    return bindings.get_freq_correction(handle);
+  }
+
+  /// Set the frequency correction value for the device in parts per million.
+  void set frequencyCorrection(int ppm) {
+    _checkOpen();
+    final error = bindings.set_freq_correction(handle, ppm);
+    if (error < 0) {
+      throw StateError('Failed to set frequency correction: ${ppm}ppm');
+    }
+  }
+
+  /// Set the gain mode for the device.
+  void set tunerGainMode(TunerGainMode mode) {
+    _checkOpen();
+    final error = bindings.set_tuner_gain_mode(
+        handle, TunerGainMode.automatic == mode ? 0 : 1);
+    if (error < 0) {
+      throw StateError('Failed to set manual tuner gain mode: ${mode}');
+    }
+  }
+
+  /// Get a list of all gains supported by the tuner in 10th of a dB.
+  List<int> get tunerGains {
+    _checkOpen();
+    final count = bindings.get_tuner_gains(handle, nullptr);
+    if (count > 0) {
+      final gains = allocate<Int32>(count: count);
+      try {
+        final error = bindings.get_tuner_gains(handle, gains.cast<IntPtr>());
+        if (error > 0) {
+          return gains.asTypedList(error).toList(growable: false);
+        }
+      } finally {
+        free(gains);
+      }
+    }
+    throw StateError('Failed to get tuner gains.');
+  }
+
+  /// Get actual gain the device is configured to in 10th of a dB.
+  int get tunerGain {
+    _checkOpen();
+    return bindings.get_tuner_gain(handle);
+  }
+
+  /// Set the gain for the device in 10th of a dB.
+  /// Manual gain mode must be enabled for this to work.
+  void set tunerGain(int gain) {
+    _checkOpen();
+    final error = bindings.set_tuner_gain(handle, gain);
+    if (error < 0) {
+      throw StateError('Failed to set tuner gain: ${gain}');
     }
   }
 
@@ -40,15 +98,15 @@ class DeviceOpen extends Device {
   }
 
   /// Set the actual sample rate in Hz the device is configured to.
-  void set sampleRate(int frequency) {
+  void set sampleRate(int rate) {
     _checkOpen();
-    final error = bindings.set_sample_rate(handle, frequency);
+    final error = bindings.set_sample_rate(handle, rate);
     if (error < 0) {
-      throw StateError('Failed to set sample rate: ${frequency}Hz.');
+      throw StateError('Failed to set sample rate: ${rate}Hz');
     }
   }
 
-  ///
+  /// Reset the internal buffer of the device.
   void resetBuffer() {
     _checkOpen();
     final error = bindings.reset_buffer(handle);
@@ -57,6 +115,7 @@ class DeviceOpen extends Device {
     }
   }
 
+  /// Synchronously read [count] into the pre-allocated [buffer].
   Uint8List readSync(Pointer<Uint8> buffer, int count) {
     _checkOpen();
     final size = allocate<IntPtr>();
@@ -106,6 +165,7 @@ class DeviceOpen extends Device {
     }
   }
 
+  /// Asserts that the device is still open.
   _checkOpen() {
     if (_isClosed) {
       throw StateError('Device has been closed.');

@@ -1,0 +1,4 @@
+enum TunerGainMode {
+  automatic,
+  manual,
+}

@@ -1,5 +1,3 @@
-library rtlsdr.devices;
-
 import 'package:more/collection.dart';
 
 import 'device.dart';

@@ -1,5 +1,3 @@
-library rtlsdr.utils.device_strings;
-
 import 'package:meta/meta.dart';
 
 @immutable

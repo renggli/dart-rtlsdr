@@ -1,5 +1,3 @@
-library rtlsdr.example;
-
 import 'dart:math';
 
 import 'package:rtlsdr/rtlsdr.dart';
