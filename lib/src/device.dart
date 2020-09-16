@@ -50,5 +50,5 @@ class Device {
   }
 
   @override
-  String toString() => '$name';
+  String toString() => name;
 }

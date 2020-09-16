@@ -28,7 +28,7 @@ class DeviceOpen extends Device {
   }
 
   /// Set the actual frequency in Hz the device is tuned to.
-  void set centerFrequency(int frequency) {
+  set centerFrequency(int frequency) {
     _checkOpen();
     final result = bindings.set_center_freq(handle, frequency);
     if (result < 0) {
@@ -47,7 +47,7 @@ class DeviceOpen extends Device {
   }
 
   /// Set the frequency correction value for the device in parts per million.
-  void set frequencyCorrection(int ppm) {
+  set frequencyCorrection(int ppm) {
     _checkOpen();
     final result = bindings.set_freq_correction(handle, ppm);
     if (result < 0) {
@@ -56,7 +56,7 @@ class DeviceOpen extends Device {
   }
 
   /// Enable test mode that returns an 8 bit counter instead of the samples.
-  void set testMode(bool enable) {
+  set testMode(bool enable) {
     _checkOpen();
     final result = bindings.set_testmode(handle, enable ? 1 : 0);
     if (result < 0) {
@@ -74,7 +74,7 @@ class DeviceOpen extends Device {
   }
 
   /// Set the gain mode for the device.
-  void set tunerGainMode(TunerGainMode mode) {
+  set tunerGainMode(TunerGainMode mode) {
     _checkOpen();
     final result = bindings.set_tuner_gain_mode(
         handle, TunerGainMode.values.indexOf(mode));
@@ -116,7 +116,7 @@ class DeviceOpen extends Device {
 
   /// Set the gain for the device in dB.
   /// Manual gain mode must be enabled for this to work.
-  void set tunerGain(double gain) {
+  set tunerGain(double gain) {
     _checkOpen();
     final result = bindings.set_tuner_gain(handle, (10.0 * gain).round());
     if (result < 0) {
@@ -125,7 +125,7 @@ class DeviceOpen extends Device {
   }
 
   /// Set the bandwidth for the device in Hz, 0 means automatic selection.
-  void set tunerBandwidth(int bandwidth) {
+  set tunerBandwidth(int bandwidth) {
     _checkOpen();
     final result = bindings.set_tuner_bandwidth(handle, bandwidth);
     if (result < 0) {
@@ -158,7 +158,7 @@ class DeviceOpen extends Device {
   }
 
   /// Set the actual sample rate in Hz the device is configured to.
-  void set sampleRate(int rate) {
+  set sampleRate(int rate) {
     _checkOpen();
     final result = bindings.set_sample_rate(handle, rate);
     if (result < 0) {
@@ -176,7 +176,7 @@ class DeviceOpen extends Device {
   }
 
   /// Set the actual sample rate in Hz the device is configured to.
-  void set directSamplingMode(DirectSamplingMode mode) {
+  set directSamplingMode(DirectSamplingMode mode) {
     _checkOpen();
     final result = bindings.set_direct_sampling(
         handle, DirectSamplingMode.values.indexOf(mode));
@@ -186,7 +186,7 @@ class DeviceOpen extends Device {
   }
 
   /// Enable or disable the internal digital AGC of the RTL2832.
-  void set agcMode(bool enable) {
+  set agcMode(bool enable) {
     _checkOpen();
     final result = bindings.set_agc_mode(handle, enable ? 1 : 0);
     if (result != 0) {
@@ -206,7 +206,7 @@ class DeviceOpen extends Device {
 
   /// Enable or disable offset tuning for zero-IF tuners, which allows to avoid
   /// problems caused by the DC offset of the ADCs and 1/f noise.
-  void set offsetTuning(bool enable) {
+  set offsetTuning(bool enable) {
     _checkOpen();
     final result = bindings.set_offset_tuning(handle, enable ? 1 : 0);
     if (result < 0) {
@@ -275,7 +275,7 @@ class DeviceOpen extends Device {
   }
 
   /// Asserts that the device is still open.
-  _checkOpen() {
+  void _checkOpen() {
     if (_isClosed) {
       throw StateError('Device has been closed.');
     }
@@ -311,6 +311,7 @@ void _asyncCallback(Pointer<Uint8> buffer, int length, int key) {
     if (!context.callback(buffer.asTypedList(length))) {
       context.close();
     }
+    // ignore: avoid_catches_without_on_clauses
   } catch (error, stackTrace) {
     context.thrownError = error;
     context.stackTrace = stackTrace;

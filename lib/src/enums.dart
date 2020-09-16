@@ -5,8 +5,8 @@ enum TunerGainMode {
 
 enum DirectSamplingMode {
   disabled, // 0
-  i_adc, // 1
-  q_adc, // 2
+  iadc, // 1
+  qadc, // 2
 }
 
 enum TunerType {

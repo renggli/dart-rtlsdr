@@ -9,3 +9,4 @@ dependencies:
   more: ^2.7.0
 dev_dependencies:
   test: ^1.15.0
+  mockito: ^4.1.1

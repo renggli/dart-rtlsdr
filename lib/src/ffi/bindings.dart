@@ -1,13 +1,12 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:rtlsdr/src/ffi/types.dart';
+import 'package:meta/meta.dart';
 
 import 'signatures.dart';
+import 'types.dart';
 
 class Bindings {
-  final DynamicLibrary rtlsdr;
-
   final int Function() get_device_count;
 
   final Pointer<Utf8> Function(int index) get_device_name;
@@ -248,8 +247,8 @@ class Bindings {
   final int Function(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int len,
       Pointer<IntPtr> n_read) read_sync;
 
-  /// Read samples from the device asynchronously. This function will block until
-  /// it is being canceled using rtlsdr_cancel_async()
+  /// Read samples from the device asynchronously. This function will block
+  /// until it is being canceled using rtlsdr_cancel_async()
   ///
   /// \param dev the device handle given by rtlsdr_open()
   /// \param cb callback function to return received samples
@@ -275,134 +274,173 @@ class Bindings {
   /// \return -1 if device is not initialized. 0 otherwise.
   final int Function(Pointer<DeviceHandle> dev, int on) set_bias_tee;
 
-  Bindings(this.rtlsdr)
-      : get_device_count = rtlsdr
+  Bindings(DynamicLibrary library)
+      : get_device_count = library
             .lookup<NativeFunction<rtlsdr_get_device_count>>(
                 'rtlsdr_get_device_count')
             .asFunction(),
-        get_device_name = rtlsdr
+        get_device_name = library
             .lookup<NativeFunction<rtlsdr_get_device_name>>(
                 'rtlsdr_get_device_name')
             .asFunction(),
-        get_device_usb_strings = rtlsdr
+        get_device_usb_strings = library
             .lookup<NativeFunction<rtlsdr_get_device_usb_strings>>(
                 'rtlsdr_get_device_usb_strings')
             .asFunction(),
-        get_index_by_serial = rtlsdr
+        get_index_by_serial = library
             .lookup<NativeFunction<rtlsdr_get_index_by_serial>>(
                 'rtlsdr_get_index_by_serial')
             .asFunction(),
-        open = rtlsdr
+        open = library
             .lookup<NativeFunction<rtlsdr_open>>('rtlsdr_open')
             .asFunction(),
-        close = rtlsdr
+        close = library
             .lookup<NativeFunction<rtlsdr_close>>('rtlsdr_close')
             .asFunction(),
-        set_xtal_freq = rtlsdr
+        set_xtal_freq = library
             .lookup<NativeFunction<rtlsdr_set_xtal_freq>>(
                 'rtlsdr_set_xtal_freq')
             .asFunction(),
-        get_xtal_freq = rtlsdr
+        get_xtal_freq = library
             .lookup<NativeFunction<rtlsdr_get_xtal_freq>>(
                 'rtlsdr_get_xtal_freq')
             .asFunction(),
-        get_usb_strings = rtlsdr
+        get_usb_strings = library
             .lookup<NativeFunction<rtlsdr_get_usb_strings>>(
                 'rtlsdr_get_usb_strings')
             .asFunction(),
-        write_eeprom = rtlsdr
+        write_eeprom = library
             .lookup<NativeFunction<rtlsdr_write_eeprom>>('rtlsdr_write_eeprom')
             .asFunction(),
-        read_eeprom = rtlsdr
+        read_eeprom = library
             .lookup<NativeFunction<rtlsdr_read_eeprom>>('rtlsdr_read_eeprom')
             .asFunction(),
-        set_center_freq = rtlsdr
+        set_center_freq = library
             .lookup<NativeFunction<rtlsdr_set_center_freq>>(
                 'rtlsdr_set_center_freq')
             .asFunction(),
-        get_center_freq = rtlsdr
+        get_center_freq = library
             .lookup<NativeFunction<rtlsdr_get_center_freq>>(
                 'rtlsdr_get_center_freq')
             .asFunction(),
-        get_tuner_type = rtlsdr
+        get_tuner_type = library
             .lookup<NativeFunction<rtlsdr_get_tuner_type>>(
                 'rtlsdr_get_tuner_type')
             .asFunction(),
-        set_freq_correction = rtlsdr
+        set_freq_correction = library
             .lookup<NativeFunction<rtlsdr_set_freq_correction>>(
                 'rtlsdr_set_freq_correction')
             .asFunction(),
-        get_freq_correction = rtlsdr
+        get_freq_correction = library
             .lookup<NativeFunction<rtlsdr_get_freq_correction>>(
                 'rtlsdr_get_freq_correction')
             .asFunction(),
-        get_tuner_gains = rtlsdr
+        get_tuner_gains = library
             .lookup<NativeFunction<rtlsdr_get_tuner_gains>>(
                 'rtlsdr_get_tuner_gains')
             .asFunction(),
-        set_tuner_gain = rtlsdr
+        set_tuner_gain = library
             .lookup<NativeFunction<rtlsdr_set_tuner_gain>>(
                 'rtlsdr_set_tuner_gain')
             .asFunction(),
-        set_tuner_bandwidth = rtlsdr
+        set_tuner_bandwidth = library
             .lookup<NativeFunction<rtlsdr_set_tuner_bandwidth>>(
                 'rtlsdr_set_tuner_bandwidth')
             .asFunction(),
-        get_tuner_gain = rtlsdr
+        get_tuner_gain = library
             .lookup<NativeFunction<rtlsdr_get_tuner_gain>>(
                 'rtlsdr_get_tuner_gain')
             .asFunction(),
-        set_tuner_if_gain = rtlsdr
+        set_tuner_if_gain = library
             .lookup<NativeFunction<rtlsdr_set_tuner_if_gain>>(
                 'rtlsdr_set_tuner_if_gain')
             .asFunction(),
-        set_tuner_gain_mode = rtlsdr
+        set_tuner_gain_mode = library
             .lookup<NativeFunction<rtlsdr_set_tuner_gain_mode>>(
                 'rtlsdr_set_tuner_gain_mode')
             .asFunction(),
-        set_sample_rate = rtlsdr
+        set_sample_rate = library
             .lookup<NativeFunction<rtlsdr_set_sample_rate>>(
                 'rtlsdr_set_sample_rate')
             .asFunction(),
-        get_sample_rate = rtlsdr
+        get_sample_rate = library
             .lookup<NativeFunction<rtlsdr_get_sample_rate>>(
                 'rtlsdr_get_sample_rate')
             .asFunction(),
-        set_testmode = rtlsdr
+        set_testmode = library
             .lookup<NativeFunction<rtlsdr_set_testmode>>('rtlsdr_set_testmode')
             .asFunction(),
-        set_agc_mode = rtlsdr
+        set_agc_mode = library
             .lookup<NativeFunction<rtlsdr_set_agc_mode>>('rtlsdr_set_agc_mode')
             .asFunction(),
-        set_direct_sampling = rtlsdr
+        set_direct_sampling = library
             .lookup<NativeFunction<rtlsdr_set_direct_sampling>>(
                 'rtlsdr_set_direct_sampling')
             .asFunction(),
-        get_direct_sampling = rtlsdr
+        get_direct_sampling = library
             .lookup<NativeFunction<rtlsdr_get_direct_sampling>>(
                 'rtlsdr_get_direct_sampling')
             .asFunction(),
-        set_offset_tuning = rtlsdr
+        set_offset_tuning = library
             .lookup<NativeFunction<rtlsdr_set_offset_tuning>>(
                 'rtlsdr_set_offset_tuning')
             .asFunction(),
-        get_offset_tuning = rtlsdr
+        get_offset_tuning = library
             .lookup<NativeFunction<rtlsdr_get_offset_tuning>>(
                 'rtlsdr_get_offset_tuning')
             .asFunction(),
-        reset_buffer = rtlsdr
+        reset_buffer = library
             .lookup<NativeFunction<rtlsdr_reset_buffer>>('rtlsdr_reset_buffer')
             .asFunction(),
-        read_sync = rtlsdr
+        read_sync = library
             .lookup<NativeFunction<rtlsdr_read_sync>>('rtlsdr_read_sync')
             .asFunction(),
-        read_async = rtlsdr
+        read_async = library
             .lookup<NativeFunction<rtlsdr_read_async>>('rtlsdr_read_async')
             .asFunction(),
-        cancel_async = rtlsdr
+        cancel_async = library
             .lookup<NativeFunction<rtlsdr_cancel_async>>('rtlsdr_cancel_async')
             .asFunction(),
-        set_bias_tee = rtlsdr
+        set_bias_tee = library
             .lookup<NativeFunction<rtlsdr_set_bias_tee>>('rtlsdr_set_bias_tee')
             .asFunction();
+
+  @visibleForTesting
+  Bindings.forTesting({
+    this.get_device_count,
+    this.get_device_name,
+    this.get_device_usb_strings,
+    this.get_index_by_serial,
+    this.open,
+    this.close,
+    this.set_xtal_freq,
+    this.get_xtal_freq,
+    this.get_usb_strings,
+    this.write_eeprom,
+    this.read_eeprom,
+    this.set_center_freq,
+    this.get_center_freq,
+    this.get_tuner_type,
+    this.set_freq_correction,
+    this.get_freq_correction,
+    this.get_tuner_gains,
+    this.set_tuner_gain,
+    this.set_tuner_bandwidth,
+    this.get_tuner_gain,
+    this.set_tuner_if_gain,
+    this.set_tuner_gain_mode,
+    this.set_sample_rate,
+    this.get_sample_rate,
+    this.set_testmode,
+    this.set_agc_mode,
+    this.set_direct_sampling,
+    this.get_direct_sampling,
+    this.set_offset_tuning,
+    this.get_offset_tuning,
+    this.reset_buffer,
+    this.read_sync,
+    this.read_async,
+    this.cancel_async,
+    this.set_bias_tee,
+  });
 }
