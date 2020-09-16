@@ -1,5 +1,5 @@
 name: rtlsdr
-verison: 0.0.1
+version: 0.0.1
 homepage: https://github.com/renggli/dart-rtlsdr
 description: Dart bindings for Software Defined Radio (librtlsdr).
 environment:
