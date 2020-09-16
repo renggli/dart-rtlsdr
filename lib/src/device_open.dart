@@ -20,45 +20,71 @@ class DeviceOpen extends Device {
   /// Get the actual frequency in Hz this device is tuned to.
   int get centerFrequency {
     _checkOpen();
-    return bindings.get_center_freq(handle);
+    final result = bindings.get_center_freq(handle);
+    if (result <= 0) {
+      throw StateError('Failed to get center frequency.');
+    }
+    return result;
   }
 
   /// Set the actual frequency in Hz the device is tuned to.
   void set centerFrequency(int frequency) {
     _checkOpen();
-    final error = bindings.set_center_freq(handle, frequency);
-    if (error < 0) {
-      throw StateError('Failed to set center frequency: ${frequency}Hz');
+    final result = bindings.set_center_freq(handle, frequency);
+    if (result < 0) {
+      throw StateError('Failed to set center frequency to ${frequency}Hz.');
     }
   }
 
   /// Get actual frequency correction value of the device in parts per million.
   int get frequencyCorrection {
     _checkOpen();
-    return bindings.get_freq_correction(handle);
+    final result = bindings.get_freq_correction(handle);
+    if (result < 0) {
+      throw StateError('Failed to get frequency correction.');
+    }
+    return result;
   }
 
   /// Set the frequency correction value for the device in parts per million.
   void set frequencyCorrection(int ppm) {
     _checkOpen();
-    final error = bindings.set_freq_correction(handle, ppm);
-    if (error < 0) {
-      throw StateError('Failed to set frequency correction: ${ppm}ppm');
+    final result = bindings.set_freq_correction(handle, ppm);
+    if (result < 0) {
+      throw StateError('Failed to set frequency correction to ${ppm}ppm.');
     }
+  }
+
+  /// Enable test mode that returns an 8 bit counter instead of the samples.
+  void set testMode(bool enable) {
+    _checkOpen();
+    final result = bindings.set_testmode(handle, enable ? 1 : 0);
+    if (result < 0) {
+      throw StateError('Failed to ${enable ? 'enable' : 'disable'} test mode.');
+    }
+  }
+
+  /// Get the tuner type.
+  TunerType get tunerType {
+    _checkOpen();
+    final result = bindings.get_tuner_type(handle);
+    return 0 <= result && result < TunerType.values.length
+        ? TunerType.values[result]
+        : throw StateError('Failed to get tuner type.');
   }
 
   /// Set the gain mode for the device.
   void set tunerGainMode(TunerGainMode mode) {
     _checkOpen();
-    final error = bindings.set_tuner_gain_mode(
-        handle, TunerGainMode.automatic == mode ? 0 : 1);
-    if (error < 0) {
-      throw StateError('Failed to set manual tuner gain mode: ${mode}');
+    final result = bindings.set_tuner_gain_mode(
+        handle, TunerGainMode.values.indexOf(mode));
+    if (result < 0) {
+      throw StateError('Failed to set manual tuner gain mode to ${mode}.');
     }
   }
 
-  /// Get a list of all gains supported by the tuner in 10th of a dB.
-  List<int> get tunerGains {
+  /// Get a list of all gains supported by the tuner in dB.
+  List<double> get tunerGains {
     _checkOpen();
     final count = bindings.get_tuner_gains(handle, nullptr);
     if (count > 0) {
@@ -66,7 +92,10 @@ class DeviceOpen extends Device {
       try {
         final error = bindings.get_tuner_gains(handle, gains.cast<IntPtr>());
         if (error > 0) {
-          return gains.asTypedList(error).toList(growable: false);
+          return gains
+              .asTypedList(error)
+              .map((value) => value / 10.0)
+              .toList(growable: false);
         }
       } finally {
         free(gains);
@@ -75,42 +104,122 @@ class DeviceOpen extends Device {
     throw StateError('Failed to get tuner gains.');
   }
 
-  /// Get actual gain the device is configured to in 10th of a dB.
-  int get tunerGain {
+  /// Get actual gain the device is configured to in dB.
+  double get tunerGain {
     _checkOpen();
-    return bindings.get_tuner_gain(handle);
+    final result = bindings.get_tuner_gain(handle);
+    if (result < 0) {
+      throw StateError('Failed to read tuner gain.');
+    }
+    return result / 10.0;
   }
 
-  /// Set the gain for the device in 10th of a dB.
+  /// Set the gain for the device in dB.
   /// Manual gain mode must be enabled for this to work.
-  void set tunerGain(int gain) {
+  void set tunerGain(double gain) {
     _checkOpen();
-    final error = bindings.set_tuner_gain(handle, gain);
-    if (error < 0) {
-      throw StateError('Failed to set tuner gain: ${gain}');
+    final result = bindings.set_tuner_gain(handle, (10.0 * gain).round());
+    if (result < 0) {
+      throw StateError('Failed to set tuner gain to ${gain}dB.');
+    }
+  }
+
+  /// Set the bandwidth for the device in Hz, 0 means automatic selection.
+  void set tunerBandwidth(int bandwidth) {
+    _checkOpen();
+    final result = bindings.set_tuner_bandwidth(handle, bandwidth);
+    if (result < 0) {
+      throw StateError('Failed to set tuner bandwidth to ${bandwidth}Hz.');
+    }
+  }
+
+  /// Set the intermediate frequency gain for the device.
+  ///
+  /// - [stage] intermediate frequency gain stage number (1 to 6 for E4000)
+  /// - [gain] in dB, -30 means -3.0 dB.
+  void tunerIfGain(int stage, double gain) {
+    _checkOpen();
+    final result =
+        bindings.set_tuner_if_gain(handle, stage, (10.0 * gain).round());
+    if (result < 0) {
+      throw StateError('Failed to set intermediate frequency gain '
+          'at ${stage} to ${gain}dB.');
     }
   }
 
   /// Get the actual sample rate in Hz the device is configured to.
   int get sampleRate {
     _checkOpen();
-    return bindings.get_sample_rate(handle);
+    final result = bindings.get_sample_rate(handle);
+    if (result <= 0) {
+      throw StateError('Failed to get sample rate.');
+    }
+    return result;
   }
 
   /// Set the actual sample rate in Hz the device is configured to.
   void set sampleRate(int rate) {
     _checkOpen();
-    final error = bindings.set_sample_rate(handle, rate);
-    if (error < 0) {
-      throw StateError('Failed to set sample rate: ${rate}Hz');
+    final result = bindings.set_sample_rate(handle, rate);
+    if (result < 0) {
+      throw StateError('Failed to set sample rate to ${rate}Hz.');
+    }
+  }
+
+  /// Get the actual sample rate in Hz the device is configured to.
+  DirectSamplingMode get directSamplingMode {
+    _checkOpen();
+    final index = bindings.get_direct_sampling(handle);
+    return 0 <= index && index < DirectSamplingMode.values.length
+        ? DirectSamplingMode.values[index]
+        : throw StateError('Failed to get direct sampling mode.');
+  }
+
+  /// Set the actual sample rate in Hz the device is configured to.
+  void set directSamplingMode(DirectSamplingMode mode) {
+    _checkOpen();
+    final result = bindings.set_direct_sampling(
+        handle, DirectSamplingMode.values.indexOf(mode));
+    if (result != 0) {
+      throw StateError('Failed to set direct sampling mode to ${mode}.');
+    }
+  }
+
+  /// Enable or disable the internal digital AGC of the RTL2832.
+  void set agcMode(bool enable) {
+    _checkOpen();
+    final result = bindings.set_agc_mode(handle, enable ? 1 : 0);
+    if (result != 0) {
+      throw StateError('Failed to ${enable ? 'enable' : 'disable'} AGC mode.');
+    }
+  }
+
+  /// Get enabled state of the offset tuning.
+  bool get offsetTuning {
+    _checkOpen();
+    final result = bindings.get_offset_tuning(handle);
+    if (result < 0) {
+      throw StateError('Failed to get offset tuning.');
+    }
+    return result == 1;
+  }
+
+  /// Enable or disable offset tuning for zero-IF tuners, which allows to avoid
+  /// problems caused by the DC offset of the ADCs and 1/f noise.
+  void set offsetTuning(bool enable) {
+    _checkOpen();
+    final result = bindings.set_offset_tuning(handle, enable ? 1 : 0);
+    if (result < 0) {
+      throw StateError(
+          'Failed to ${enable ? 'enable' : 'disable'} offset tuning.');
     }
   }
 
   /// Reset the internal buffer of the device.
   void resetBuffer() {
     _checkOpen();
-    final error = bindings.reset_buffer(handle);
-    if (error < 0) {
+    final result = bindings.reset_buffer(handle);
+    if (result < 0) {
       throw StateError('Failed to reset buffers.');
     }
   }
@@ -121,8 +230,8 @@ class DeviceOpen extends Device {
     final size = allocate<IntPtr>();
     try {
       size.value = 0;
-      final error = bindings.read_sync(handle, buffer, count, size);
-      if (error < 0) {
+      final result = bindings.read_sync(handle, buffer, count, size);
+      if (result < 0) {
         throw StateError('Failed to read synchronous.');
       }
       return buffer.asTypedList(size.value);
@@ -142,12 +251,12 @@ class DeviceOpen extends Device {
     final context = _AsyncContext(_asyncKey++, this, onData);
     _asyncContexts[context.key] = context;
     try {
-      final error = bindings.read_async(
+      final result = bindings.read_async(
           handle, _asyncCallbackPointer, context.key, bufferCount, bufferSize);
       if (context.thrownError != null) {
         throw context.thrownError;
-      } else if (error < 0) {
-        throw StateError('Failed to read asynchronously: $error.');
+      } else if (result < 0) {
+        throw StateError('Failed to read asynchronously: $result.');
       }
     } finally {
       _asyncContexts.remove(context.key);

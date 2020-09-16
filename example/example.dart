@@ -15,8 +15,15 @@ void main() {
     try {
       open.centerFrequency = 105800000;
       open.sampleRate = 2048000;
+
       print('Center Frequency: ${open.centerFrequency}Hz');
+      print('Frequency correction: ${open.frequencyCorrection}ppm');
+      print('Tuner type: ${open.tunerType}');
+      print('Tuner gains: ${open.tunerGains.join(', ')}');
+      print('Tuner gain: ${open.tunerGain}dB');
       print('Sample Rate: ${open.sampleRate}Hz');
+      print('Direct sampling mode: ${open.directSamplingMode}');
+      print('Offset tuning: ${open.offsetTuning}');
 
       var counter = 0;
       open.resetBuffer();
