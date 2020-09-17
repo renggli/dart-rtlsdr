@@ -1,9 +1,5 @@
 import 'dart:ffi';
 
-import 'package:meta/meta.dart';
-
-import 'bindings.dart';
-
 final libraryPaths = [
   // Linux, Android
   'librtlsdr.so',
@@ -25,10 +21,3 @@ DynamicLibrary loadLibrary() {
   }
   throw UnsupportedError('Unable to load RTL-SDR library.');
 }
-
-/// Cached RTL-SDR library bindings.
-@visibleForTesting
-Bindings cachedBindings;
-
-/// Return the currently loaded RTL-SDR library bindings.
-Bindings get bindings => cachedBindings ??= Bindings(loadLibrary());

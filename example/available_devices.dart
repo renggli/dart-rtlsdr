@@ -1,5 +1,6 @@
 import 'package:rtlsdr/rtlsdr.dart';
 
+/// Prints all name and device strings of all available devices.
 void main() {
   for (final info in DeviceInfo.all) {
     print('Name: ${info.name}');

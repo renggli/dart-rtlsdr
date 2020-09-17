@@ -3,31 +3,26 @@ import 'dart:math';
 import 'package:rtlsdr/rtlsdr.dart';
 
 void main() {
-  getDevices().forEach((device) {
-    print('Device: ${device}');
+  for (final info in DeviceInfo.all) {
+    print('Device: ${info.name}');
 
-    final deviceStrings = device.deviceStrings;
-    print('Manufacturer: ${deviceStrings.manufacturerName}');
-    print('Product: ${deviceStrings.productName}');
-    print('Serial: ${deviceStrings.serialNumber}');
-
-    final open = device.open();
+    final device = info.open();
     try {
-      open.centerFrequency = 105800000;
-      open.sampleRate = 2048000;
+      device.centerFrequency = 105800000;
+      device.sampleRate = 2048000;
 
-      print('Center Frequency: ${open.centerFrequency}Hz');
-      print('Frequency correction: ${open.frequencyCorrection}ppm');
-      print('Tuner type: ${open.tunerType}');
-      print('Tuner gains: ${open.tunerGains.join(', ')}');
-      print('Tuner gain: ${open.tunerGain}dB');
-      print('Sample Rate: ${open.sampleRate}Hz');
-      print('Direct sampling mode: ${open.directSamplingMode}');
-      print('Offset tuning: ${open.offsetTuning}');
+      print('Center Frequency: ${device.centerFrequency}Hz');
+      print('Frequency correction: ${device.frequencyCorrection}ppm');
+      print('Tuner type: ${device.tunerType}');
+      print('Tuner gains: ${device.tunerGains.join(', ')}');
+      print('Tuner gain: ${device.tunerGain}dB');
+      print('Sample Rate: ${device.sampleRate}Hz');
+      print('Direct sampling mode: ${device.directSamplingMode}');
+      print('Offset tuning: ${device.offsetTuning}');
 
       var counter = 0;
-      open.resetBuffer();
-      open.readAsync((data) {
+      device.resetBuffer();
+      device.readAsync((data) {
         for (var i = 0; i < min(10, data.length); i += 2) {
           final a = (data[i] - 127) / 127.0;
           final b = (data[i + 1] - 127) / 127.0;
@@ -42,7 +37,7 @@ void main() {
         return counter++ < 10;
       }, bufferCount: 1);
     } finally {
-      open.close();
+      device.close();
     }
-  });
+  }
 }

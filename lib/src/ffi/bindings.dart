@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'package:meta/meta.dart';
 
+import 'library.dart';
 import 'signatures.dart';
 import 'types.dart';
 
@@ -444,3 +445,13 @@ class Bindings {
     this.set_bias_tee,
   });
 }
+
+// Internal cached bindings.
+Bindings _bindings;
+
+/// Cached RTL-SDR library bindings.
+@visibleForTesting
+set bindings(Bindings bindings) => _bindings = bindings;
+
+/// Return the currently loaded RTL-SDR library bindings.
+Bindings get bindings => _bindings ??= Bindings(loadLibrary());
