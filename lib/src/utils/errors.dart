@@ -1,3 +1,5 @@
+import '../device.dart';
+
 const Map<int, String> errorIds = {
   -1: 'LIBUSB_ERROR_IO',
   -2: 'LIBUSB_ERROR_INVALID_PARAM',
@@ -31,6 +33,12 @@ const Map<int, String> errorMessages = {
 };
 
 class DeviceException implements Exception {
+  static void checkOpen(Device device) {
+    if (device.isClosed) {
+      throw DeviceException(0, 'Device has been closed.');
+    }
+  }
+
   static void checkError(int code, String message) {
     if (code < 0) {
       throw DeviceException(code, message);

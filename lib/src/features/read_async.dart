@@ -14,7 +14,7 @@ extension ReadAsyncDeviceExtension on Device {
     int bufferCount = 0,
     int bufferSize = 0,
   }) {
-    checkOpen();
+    DeviceException.checkOpen(this);
     final context = AsyncContext(asyncKey++, this, onData);
     asyncContexts[context.key] = context;
     try {
@@ -53,7 +53,7 @@ final Map<int, AsyncContext> asyncContexts = {};
 void asyncCallback(Pointer<Uint8> buffer, int length, int key) {
   final context = asyncContexts[key];
   if (context == null) {
-    throw StateError('Invalid async context: $key');
+    throw DeviceException(0, 'Invalid async context: $key');
   }
   try {
     if (!context.callback(buffer.asTypedList(length))) {

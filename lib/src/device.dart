@@ -25,20 +25,23 @@ class Device {
     final handle = allocate<Pointer<DeviceHandle>>();
     final result = bindings.open(handle, info.index);
     DeviceException.checkError(result, 'Unable to open device ${info.index}.');
-    return Device(info, handle.value);
+    return Device(info, handle);
   }
 
   // Internal closed state..
   bool _isClosed = false;
 
+  // Internal pointer to handle.
+  Pointer<Pointer<DeviceHandle>> _handle;
+
   /// Constructor to open a device from a handle.
-  Device(this.info, this.handle);
+  Device(this.info, this._handle);
 
   /// The information about this device.
   final DeviceInfo info;
 
   /// The handle of this device.
-  final Pointer<DeviceHandle> handle;
+  Pointer<DeviceHandle> get handle => _handle.value;
 
   /// Tests if the device is still open.
   bool get isClosed => _isClosed;
@@ -46,94 +49,75 @@ class Device {
   /// Closes the given device, if it is open.
   void close() {
     if (!_isClosed) {
-      final result = bindings.close(handle);
       _isClosed = true;
-      DeviceException.checkError(result, 'Unable to close device ${info.index}.');
-    }
-  }
-
-  /// Asserts that the device is still open.
-  void checkOpen() {
-    if (_isClosed) {
-      throw StateError('Device has been closed.');
+      bindings.close(handle);
+      free(_handle);
     }
   }
 
   /// Get the actual frequency in Hz this device is tuned to.
   int get centerFrequency {
-    checkOpen();
+    DeviceException.checkOpen(this);
     final result = bindings.get_center_freq(handle);
-    if (result <= 0) {
-      throw StateError('Failed to get center frequency.');
-    }
+    DeviceException.checkError(result, 'Failed to get center frequency.');
     return result;
   }
 
   /// Set the actual frequency in Hz the device is tuned to.
   set centerFrequency(int frequency) {
-    checkOpen();
+    DeviceException.checkOpen(this);
     final result = bindings.set_center_freq(handle, frequency);
-    if (result < 0) {
-      throw StateError('Failed to set center frequency to ${frequency}Hz.');
-    }
+    DeviceException.checkError(
+        result, 'Failed to set center frequency to ${frequency}Hz.');
   }
 
   /// Get actual frequency correction value of the device in parts per million.
   int get frequencyCorrection {
-    checkOpen();
+    DeviceException.checkOpen(this);
     final result = bindings.get_freq_correction(handle);
-    if (result < 0) {
-      throw StateError('Failed to get frequency correction.');
-    }
+    DeviceException.checkError(result, 'Failed to get frequency correction.');
     return result;
   }
 
   /// Set the frequency correction value for the device in parts per million.
   set frequencyCorrection(int ppm) {
-    checkOpen();
+    DeviceException.checkOpen(this);
     final result = bindings.set_freq_correction(handle, ppm);
-    if (result < 0) {
-      throw StateError('Failed to set frequency correction to ${ppm}ppm.');
-    }
+    DeviceException.checkError(
+        result, 'Failed to set frequency correction to ${ppm}ppm.');
   }
 
   /// Enable test mode that returns an 8 bit counter instead of the samples.
   set testMode(bool enable) {
-    checkOpen();
+    DeviceException.checkOpen(this);
     final result = bindings.set_testmode(handle, enable ? 1 : 0);
-    if (result < 0) {
-      throw StateError('Failed to ${enable ? 'enable' : 'disable'} test mode.');
-    }
+    DeviceException.checkError(
+        result, 'Failed to ${enable ? 'enable' : 'disable'} test mode.');
   }
 
   /// Enable or disable the internal digital AGC of the RTL2832.
   set agcMode(bool enable) {
-    checkOpen();
+    DeviceException.checkOpen(this);
     final result = bindings.set_agc_mode(handle, enable ? 1 : 0);
-    if (result != 0) {
-      throw StateError('Failed to ${enable ? 'enable' : 'disable'} AGC mode.');
-    }
+    DeviceException.checkError(
+        result, 'Failed to ${enable ? 'enable' : 'disable'} AGC mode.');
   }
 
   /// Get enabled state of the offset tuning.
   bool get offsetTuning {
-    checkOpen();
+    DeviceException.checkOpen(this);
     final result = bindings.get_offset_tuning(handle);
-    if (result < 0) {
-      throw StateError('Failed to get offset tuning.');
-    }
+    DeviceException.checkError(result, 'Failed to get offset tuning.');
     return result == 1;
   }
 
   /// Enable or disable offset tuning for zero-IF tuners, which allows to avoid
   /// problems caused by the DC offset of the ADCs and 1/f noise.
   set offsetTuning(bool enable) {
-    checkOpen();
+    DeviceException.checkOpen(this);
     final result = bindings.set_offset_tuning(handle, enable ? 1 : 0);
-    if (result < 0) {
-      throw StateError(
-          'Failed to ${enable ? 'enable' : 'disable'} offset tuning.');
-    }
+    DeviceException.checkError(
+        result, 'Failed to ${enable ? 'enable' : 'disable'} offset tuning.');
   }
 
   @override
