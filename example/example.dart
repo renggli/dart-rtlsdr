@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'dart:io';
+
 import 'package:rtlsdr/rtlsdr.dart';
 
 void main() async {
