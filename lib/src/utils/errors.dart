@@ -1,4 +1,4 @@
-import '../device.dart';
+import '../rtlsdr.dart';
 
 const Map<int, String> errorIds = {
   -1: 'LIBUSB_ERROR_IO',
@@ -32,20 +32,21 @@ const Map<int, String> errorMessages = {
   -99: 'Other error',
 };
 
-class DeviceException implements Exception {
-  static void checkOpen(Device device) {
+class RtlSdrException implements Exception {
+  /// Throws an [RtlSdrException], if the given [device] is not open.
+  static void checkOpen(RtlSdr device) {
     if (device.isClosed) {
-      throw DeviceException(0, 'Device has been closed.');
+      throw RtlSdrException(0, '$device is closed.');
     }
   }
 
   static void checkError(int code, String message) {
     if (code < 0) {
-      throw DeviceException(code, message);
+      throw RtlSdrException(code, message);
     }
   }
 
-  DeviceException(this.code, this.message);
+  RtlSdrException(this.code, this.message);
 
   final int code;
 

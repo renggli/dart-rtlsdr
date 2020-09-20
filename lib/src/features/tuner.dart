@@ -2,38 +2,38 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import '../device.dart';
 import '../ffi/bindings.dart';
+import '../rtlsdr.dart';
 import '../utils/errors.dart';
 
-extension TunerDeviceExtension on Device {
+extension TunerExtension on RtlSdr {
   /// Get the tuner type.
   TunerType get tunerType {
-    DeviceException.checkOpen(this);
+    RtlSdrException.checkOpen(this);
     final result = bindings.get_tuner_type(handle);
     return 0 <= result && result < TunerType.values.length
         ? TunerType.values[result]
-        : throw DeviceException(result, 'Failed to get tuner type.');
+        : throw RtlSdrException(result, 'Failed to get tuner type.');
   }
 
   /// Set the gain mode for the device.
   set tunerGainMode(TunerGainMode mode) {
-    DeviceException.checkOpen(this);
+    RtlSdrException.checkOpen(this);
     final result = bindings.set_tuner_gain_mode(
         handle, TunerGainMode.values.indexOf(mode));
-    DeviceException.checkError(
+    RtlSdrException.checkError(
         result, 'Failed to set manual tuner gain mode to ${mode}.');
   }
 
   /// Get a list of all gains supported by the tuner in dB.
   List<double> get tunerGains {
-    DeviceException.checkOpen(this);
+    RtlSdrException.checkOpen(this);
     final count = bindings.get_tuner_gains(handle, nullptr);
     if (count > 0) {
       final gains = allocate<Int32>(count: count);
       try {
         final result = bindings.get_tuner_gains(handle, gains.cast<IntPtr>());
-        DeviceException.checkError(result, 'Failed to get tuner gains.');
+        RtlSdrException.checkError(result, 'Failed to get tuner gains.');
         return gains
             .asTypedList(result)
             .map((value) => value / 10.0)
@@ -42,31 +42,31 @@ extension TunerDeviceExtension on Device {
         free(gains);
       }
     }
-    throw DeviceException(count, 'Failed to get tuner gain count.');
+    throw RtlSdrException(count, 'Failed to get tuner gain count.');
   }
 
   /// Get actual gain the device is configured to in dB.
   double get tunerGain {
-    DeviceException.checkOpen(this);
+    RtlSdrException.checkOpen(this);
     final result = bindings.get_tuner_gain(handle);
-    DeviceException.checkError(result, 'Failed to read tuner gain.');
+    RtlSdrException.checkError(result, 'Failed to read tuner gain.');
     return result / 10.0;
   }
 
   /// Set the gain for the device in dB.
   /// Manual gain mode must be enabled for this to work.
   set tunerGain(double gain) {
-    DeviceException.checkOpen(this);
+    RtlSdrException.checkOpen(this);
     final result = bindings.set_tuner_gain(handle, (10.0 * gain).round());
-    DeviceException.checkError(
+    RtlSdrException.checkError(
         result, 'Failed to set tuner gain to ${gain}dB.');
   }
 
   /// Set the bandwidth for the device in Hz, 0 means automatic selection.
   set tunerBandwidth(int bandwidth) {
-    DeviceException.checkOpen(this);
+    RtlSdrException.checkOpen(this);
     final result = bindings.set_tuner_bandwidth(handle, bandwidth);
-    DeviceException.checkError(
+    RtlSdrException.checkError(
         result, 'Failed to set tuner bandwidth to ${bandwidth}Hz.');
   }
 
@@ -75,10 +75,10 @@ extension TunerDeviceExtension on Device {
   /// - [stage] intermediate frequency gain stage number (1 to 6 for E4000)
   /// - [gain] in dB, -30 means -3.0 dB.
   void tunerIntermediateFrequencyGain(int stage, double gain) {
-    DeviceException.checkOpen(this);
+    RtlSdrException.checkOpen(this);
     final result =
         bindings.set_tuner_if_gain(handle, stage, (10.0 * gain).round());
-    DeviceException.checkError(
+    RtlSdrException.checkError(
         result,
         'Failed to set intermediate frequency '
         'gain at ${stage} to ${gain}dB.');

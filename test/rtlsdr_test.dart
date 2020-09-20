@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'package:rtlsdr/rtlsdr.dart';
 import 'package:rtlsdr/src/ffi/bindings.dart';
+import 'package:rtlsdr/src/utils/errors.dart';
 import 'package:test/test.dart';
 
 void put(Pointer<Utf8> pointer, String value) {
@@ -13,34 +14,48 @@ void put(Pointer<Utf8> pointer, String value) {
   list[value.length] = 0;
 }
 
+final isRtlSdrException = isA<RtlSdrException>();
+
 void main() {
   tearDown(() => bindings = null);
-  group('DeviceInfo', () {
+  group('constructors', () {
     test('no devices', () {
       bindings = Bindings.forTesting(
         get_device_count: () => 0,
       );
-      expect(DeviceInfo.all, isEmpty);
+      expect(RtlSdr.devices, isEmpty);
     });
     test('multiple devices', () {
       bindings = Bindings.forTesting(
         get_device_count: () => 3,
       );
-      final info = DeviceInfo.all.toList();
-      expect(DeviceInfo.all, hasLength(3));
-      for (var i = 0; i < info.length; i++) {
-        expect(info[i].index, i);
+      final devices = RtlSdr.devices.toList();
+      expect(devices, hasLength(3));
+      for (var i = 0; i < devices.length; i++) {
+        expect(devices[i].index, i);
       }
     });
-    test('default', () {
+    test('from serial', () {
+      bindings = Bindings.forTesting(
+        get_index_by_serial: (serial) {
+          expect(Utf8.fromUtf8(serial), 'Serial');
+          return 3;
+        },
+      );
+      final device = RtlSdr.fromSerial('Serial');
+      expect(device.index, 3);
+    });
+  });
+  group('informational', () {
+    test('name', () {
       bindings = Bindings.forTesting(
         get_device_name: (index) => Utf8.toUtf8('Name $index'),
       );
-      final info = DeviceInfo(0);
-      expect(info.index, 0);
-      expect(info.name, 'Name 0');
-      expect(info.isValid, isTrue);
-      expect(info.toString(), 'DeviceInfo{Name 0}');
+      final device = RtlSdr();
+      expect(device.index, 0);
+      expect(device.name, 'Name 0');
+      expect(device.isValid, isTrue);
+      expect(device.toString(), 'RtlSdr{Name 0}');
     });
     test('manufacturer', () {
       bindings = Bindings.forTesting(
@@ -49,8 +64,8 @@ void main() {
           return 0;
         },
       );
-      final info = DeviceInfo(0);
-      expect(info.manufacturer, 'Manufacturer 0');
+      final device = RtlSdr(1);
+      expect(device.manufacturer, 'Manufacturer 1');
     });
     test('product', () {
       bindings = Bindings.forTesting(
@@ -59,8 +74,8 @@ void main() {
           return 0;
         },
       );
-      final info = DeviceInfo(0);
-      expect(info.product, 'Product 0');
+      final device = RtlSdr(2);
+      expect(device.product, 'Product 2');
     });
     test('serial', () {
       bindings = Bindings.forTesting(
@@ -69,54 +84,44 @@ void main() {
           return 0;
         },
       );
-      final info = DeviceInfo(0);
-      expect(info.serial, 'Serial 0');
+      final device = RtlSdr(3);
+      expect(device.serial, 'Serial 3');
     });
     test('valid', () {
       bindings = Bindings.forTesting(
         get_device_name: (index) => Utf8.toUtf8(''),
       );
-      final info = DeviceInfo(0);
-      expect(info.isValid, isFalse);
+      final device = RtlSdr(4);
+      expect(device.isValid, isFalse);
     });
   });
-  group('Device', () {
-    test('fromInfo', () {
+  group('opening and closing', () {
+    test('initially closed', () {
+      bindings = Bindings.forTesting();
+      final device = RtlSdr();
+      expect(device.isClosed, isTrue);
+    });
+    test('successful open', () {
       bindings = Bindings.forTesting(
         open: (dev, index) {
-          expect(index, 1);
+          expect(index, 42);
           return 0;
         },
       );
-      final device = DeviceInfo(1).open();
-      expect(device.info.index, 1);
+      final device = RtlSdr(42);
+      device.open();
       expect(device.isClosed, isFalse);
     });
-    test('fromIndex', () {
+    test('failing to open', () {
       bindings = Bindings.forTesting(
-        open: (dev, index) {
-          expect(index, 2);
-          return 0;
-        },
+        open: (dev, index) => -4,
       );
-      final device = Device.fromIndex(2);
-      expect(device.info.index, 2);
-      expect(device.isClosed, isFalse);
-    });
-    test('fromSerial', () {
-      bindings = Bindings.forTesting(
-        get_index_by_serial: (serial) {
-          expect(Utf8.fromUtf8(serial), 'Serial');
-          return 3;
-        },
-        open: (dev, index) {
-          expect(index, 3);
-          return 0;
-        },
-      );
-      final device = Device.fromSerial('Serial');
-      expect(device.info.index, 3);
-      expect(device.isClosed, isFalse);
+      final device = RtlSdr();
+      expect(
+          () => device.open(),
+          throwsA(isRtlSdrException.having((error) => error.message, 'message',
+              'Unable to open device 0.')));
+      expect(device.isClosed, isTrue);
     });
   });
 }
