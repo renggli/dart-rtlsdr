@@ -1,8 +1,8 @@
 import 'dart:math';
-
+import 'dart:io';
 import 'package:rtlsdr/rtlsdr.dart';
 
-void main() {
+void main() async {
   for (final info in DeviceInfo.all) {
     print('Device: ${info.name}');
 
@@ -20,9 +20,7 @@ void main() {
       print('Direct sampling mode: ${device.directSamplingMode}');
       print('Offset tuning: ${device.offsetTuning}');
 
-      var counter = 0;
-      device.resetBuffer();
-      device.readAsync((data) {
+      await device.stream.forEach((data) {
         for (var i = 0; i < min(10, data.length); i += 2) {
           final a = (data[i] - 127) / 127.0;
           final b = (data[i + 1] - 127) / 127.0;
@@ -33,9 +31,7 @@ void main() {
               'r = ${r.toStringAsFixed(3)}  '
               'p = ${p.toStringAsFixed(3)}  ');
         }
-        print('---');
-        return counter++ < 10;
-      }, bufferCount: 1);
+      });
     } finally {
       device.close();
     }

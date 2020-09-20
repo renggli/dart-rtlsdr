@@ -57,8 +57,10 @@ void main() {
 }
 ```
 
-License
--------
+# License
+
+All of the code contained here is licensed by the GNU General Public License v3.
+
 
 The MIT License, see [LICENSE](https://raw.githubusercontent.com/renggli/dart-rtlsdr/master/LICENSE).
 

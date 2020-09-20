@@ -9,7 +9,7 @@ import '../utils/errors.dart';
 extension ReadAsyncDeviceExtension on Device {
   // Asynchronously executes the callback [onData] with a buffer of the
   // consumed data.
-  void readAsync(
+  void readBytesAsync(
     bool Function(Uint8List data) onData, {
     int bufferCount = 0,
     int bufferSize = 0,
