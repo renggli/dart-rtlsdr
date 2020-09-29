@@ -3,7 +3,7 @@
 [![GitHub Issues](https://img.shields.io/github/issues/renggli/dart-rtlsdr.svg)](https://github.com/renggli/dart-rtlsdr/issues)
 [![GitHub Forks](https://img.shields.io/github/forks/renggli/dart-rtlsdr.svg)](https://github.com/renggli/dart-rtlsdr/network)
 [![GitHub Stars](https://img.shields.io/github/stars/renggli/dart-rtlsdr.svg)](https://github.com/renggli/dart-rtlsdr/stargazers)
-[![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/renggli/dart-rtlsdr/master/LICENSE)
+[![GitHub License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://raw.githubusercontent.com/renggli/dart-rtlsdr/master/LICENSE)
 
 Dart bindings for Software Defined Radio
 ======================================== 
@@ -59,8 +59,4 @@ void main() {
 
 # License
 
-All of the code contained here is licensed by the GNU General Public License v3.
-
-
-The MIT License, see [LICENSE](https://raw.githubusercontent.com/renggli/dart-rtlsdr/master/LICENSE).
-
+I am not a fan of the GNU General Public License, but it looks like that is the only option for code using _librtlsdr_. All the code contained here is thereby licensed by the [GNU General Public License v3](https://raw.githubusercontent.com/renggli/dart-rtlsdr/master/LICENSE).
