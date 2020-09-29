@@ -124,13 +124,16 @@ class RtlSdr {
   /// Opens the device for interaction, if it is not already open.
   void open() {
     if (isClosed) {
-      final handle = allocate<Pointer<DeviceHandle>>();
+      if (!isValid) {
+        throw RtlSdrException(0, 'Invalid device ${index}.');
+      }
+      final pointer = allocate<Pointer<DeviceHandle>>();
       try {
-        final result = bindings.open(handle, index);
+        final result = bindings.open(pointer, index);
         RtlSdrException.checkError(result, 'Unable to open device ${index}.');
-        _handle = handle.value;
+        _handle = pointer.value;
       } finally {
-        free(handle);
+        free(pointer);
       }
     }
   }
@@ -255,5 +258,5 @@ class RtlSdr {
   }
 
   @override
-  String toString() => 'RtlSdr{$name}';
+  String toString() => 'RtlSdr{$index, $name}';
 }

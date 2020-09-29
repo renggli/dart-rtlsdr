@@ -55,7 +55,7 @@ void main() {
       expect(device.index, 0);
       expect(device.name, 'Name 0');
       expect(device.isValid, isTrue);
-      expect(device.toString(), 'RtlSdr{Name 0}');
+      expect(device.toString(), 'RtlSdr{0, Name 0}');
     });
     test('manufacturer', () {
       bindings = Bindings.forTesting(

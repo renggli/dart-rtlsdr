@@ -40,6 +40,7 @@ class RtlSdrException implements Exception {
     }
   }
 
+  /// Throws an [RtlSdrException], if the given [code] is negative.
   static void checkError(int code, String message) {
     if (code < 0) {
       throw RtlSdrException(code, message);
@@ -58,11 +59,11 @@ class RtlSdrException implements Exception {
 
   @override
   String toString() {
-    final buffer = StringBuffer('DeviceException');
+    final buffer = StringBuffer('RtlSdrException');
     if (errorId != null && errorMessage != null) {
-      buffer.write('<$errorId, $errorMessage>');
+      buffer.write('<$code, $errorId, $errorMessage>');
     } else {
-      buffer.write('$code');
+      buffer.write('<$code>');
     }
     buffer.write(': $message');
     return buffer.toString();
