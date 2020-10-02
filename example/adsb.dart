@@ -158,14 +158,13 @@ void manchester(Uint16List buffer) {
 }
 
 void messages(Uint16List buffer) {
-  int i, data_i, frame_len;
   // todo, allow wrap across buffers
-  for (i = 0; i < buffer.length; i++) {
+  for (var i = 0; i < buffer.length; i++) {
     if (buffer[i] > 1) {
       continue;
     }
-    frame_len = longFrame;
-    data_i = 0;
+    var frame_len = longFrame;
+    var data_i = 0;
     adsb_frame.fillRange(0, adsb_frame.length, 0);
     for (;
         i < buffer.length && buffer[i] <= 1 && data_i < frame_len;

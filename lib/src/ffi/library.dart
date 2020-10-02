@@ -5,6 +5,7 @@ final libraryPaths = [
   'librtlsdr.so',
   // Max, iOS
   'librtlsdr.dylib',
+  '/usr/lib/librtlsdr.dylib',
   '/usr/local/lib/librtlsdr.dylib',
   // Windows
   'rtlsdr.dll',
