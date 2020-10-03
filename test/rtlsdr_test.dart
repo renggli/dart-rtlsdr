@@ -107,6 +107,7 @@ void main() {
           expect(index, 42);
           return 0;
         },
+        get_device_name: (index) => Utf8.toUtf8('Mock Device'),
       );
       final device = RtlSdr(42);
       device.open();
@@ -115,6 +116,7 @@ void main() {
     test('failing to open', () {
       bindings = Bindings.forTesting(
         open: (dev, index) => -4,
+        get_device_name: (index) => Utf8.toUtf8('Mokc Device'),
       );
       final device = RtlSdr();
       expect(
