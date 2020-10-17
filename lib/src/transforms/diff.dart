@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 extension DiffConverterExtension<T extends num, L extends List<T>>
     on Stream<L> {

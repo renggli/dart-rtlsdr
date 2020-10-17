@@ -55,6 +55,7 @@ class SampleAnalyzer implements Analyzer {
   Duration interval_total = Duration.zero;
   DateTime recentTime;
 
+  @override
   void call(Uint8List buffer) {
     final timeNow = DateTime.now();
     if (recentTime == null) {
