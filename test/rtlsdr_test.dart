@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 import 'package:rtlsdr/rtlsdr.dart';
@@ -124,6 +125,38 @@ void main() {
           throwsA(isRtlSdrException.having((error) => error.message, 'message',
               'Unable to open device 0.')));
       expect(device.isClosed, isTrue);
+    });
+  });
+  group('transforming', () {
+    test('toAmplitude', () async {
+      final input = Uint8List.fromList([121, 158, 44, 158, 69, 7, 194, 231]);
+      final output = await Stream.fromIterable([input]).toAmplitude().first;
+      expect(output, [973, 7903, 17943, 15135]);
+    });
+    test('toComponentI', () async {
+      final input = Uint8List.fromList([0, 1, 2, 3, 4, 5, 6, 7]);
+      final output = await Stream.fromIterable([input]).toComponentI().first;
+      expect(output, [0, 2, 4, 6]);
+    });
+    test('toComponentQ', () async {
+      final input = Uint8List.fromList([0, 1, 2, 3, 4, 5, 6, 7]);
+      final output = await Stream.fromIterable([input]).toComponentQ().first;
+      expect(output, [1, 3, 5, 7]);
+    });
+    test('toDiff', () async {
+      final input1 = Int16List.fromList([-81, 42, -21, 124]);
+      final input2 = Int16List.fromList([66, 102, -88, -93]);
+      final output =
+          await Stream.fromIterable([input1, input2]).toDiff().toList();
+      expect(output, [
+        [123, -63, 145],
+        [-58, 36, -190, -5]
+      ]);
+    });
+    test('toPhase', () async {
+      final input = Uint8List.fromList([42, 11, 75, 111, 54, 5, 45, 252]);
+      final output = await Stream.fromIterable([input]).toPhase().first;
+      expect(output, [-2873, -3699, -2753, 2811]);
     });
   });
 }

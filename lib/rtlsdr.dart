@@ -1,4 +1,11 @@
 export 'src/features/sampling.dart';
 export 'src/features/tuner.dart';
 export 'src/rtlsdr.dart';
+export 'src/transforms/amplitude.dart' show AmplitudeExtension;
+export 'src/transforms/cast.dart' show AsTypedListExtension;
+export 'src/transforms/component.dart' show ComponentExtension;
+export 'src/transforms/copy_double.dart' show ToTypedDoubleListExtension;
+export 'src/transforms/copy_int.dart' show ToTypedIntListExtension;
+export 'src/transforms/diff.dart' show DiffConverterExtension;
+export 'src/transforms/phase.dart' show PhaseExtension;
 export 'src/utils/errors.dart';
