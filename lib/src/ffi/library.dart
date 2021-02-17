@@ -1,21 +1,25 @@
 import 'dart:ffi';
 
-final libraryPaths = [
-  // Linux, Android
-  'librtlsdr.so',
-  // Max, iOS
-  'librtlsdr.dylib',
-  '/usr/lib/librtlsdr.dylib',
-  '/usr/local/lib/librtlsdr.dylib',
-  // Windows
-  'rtlsdr.dll',
-];
+import 'dart:io';
 
 DynamicLibrary loadLibrary() {
-  for (final path in libraryPaths) {
+  final files = <String>[
+    'librtlsdr.so',
+    'librtlsdr.dylib',
+    'rtlsdr.dll',
+  ];
+  final paths = <String>['./'];
+  if (Platform.isLinux) {
+    final libraryPath = Platform.environment['LD_LIBRARY_PATH'] ?? '';
+    paths.addAll(libraryPath.split(':'));
+  } else if (Platform.isMacOS) {
+    final libraryPath = Platform.environment['DYLD_FALLBACK_LIBRARY_PATH'] ??
+        '~/lib:/usr/local/lib:/lib:/usr/lib';
+    paths.addAll(libraryPath.split(':'));
+  }
+  for (final path in paths) {
     try {
       return DynamicLibrary.open(path);
-      // ignore: avoid_catching_errors
     } on ArgumentError {
       continue;
     }

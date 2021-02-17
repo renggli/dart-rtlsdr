@@ -408,7 +408,7 @@ class Bindings {
 
   @visibleForTesting
   Bindings.forTesting({
-    this.get_device_count,
+    this.get_device_count =,
     this.get_device_name,
     this.get_device_usb_strings,
     this.get_index_by_serial,
@@ -447,7 +447,7 @@ class Bindings {
 }
 
 // Internal cached bindings.
-Bindings _bindings;
+Bindings? _bindings;
 
 /// Cached RTL-SDR library bindings.
 @visibleForTesting
