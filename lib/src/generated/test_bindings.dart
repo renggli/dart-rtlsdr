@@ -1,4 +1,5 @@
 import 'dart:ffi';
+
 import 'package:ffi/ffi.dart';
 
 import '../ffi/types.dart';
@@ -60,122 +61,110 @@ class TestBindings implements AbstractBindings {
     DartGetVerId? getVerId,
     DartGetVersion? getVersion,
   }) {
-    _getDeviceCount = getDeviceCount ??
-        (() => throw UnimplementedError('rtlsdr_get_device_count'));
-    _getDeviceName = getDeviceName ??
-        ((index) => throw UnimplementedError('rtlsdr_get_device_name'));
+    _getDeviceCount =
+        getDeviceCount ?? (() => throw UnimplementedError('getDeviceCount'));
+    _getDeviceName =
+        getDeviceName ?? ((index) => throw UnimplementedError('getDeviceName'));
     _getDeviceUsbStrings = getDeviceUsbStrings ??
         ((index, manufact, product, serial) =>
-            throw UnimplementedError('rtlsdr_get_device_usb_strings'));
+            throw UnimplementedError('getDeviceUsbStrings'));
     _getIndexBySerial = getIndexBySerial ??
-        ((serial) => throw UnimplementedError('rtlsdr_get_index_by_serial'));
-    _open = open ?? ((dev, index) => throw UnimplementedError('rtlsdr_open'));
-    _close = close ?? ((dev) => throw UnimplementedError('rtlsdr_close'));
+        ((serial) => throw UnimplementedError('getIndexBySerial'));
+    _open = open ?? ((dev, index) => throw UnimplementedError('open'));
+    _close = close ?? ((dev) => throw UnimplementedError('close'));
     _setXtalFreq = setXtalFreq ??
-        ((dev, rtlFreq, tunerFreq) =>
-            throw UnimplementedError('rtlsdr_set_xtal_freq'));
+        ((dev, rtlFreq, tunerFreq) => throw UnimplementedError('setXtalFreq'));
     _getXtalFreq = getXtalFreq ??
-        ((dev, rtlFreq, tunerFreq) =>
-            throw UnimplementedError('rtlsdr_get_xtal_freq'));
+        ((dev, rtlFreq, tunerFreq) => throw UnimplementedError('getXtalFreq'));
     _getUsbStrings = getUsbStrings ??
         ((dev, manufact, product, serial) =>
-            throw UnimplementedError('rtlsdr_get_usb_strings'));
+            throw UnimplementedError('getUsbStrings'));
     _writeEeprom = writeEeprom ??
-        ((dev, data, offset, len) =>
-            throw UnimplementedError('rtlsdr_write_eeprom'));
+        ((dev, data, offset, len) => throw UnimplementedError('writeEeprom'));
     _readEeprom = readEeprom ??
-        ((dev, data, offset, len) =>
-            throw UnimplementedError('rtlsdr_read_eeprom'));
+        ((dev, data, offset, len) => throw UnimplementedError('readEeprom'));
     _setCenterFreq = setCenterFreq ??
-        ((dev, freq) => throw UnimplementedError('rtlsdr_set_center_freq'));
+        ((dev, freq) => throw UnimplementedError('setCenterFreq'));
     _setCenterFreq64 = setCenterFreq64 ??
-        ((dev, freq) => throw UnimplementedError('rtlsdr_set_center_freq64'));
+        ((dev, freq) => throw UnimplementedError('setCenterFreq64'));
     _setHarmonicRx = setHarmonicRx ??
-        ((dev, harmonic) => throw UnimplementedError('rtlsdr_set_harmonic_rx'));
+        ((dev, harmonic) => throw UnimplementedError('setHarmonicRx'));
     _isTunerPLLLocked = isTunerPLLLocked ??
-        ((dev) => throw UnimplementedError('rtlsdr_is_tuner_PLL_locked'));
-    _getCenterFreq = getCenterFreq ??
-        ((dev) => throw UnimplementedError('rtlsdr_get_center_freq'));
+        ((dev) => throw UnimplementedError('isTunerPLLLocked'));
+    _getCenterFreq =
+        getCenterFreq ?? ((dev) => throw UnimplementedError('getCenterFreq'));
     _getCenterFreq64 = getCenterFreq64 ??
-        ((dev) => throw UnimplementedError('rtlsdr_get_center_freq64'));
+        ((dev) => throw UnimplementedError('getCenterFreq64'));
     _setFreqCorrection = setFreqCorrection ??
-        ((dev, ppm) => throw UnimplementedError('rtlsdr_set_freq_correction'));
+        ((dev, ppm) => throw UnimplementedError('setFreqCorrection'));
     _getFreqCorrection = getFreqCorrection ??
-        ((dev) => throw UnimplementedError('rtlsdr_get_freq_correction'));
-    _getTunerType = getTunerType ??
-        ((dev) => throw UnimplementedError('rtlsdr_get_tuner_type'));
+        ((dev) => throw UnimplementedError('getFreqCorrection'));
+    _getTunerType =
+        getTunerType ?? ((dev) => throw UnimplementedError('getTunerType'));
     _getTunerGains = getTunerGains ??
-        ((dev, gains) => throw UnimplementedError('rtlsdr_get_tuner_gains'));
+        ((dev, gains) => throw UnimplementedError('getTunerGains'));
     _setTunerGain = setTunerGain ??
-        ((dev, gain) => throw UnimplementedError('rtlsdr_set_tuner_gain'));
+        ((dev, gain) => throw UnimplementedError('setTunerGain'));
     _setAndGetTunerBandwidth = setAndGetTunerBandwidth ??
         ((dev, bw, appliedBw, applyBw) =>
-            throw UnimplementedError('rtlsdr_set_and_get_tuner_bandwidth'));
+            throw UnimplementedError('setAndGetTunerBandwidth'));
     _setTunerBandwidth = setTunerBandwidth ??
-        ((dev, bw) => throw UnimplementedError('rtlsdr_set_tuner_bandwidth'));
+        ((dev, bw) => throw UnimplementedError('setTunerBandwidth'));
     _setTunerBandCenter = setTunerBandCenter ??
         ((dev, ifBandCenterFreq) =>
-            throw UnimplementedError('rtlsdr_set_tuner_band_center'));
+            throw UnimplementedError('setTunerBandCenter'));
     _setTunerSideband = setTunerSideband ??
-        ((dev, sideband) =>
-            throw UnimplementedError('rtlsdr_set_tuner_sideband'));
-    _getTunerGain = getTunerGain ??
-        ((dev) => throw UnimplementedError('rtlsdr_get_tuner_gain'));
+        ((dev, sideband) => throw UnimplementedError('setTunerSideband'));
+    _getTunerGain =
+        getTunerGain ?? ((dev) => throw UnimplementedError('getTunerGain'));
     _setTunerGainExt = setTunerGainExt ??
         ((dev, lnaGain, mixerGain, vgaGain) =>
-            throw UnimplementedError('rtlsdr_set_tuner_gain_ext'));
+            throw UnimplementedError('setTunerGainExt'));
     _setTunerIfGain = setTunerIfGain ??
-        ((dev, stage, gain) =>
-            throw UnimplementedError('rtlsdr_set_tuner_if_gain'));
+        ((dev, stage, gain) => throw UnimplementedError('setTunerIfGain'));
     _setTunerGainMode = setTunerGainMode ??
-        ((dev, manual) =>
-            throw UnimplementedError('rtlsdr_set_tuner_gain_mode'));
+        ((dev, manual) => throw UnimplementedError('setTunerGainMode'));
     _setTunerIfMode = setTunerIfMode ??
-        ((dev, ifMode) => throw UnimplementedError('rtlsdr_set_tuner_if_mode'));
+        ((dev, ifMode) => throw UnimplementedError('setTunerIfMode'));
     _setSampleRate = setSampleRate ??
-        ((dev, rate) => throw UnimplementedError('rtlsdr_set_sample_rate'));
-    _getSampleRate = getSampleRate ??
-        ((dev) => throw UnimplementedError('rtlsdr_get_sample_rate'));
-    _setTestmode = setTestmode ??
-        ((dev, on) => throw UnimplementedError('rtlsdr_set_testmode'));
-    _setAgcMode = setAgcMode ??
-        ((dev, on) => throw UnimplementedError('rtlsdr_set_agc_mode'));
+        ((dev, rate) => throw UnimplementedError('setSampleRate'));
+    _getSampleRate =
+        getSampleRate ?? ((dev) => throw UnimplementedError('getSampleRate'));
+    _setTestmode =
+        setTestmode ?? ((dev, on) => throw UnimplementedError('setTestmode'));
+    _setAgcMode =
+        setAgcMode ?? ((dev, on) => throw UnimplementedError('setAgcMode'));
     _setDirectSampling = setDirectSampling ??
-        ((dev, on) => throw UnimplementedError('rtlsdr_set_direct_sampling'));
+        ((dev, on) => throw UnimplementedError('setDirectSampling'));
     _getDirectSampling = getDirectSampling ??
-        ((dev) => throw UnimplementedError('rtlsdr_get_direct_sampling'));
+        ((dev) => throw UnimplementedError('getDirectSampling'));
     _setDsMode = setDsMode ??
-        ((dev, mode, freqThreshold) =>
-            throw UnimplementedError('rtlsdr_set_ds_mode'));
+        ((dev, mode, freqThreshold) => throw UnimplementedError('setDsMode'));
     _setOffsetTuning = setOffsetTuning ??
-        ((dev, on) => throw UnimplementedError('rtlsdr_set_offset_tuning'));
+        ((dev, on) => throw UnimplementedError('setOffsetTuning'));
     _getOffsetTuning = getOffsetTuning ??
-        ((dev) => throw UnimplementedError('rtlsdr_get_offset_tuning'));
+        ((dev) => throw UnimplementedError('getOffsetTuning'));
     _setDithering = setDithering ??
-        ((dev, dither) => throw UnimplementedError('rtlsdr_set_dithering'));
-    _resetBuffer = resetBuffer ??
-        ((dev) => throw UnimplementedError('rtlsdr_reset_buffer'));
+        ((dev, dither) => throw UnimplementedError('setDithering'));
+    _resetBuffer =
+        resetBuffer ?? ((dev) => throw UnimplementedError('resetBuffer'));
     _readSync = readSync ??
-        ((dev, buf, len, nRead) =>
-            throw UnimplementedError('rtlsdr_read_sync'));
-    _waitAsync = waitAsync ??
-        ((dev, cb, ctx) => throw UnimplementedError('rtlsdr_wait_async'));
+        ((dev, buf, len, nRead) => throw UnimplementedError('readSync'));
+    _waitAsync =
+        waitAsync ?? ((dev, cb, ctx) => throw UnimplementedError('waitAsync'));
     _readAsync = readAsync ??
         ((dev, cb, ctx, bufNum, bufLen) =>
-            throw UnimplementedError('rtlsdr_read_async'));
-    _cancelAsync = cancelAsync ??
-        ((dev) => throw UnimplementedError('rtlsdr_cancel_async'));
-    _irQuery = irQuery ??
-        ((dev, buf, bufLen) => throw UnimplementedError('rtlsdr_ir_query'));
-    _setBiasTee = setBiasTee ??
-        ((dev, on) => throw UnimplementedError('rtlsdr_set_bias_tee'));
+            throw UnimplementedError('readAsync'));
+    _cancelAsync =
+        cancelAsync ?? ((dev) => throw UnimplementedError('cancelAsync'));
+    _irQuery =
+        irQuery ?? ((dev, buf, bufLen) => throw UnimplementedError('irQuery'));
+    _setBiasTee =
+        setBiasTee ?? ((dev, on) => throw UnimplementedError('setBiasTee'));
     _setBiasTeeGpio = setBiasTeeGpio ??
-        ((dev, gpio, on) =>
-            throw UnimplementedError('rtlsdr_set_bias_tee_gpio'));
-    _getVerId =
-        getVerId ?? (() => throw UnimplementedError('rtlsdr_get_ver_id'));
-    _getVersion =
-        getVersion ?? (() => throw UnimplementedError('rtlsdr_get_version'));
+        ((dev, gpio, on) => throw UnimplementedError('setBiasTeeGpio'));
+    _getVerId = getVerId ?? (() => throw UnimplementedError('getVerId'));
+    _getVersion = getVersion ?? (() => throw UnimplementedError('getVersion'));
   }
 
   late DartGetDeviceCount _getDeviceCount;

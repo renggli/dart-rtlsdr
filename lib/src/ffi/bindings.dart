@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
+
 import '../generated/abstract_bindings.dart';
 import '../generated/lazy_bindings.dart';
-
 import 'library.dart';
 
 // Internal cached bindings.

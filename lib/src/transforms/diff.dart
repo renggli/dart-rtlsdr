@@ -25,21 +25,15 @@ class DiffSink<T extends num, L extends List<T>>
     extends ChunkedConversionSink<L> {
   final Sink<L> sink;
 
-  bool first = true;
-  T? previous;
+  T previous = 0 as T;
 
   DiffSink(this.sink);
 
   @override
   void add(L chunk) {
-    if (first && chunk.isNotEmpty) {
-      previous = chunk.first;
-      chunk = chunk.sublist(1);
-      first = false;
-    }
     for (var i = 0; i < chunk.length; i++) {
       final current = chunk[i];
-      chunk[i] = current - previous;
+      chunk[i] = current - previous as T;
       previous = current;
     }
     sink.add(chunk);

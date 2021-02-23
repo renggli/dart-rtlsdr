@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:characters/characters.dart';
 import 'package:more/char_matcher.dart';
 import 'package:more/more.dart';
-import 'package:characters/characters.dart';
 
 final declarations = [
   'uint32_t rtlsdr_get_device_count(void)',
@@ -94,6 +94,14 @@ class Method {
   String get nativeTypeName => 'Native${dartName}';
 
   String get nativeName => 'rtlsdr_$name';
+
+  String get nativeArguments =>
+      arguments.map((arg) => '${arg.type.nativeType} ${arg.name}').join(', ');
+
+  String lookupFunction(String library) => '$library.lookupFunction'
+      '<$nativeTypeName, $dartTypeName>(\'$nativeName\')';
+
+  String get argumentNames => arguments.map((arg) => arg.name).join(', ');
 }
 
 class Parameter {
@@ -217,11 +225,8 @@ Future<void> generateMethodTypes(List<Method> methods) async {
   out.writeln();
   for (final method in methods) {
     out.writeln('// ${method.declaration}');
-    final nativeArguments = method.arguments
-        .map((arg) => '${arg.type.nativeType} ${arg.name}')
-        .join(', ');
     out.writeln('typedef ${method.nativeTypeName} = '
-        '${method.result.nativeType} Function(${nativeArguments});');
+        '${method.result.nativeType} Function(${method.nativeArguments});');
     out.writeln('typedef ${method.dartTypeName} = '
         '${method.result.dartType} Function(${method.dartArguments});');
     out.writeln();
@@ -241,7 +246,7 @@ Future<void> generateAbstractBindings(List<Method> methods) async {
   out.writeln('/// Abstract base class for the external bindings.');
   out.writeln('abstract class AbstractBindings {');
   for (final method in methods) {
-    out.writeln('${method.dartMethodDeclaration});');
+    out.writeln('${method.dartMethodDeclaration};');
     out.writeln('');
   }
   out.writeln('}');
@@ -267,11 +272,9 @@ Future<void> generateLazyBindings(List<Method> methods) async {
   out.writeln();
   for (final method in methods) {
     out.writeln('@override');
-    out.writeln('${method.dartMethodDeclaration}) =>');
-    out.writeln('(_${method.dartMethodName} ??= _library.lookupFunction'
-        '<${method.nativeTypeName}, ${method.dartTypeName}>'
-        '(\'${method.nativeName}\'))'
-        '(${method.arguments.map((arg) => arg.name).join(', ')});');
+    out.writeln('${method.dartMethodDeclaration} =>');
+    out.writeln('(_${method.dartMethodName} ??= '
+        '${method.lookupFunction('_library')})(${method.argumentNames});');
     out.writeln('${method.dartTypeName}? _${method.dartMethodName};');
     out.writeln();
   }
@@ -295,8 +298,7 @@ Future<void> generateEagerBindings(List<Method> methods) async {
   out.writeln('EagerBindings(DynamicLibrary library) : ');
   out.writeln(methods
       .map((method) => '_${method.dartMethodName} = '
-          'library.lookupFunction<${method.nativeTypeName}, ${method.dartTypeName}>'
-          '(\'${method.nativeName}\')')
+          '${method.lookupFunction('library')}')
       .join(',\n'));
   out.writeln(';');
   out.writeln();
@@ -306,9 +308,8 @@ Future<void> generateEagerBindings(List<Method> methods) async {
   out.writeln();
   for (final method in methods) {
     out.writeln('@override');
-    out.writeln('${method.dartMethodDeclaration}) =>');
-    out.writeln('_${method.dartMethodName}'
-        '(${method.arguments.map((arg) => arg.name).join(', ')});');
+    out.writeln('${method.dartMethodDeclaration} =>');
+    out.writeln('_${method.dartMethodName}(${method.argumentNames});');
     out.writeln();
   }
   out.writeln('}');
@@ -334,9 +335,8 @@ Future<void> generateTestBindings(List<Method> methods) async {
   }
   out.writeln('}) {');
   for (final method in methods) {
-    final argumentNames = method.arguments.map((arg) => arg.name).join(', ');
     out.writeln('_${method.dartMethodName} = ${method.dartMethodName} '
-        '?? (($argumentNames) => throw UnimplementedError(\'${method.nativeName}\'));');
+        '?? ((${method.argumentNames}) => throw UnimplementedError(\'${method.dartMethodName}\'));');
   }
   out.writeln('}');
   out.writeln();
@@ -346,9 +346,8 @@ Future<void> generateTestBindings(List<Method> methods) async {
   out.writeln();
   for (final method in methods) {
     out.writeln('@override');
-    out.writeln('${method.dartMethodDeclaration}) =>');
-    out.writeln('_${method.dartMethodName}'
-        '(${method.arguments.map((arg) => arg.name).join(', ')});');
+    out.writeln('${method.dartMethodDeclaration} =>');
+    out.writeln('_${method.dartMethodName}(${method.argumentNames});');
     out.writeln();
   }
   out.writeln('}');

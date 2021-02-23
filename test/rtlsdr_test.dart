@@ -155,7 +155,7 @@ void main() {
       final output =
           await Stream.fromIterable([input1, input2]).toDiff().toList();
       expect(output, [
-        [123, -63, 145],
+        [-81, 123, -63, 145],
         [-58, 36, -190, -5]
       ]);
     });
