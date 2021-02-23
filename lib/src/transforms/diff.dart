@@ -26,7 +26,7 @@ class DiffSink<T extends num, L extends List<T>>
   final Sink<L> sink;
 
   bool first = true;
-  T previous;
+  T? previous;
 
   DiffSink(this.sink);
 

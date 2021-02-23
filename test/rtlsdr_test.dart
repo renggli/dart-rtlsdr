@@ -18,17 +18,17 @@ void put(Pointer<Utf8> pointer, String value) {
 final isRtlSdrException = isA<RtlSdrException>();
 
 void main() {
-  tearDown(() => bindings = null);
+  tearDown(() => bindings = TestBindings());
   group('constructors', () {
     test('no devices', () {
-      bindings = Bindings.forTesting(
-        get_device_count: () => 0,
+      bindings = TestBindings(
+        getDeviceCount: () => 0,
       );
       expect(RtlSdr.devices, isEmpty);
     });
     test('multiple devices', () {
-      bindings = Bindings.forTesting(
-        get_device_count: () => 3,
+      bindings = TestBindings(
+        getDeviceCount: () => 3,
       );
       final devices = RtlSdr.devices.toList();
       expect(devices, hasLength(3));
@@ -37,9 +37,9 @@ void main() {
       }
     });
     test('from serial', () {
-      bindings = Bindings.forTesting(
-        get_index_by_serial: (serial) {
-          expect(Utf8.fromUtf8(serial), 'Serial');
+      bindings = TestBindings(
+        getIndexBySerial: (serial) {
+          expect(serial.toDartString(), 'Serial');
           return 3;
         },
       );
@@ -49,8 +49,8 @@ void main() {
   });
   group('informational', () {
     test('name', () {
-      bindings = Bindings.forTesting(
-        get_device_name: (index) => Utf8.toUtf8('Name $index'),
+      bindings = TestBindings(
+        getDeviceName: (index) => 'Name $index'.toNativeUtf8(),
       );
       final device = RtlSdr();
       expect(device.index, 0);
@@ -59,9 +59,11 @@ void main() {
       expect(device.toString(), 'RtlSdr{0, Name 0}');
     });
     test('manufacturer', () {
-      bindings = Bindings.forTesting(
-        get_device_usb_strings: (index, manufacturer, product, serial) {
+      bindings = TestBindings(
+        getDeviceUsbStrings: (index, manufacturer, product, serial) {
           put(manufacturer, 'Manufacturer $index');
+          expect(product, nullptr);
+          expect(serial, nullptr);
           return 0;
         },
       );
@@ -69,9 +71,11 @@ void main() {
       expect(device.manufacturer, 'Manufacturer 1');
     });
     test('product', () {
-      bindings = Bindings.forTesting(
-        get_device_usb_strings: (index, manufacturer, product, serial) {
+      bindings = TestBindings(
+        getDeviceUsbStrings: (index, manufacturer, product, serial) {
+          expect(manufacturer, nullptr);
           put(product, 'Product $index');
+          expect(serial, nullptr);
           return 0;
         },
       );
@@ -79,8 +83,10 @@ void main() {
       expect(device.product, 'Product 2');
     });
     test('serial', () {
-      bindings = Bindings.forTesting(
-        get_device_usb_strings: (index, manufacturer, product, serial) {
+      bindings = TestBindings(
+        getDeviceUsbStrings: (index, manufacturer, product, serial) {
+          expect(manufacturer, nullptr);
+          expect(product, nullptr);
           put(serial, 'Serial $index');
           return 0;
         },
@@ -89,8 +95,8 @@ void main() {
       expect(device.serial, 'Serial 3');
     });
     test('valid', () {
-      bindings = Bindings.forTesting(
-        get_device_name: (index) => Utf8.toUtf8(''),
+      bindings = TestBindings(
+        getDeviceName: (index) => ''.toNativeUtf8(),
       );
       final device = RtlSdr(4);
       expect(device.isValid, isFalse);
@@ -98,26 +104,26 @@ void main() {
   });
   group('opening and closing', () {
     test('initially closed', () {
-      bindings = Bindings.forTesting();
+      bindings = TestBindings();
       final device = RtlSdr();
       expect(device.isClosed, isTrue);
     });
     test('successful open', () {
-      bindings = Bindings.forTesting(
+      bindings = TestBindings(
         open: (dev, index) {
           expect(index, 42);
           return 0;
         },
-        get_device_name: (index) => Utf8.toUtf8('Mock Device'),
+        getDeviceName: (index) => 'Mock Device'.toNativeUtf8(),
       );
       final device = RtlSdr(42);
       device.open();
       expect(device.isClosed, isFalse);
     });
     test('failing to open', () {
-      bindings = Bindings.forTesting(
+      bindings = TestBindings(
         open: (dev, index) => -4,
-        get_device_name: (index) => Utf8.toUtf8('Mokc Device'),
+        getDeviceName: (index) => 'Mock Device'.toNativeUtf8(),
       );
       final device = RtlSdr();
       expect(

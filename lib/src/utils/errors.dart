@@ -53,9 +53,9 @@ class RtlSdrException implements Exception {
 
   final String message;
 
-  String get errorId => errorIds[code];
+  String? get errorId => errorIds[code];
 
-  String get errorMessage => errorMessages[code];
+  String? get errorMessage => errorMessages[code];
 
   @override
   String toString() {

@@ -53,7 +53,7 @@ class SampleAnalyzer implements Analyzer {
   Duration interval = Duration.zero;
   int nsamples_total = 0;
   Duration interval_total = Duration.zero;
-  DateTime recentTime;
+  DateTime? recentTime;
 
   @override
   void call(Uint8List buffer) {
@@ -64,7 +64,7 @@ class SampleAnalyzer implements Analyzer {
     }
 
     nsamples += buffer.length ~/ 2;
-    interval = timeNow.difference(recentTime);
+    interval = timeNow.difference(recentTime!);
 
     if (interval < const Duration(seconds: 10)) {
       return;

@@ -1,5 +1,11 @@
+export 'src/features/frequency.dart';
+export 'src/features/mode.dart';
 export 'src/features/sampling.dart';
 export 'src/features/tuner.dart';
+export 'src/generated/abstract_bindings.dart';
+export 'src/generated/eager_bindings.dart';
+export 'src/generated/lazy_bindings.dart';
+export 'src/generated/test_bindings.dart';
 export 'src/rtlsdr.dart';
 export 'src/transforms/amplitude.dart' show AmplitudeExtension;
 export 'src/transforms/cast.dart' show AsTypedListExtension;

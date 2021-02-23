@@ -1,27 +1,53 @@
 import 'dart:ffi';
-
 import 'dart:io';
 
-DynamicLibrary loadLibrary() {
-  final files = <String>[
-    'librtlsdr.so',
-    'librtlsdr.dylib',
-    'rtlsdr.dll',
-  ];
-  final paths = <String>['./'];
-  if (Platform.isLinux) {
+/// Paths to search the library in.
+late Set<String> libraryPaths = _defaultLibraryPaths();
+
+Set<String> _defaultLibraryPaths() {
+  final result = <String>{''};
+  if (Platform.isWindows) {
+    // No clue where too look.
+  } else if (Platform.isMacOS || Platform.isIOS) {
+    result.addAll(['~/lib', '/usr/local/lib', '/lib', '/usr/lib']);
+    final libraryPath = Platform.environment['DYLD_LIBRARY_PATH'] ?? '';
+    result.addAll(libraryPath.split(':'));
+    final fallbackLibraryPath =
+        Platform.environment['DYLD_FALLBACK_LIBRARY_PATH'] ?? '';
+    result.addAll(fallbackLibraryPath.split(':'));
+  } else {
     final libraryPath = Platform.environment['LD_LIBRARY_PATH'] ?? '';
-    paths.addAll(libraryPath.split(':'));
-  } else if (Platform.isMacOS) {
-    final libraryPath = Platform.environment['DYLD_FALLBACK_LIBRARY_PATH'] ??
-        '~/lib:/usr/local/lib:/lib:/usr/lib';
-    paths.addAll(libraryPath.split(':'));
+    result.addAll(libraryPath.split(':'));
   }
-  for (final path in paths) {
-    try {
-      return DynamicLibrary.open(path);
-    } on ArgumentError {
-      continue;
+  return result;
+}
+
+/// Library names to search for.
+late Set<String> libraryNames = _defaultLibraryNames();
+
+Set<String> _defaultLibraryNames() {
+  final result = <String>{};
+  if (Platform.isWindows) {
+    result.add('rtlsdr.dll');
+  } else if (Platform.isMacOS || Platform.isIOS) {
+    result.add('librtlsdr.dylib');
+  } else {
+    result.add('librtlsdr.so');
+  }
+  return result;
+}
+
+/// Tries to load the library from the provided paths.
+DynamicLibrary loadLibrary() {
+  for (final path in libraryPaths) {
+    for (final name in libraryNames) {
+      final fullName =
+          path.isEmpty ? name : '$path${Platform.pathSeparator}$name';
+      try {
+        return DynamicLibrary.open(fullName);
+      } on ArgumentError {
+        continue;
+      }
     }
   }
   throw UnsupportedError('Unable to load RTL-SDR library.');

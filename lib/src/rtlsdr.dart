@@ -15,17 +15,22 @@ import 'utils/isolate.dart';
 class RtlSdr {
   /// Returns an iterable of all [RtlSdr] devices accessible on this machine.
   static Iterable<RtlSdr> get devices {
-    final result = bindings.get_device_count();
+    final result = bindings.getDeviceCount();
     RtlSdrException.checkError(result, 'Unable to read number of devices.');
     return 0.to(result).map((index) => RtlSdr(index));
   }
 
   /// Returns the [RtlSdr] device with the given [serial] number.
   factory RtlSdr.fromSerial(String serial) {
-    final index = bindings.get_index_by_serial(Utf8.toUtf8(serial));
-    RtlSdrException.checkError(
-        index, 'Unable to find device with serial "$serial".');
-    return RtlSdr(index);
+    final utf8Serial = serial.toNativeUtf8(allocator: malloc);
+    try {
+      final index = bindings.getIndexBySerial(utf8Serial);
+      RtlSdrException.checkError(
+          index, 'Unable to find device with serial "$serial".');
+      return RtlSdr(index);
+    } finally {
+      malloc.free(utf8Serial);
+    }
   }
 
   /// Constructor for the device with the given [index].
@@ -34,92 +39,78 @@ class RtlSdr {
   /// The device index to identify the device.
   final int index;
 
-  // Internally cached informational data about the device.
-  String _name;
-  String _manufacturer;
-  String _product;
-  String _serial;
+  /// The name of the device.
+  late String name = _getName();
+
+  String _getName() => bindings.getDeviceName(index).toDartString();
 
   /// Tests if this is a valid device.
-  bool get isValid {
-    _updateDeviceName();
-    return _name.isNotEmpty;
-  }
-
-  /// The name of the device.
-  String get name {
-    if (_name == null) {
-      _updateDeviceName();
-    }
-    return _name;
-  }
+  bool get isValid => _getName().isNotEmpty;
 
   /// The manufacturer of the device.
-  String get manufacturer {
-    if (_manufacturer == null) {
-      _updateDeviceStrings();
+  late String manufacturer = _getManufacturer();
+
+  String _getManufacturer() {
+    final manufacturer = malloc<Uint8>(256).cast<Utf8>();
+    try {
+      final result =
+          bindings.getDeviceUsbStrings(index, manufacturer, nullptr, nullptr);
+      RtlSdrException.checkError(
+          result, 'Unable to get manufacturer of device $index.');
+      return manufacturer.toDartString();
+    } finally {
+      malloc.free(manufacturer);
     }
-    return _manufacturer;
   }
 
   /// The product name of the device.
-  String get product {
-    if (_product == null) {
-      _updateDeviceStrings();
+  late String product = _getProduct();
+
+  String _getProduct() {
+    final product = malloc<Uint8>(256).cast<Utf8>();
+    try {
+      final result =
+          bindings.getDeviceUsbStrings(index, nullptr, product, nullptr);
+      RtlSdrException.checkError(
+          result, 'Unable to get product of device $index.');
+      return product.toDartString();
+    } finally {
+      malloc.free(product);
     }
-    return _product;
   }
 
   /// The serial number of the device.
-  String get serial {
-    if (_serial == null) {
-      _updateDeviceStrings();
-    }
-    return _serial;
-  }
+  late String serial = _getSerial();
 
-  // Internal helper to retrieve the device name.
-  void _updateDeviceName() {
-    _name = null;
-    final result = bindings.get_device_name(index);
-    _name = Utf8.fromUtf8(result);
-  }
-
-  // Internal helper to retrieve the device strings.
-  void _updateDeviceStrings() {
-    _manufacturer = _product = _serial = null;
-    final manufacturer = allocate<Uint8>(count: 256).cast<Utf8>();
+  String _getSerial() {
+    final serial = malloc<Uint8>(256).cast<Utf8>();
     try {
-      final product = allocate<Uint8>(count: 256).cast<Utf8>();
-      try {
-        final serial = allocate<Uint8>(count: 256).cast<Utf8>();
-        try {
-          final result = bindings.get_device_usb_strings(
-              index, manufacturer, product, serial);
-          RtlSdrException.checkError(
-              result, 'Unable to get strings of device $index.');
-          _manufacturer = Utf8.fromUtf8(manufacturer);
-          _product = Utf8.fromUtf8(product);
-          _serial = Utf8.fromUtf8(serial);
-        } finally {
-          free(serial);
-        }
-      } finally {
-        free(product);
-      }
+      final result =
+          bindings.getDeviceUsbStrings(index, nullptr, nullptr, serial);
+      RtlSdrException.checkError(
+          result, 'Unable to get serial of device $index.');
+      return serial.toDartString();
     } finally {
-      free(manufacturer);
+      malloc.free(serial);
     }
   }
 
-  // Internal device handle, if opened.
-  Pointer<DeviceHandle> _handle;
+  /// Internal device handle, or null.
+  Pointer<DeviceHandle>? _handle;
 
-  /// Read-only handle of the device, if opened.
-  Pointer<DeviceHandle> get handle => _handle;
+  /// Tests if this device is open.
+  bool get isOpen => _handle != null;
 
   /// Tests if this device is closed.
   bool get isClosed => _handle == null;
+
+  /// Device handle, attempts to open the device if no handle.
+  Pointer<DeviceHandle> get handle {
+    if (isClosed) {
+      open();
+    }
+    return _handle!;
+  }
 
   /// Opens the device for interaction, if it is not already open.
   void open() {
@@ -127,20 +118,20 @@ class RtlSdr {
       if (!isValid) {
         throw RtlSdrException(0, 'Invalid device ${index}.');
       }
-      final pointer = allocate<Pointer<DeviceHandle>>();
+      final pointer = malloc<Pointer<DeviceHandle>>();
       try {
         final result = bindings.open(pointer, index);
         RtlSdrException.checkError(result, 'Unable to open device ${index}.');
         _handle = pointer.value;
       } finally {
-        free(pointer);
+        malloc.free(pointer);
       }
     }
   }
 
   /// Closes the device, if it is not already closed.
   void close() {
-    if (!isClosed) {
+    if (isOpen) {
       _closeDataStream();
       try {
         final result = bindings.close(handle);
@@ -152,13 +143,13 @@ class RtlSdr {
   }
 
   // Internal stream controller of the data stream.
-  StreamController<Uint8List> _streamController;
+  StreamController<Uint8List>? _streamController;
 
   // Internal receiver port transferring the data.
-  ReceivePort _receiverPort;
+  ReceivePort? _receiverPort;
 
   // Internal isolate reading the device data.
-  Isolate _isolate;
+  Isolate? _isolate;
 
   /// Returns a broadcast stream of the device data.
   Stream<Uint8List> get stream {
@@ -167,94 +158,27 @@ class RtlSdr {
       onListen: _setupDataStream,
       onCancel: _closeDataStream,
     );
-    return _streamController.stream;
+    return _streamController!.stream;
   }
 
-  // Internal helper to setup the data stream.
   void _setupDataStream() {
     RtlSdrException.checkOpen(this);
     _receiverPort = ReceivePort();
-    _receiverPort.listen(_streamController.add);
+    _receiverPort!.listen((data) => _streamController?.add(data));
     Isolate.spawn(
       readIsolate,
-      ReadIsolate(handle.address, 0, 0, _receiverPort.sendPort),
+      ReadIsolate(handle.address, 0, 0, _receiverPort!.sendPort),
     ).then((isolate) => _isolate = isolate);
   }
 
-  // Internal helper to tear down the data stream.
   void _closeDataStream() {
-    bindings.cancel_async(handle);
+    bindings.cancelAsync(handle);
     _streamController?.close();
     _streamController = null;
     _receiverPort?.close();
     _receiverPort = null;
     _isolate?.kill();
     _isolate = null;
-  }
-
-  /// Get the actual frequency in Hz this device is tuned to.
-  int get centerFrequency {
-    RtlSdrException.checkOpen(this);
-    final result = bindings.get_center_freq(handle);
-    RtlSdrException.checkError(result, 'Failed to get center frequency.');
-    return result;
-  }
-
-  /// Set the actual frequency in Hz the device is tuned to.
-  set centerFrequency(int frequency) {
-    RtlSdrException.checkOpen(this);
-    final result = bindings.set_center_freq(handle, frequency);
-    RtlSdrException.checkError(
-        result, 'Failed to set center frequency to ${frequency}Hz.');
-  }
-
-  /// Get actual frequency correction value of the device in parts per million.
-  int get frequencyCorrection {
-    RtlSdrException.checkOpen(this);
-    final result = bindings.get_freq_correction(handle);
-    RtlSdrException.checkError(result, 'Failed to get frequency correction.');
-    return result;
-  }
-
-  /// Set the frequency correction value for the device in parts per million.
-  set frequencyCorrection(int ppm) {
-    RtlSdrException.checkOpen(this);
-    final result = bindings.set_freq_correction(handle, ppm);
-    RtlSdrException.checkError(
-        result, 'Failed to set frequency correction to ${ppm}ppm.');
-  }
-
-  /// Enable test mode that returns an 8 bit counter instead of the samples.
-  set testMode(bool enable) {
-    RtlSdrException.checkOpen(this);
-    final result = bindings.set_testmode(handle, enable ? 1 : 0);
-    RtlSdrException.checkError(
-        result, 'Failed to ${enable ? 'enable' : 'disable'} test mode.');
-  }
-
-  /// Enable or disable the internal digital AGC of the RTL2832.
-  set agcMode(bool enable) {
-    RtlSdrException.checkOpen(this);
-    final result = bindings.set_agc_mode(handle, enable ? 1 : 0);
-    RtlSdrException.checkError(
-        result, 'Failed to ${enable ? 'enable' : 'disable'} AGC mode.');
-  }
-
-  /// Get enabled state of the offset tuning.
-  bool get offsetTuning {
-    RtlSdrException.checkOpen(this);
-    final result = bindings.get_offset_tuning(handle);
-    RtlSdrException.checkError(result, 'Failed to get offset tuning.');
-    return result == 1;
-  }
-
-  /// Enable or disable offset tuning for zero-IF tuners, which allows to avoid
-  /// problems caused by the DC offset of the ADCs and 1/f noise.
-  set offsetTuning(bool enable) {
-    RtlSdrException.checkOpen(this);
-    final result = bindings.set_offset_tuning(handle, enable ? 1 : 0);
-    RtlSdrException.checkError(
-        result, 'Failed to ${enable ? 'enable' : 'disable'} offset tuning.');
   }
 
   @override
