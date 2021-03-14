@@ -1,7 +1,27 @@
 language: dart
-dart: stable
+dart:
+  - dev
 
-dart_task:
+jobs:
+  include:
+    - stage: valid
+      name: "Dart Analyzer"
+      os: linux
+      script: dartanalyzer --fatal-infos .
+    - stage: valid
+      name: "Dart Formatter"
+      os: linux
+      script: dartfmt --dry-run --set-exit-if-changed .
+    - stage: test
+      name: "VM Tests"
+      os: linux
+      script: pub run test test/all_test.dart --platform vm
+    - stage: coverage
+      name: "Coverage"
+      os: linux
+      script: pub global activate dart_coveralls && dart_coveralls report test/all_test.dart
+
+stages:
+  - valid
   - test
-  - dartanalyzer: --fatal-warnings --fatal-infos .
-  - dart_style
+  - coverage
