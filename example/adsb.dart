@@ -17,7 +17,7 @@ const overwrite = 254;
 const badSample = 255;
 
 final Uint16List squares = precomputeSquares();
-final Uint8List adsb_frame = Uint8List(14);
+final Uint8List adsbFrame = Uint8List(14);
 
 Uint16List precomputeSquares() {
   final result = Uint16List(256);
@@ -62,8 +62,8 @@ bool preamble(Uint16List buffer, int offset) {
 }
 
 // Takes 4 consecutive real samples, return 0 or 1, BADSAMPLE on error
-int single_manchester(int a, int b, int c, int d) {
-  final bit_p = a > b;
+int singleManchester(int a, int b, int c, int d) {
+  final bitp = a > b;
   final bit = c > d;
 
   if (quality == 0) {
@@ -71,41 +71,41 @@ int single_manchester(int a, int b, int c, int d) {
   }
 
   if (quality == 5) {
-    if (bit && bit_p && b > c) {
+    if (bit && bitp && b > c) {
       return badSample;
     }
-    if (!bit && !bit_p && b < c) {
+    if (!bit && !bitp && b < c) {
       return badSample;
     }
     return bit ? 1 : 0;
   }
 
   if (quality == 10) {
-    if (bit && bit_p && c > b) {
+    if (bit && bitp && c > b) {
       return 1;
     }
-    if (bit && !bit_p && d < b) {
+    if (bit && !bitp && d < b) {
       return 1;
     }
-    if (!bit && bit_p && d > b) {
+    if (!bit && bitp && d > b) {
       return 0;
     }
-    if (!bit && !bit_p && c < b) {
+    if (!bit && !bitp && c < b) {
       return 0;
     }
     return badSample;
   }
 
-  if (bit && bit_p && c > b && d < a) {
+  if (bit && bitp && c > b && d < a) {
     return 1;
   }
-  if (bit && !bit_p && c > a && d < b) {
+  if (bit && !bitp && c > a && d < b) {
     return 1;
   }
-  if (!bit && bit_p && c < a && d > b) {
+  if (!bit && bitp && c < a && d > b) {
     return 0;
   }
-  if (!bit && !bit_p && c < b && d > a) {
+  if (!bit && !bitp && c < b && d > a) {
     return 0;
   }
   return badSample;
@@ -116,9 +116,9 @@ void manchester(Uint16List buffer) {
   var a = 0, b = 0;
   var bit = 0;
   var i = 0, i2 = 0, errors = 0;
-  final maximum_i = buffer.length - 1;
+  final maxi = buffer.length - 1;
 
-  while (i < maximum_i) {
+  while (i < maxi) {
     /* find preamble */
     for (; i < (buffer.length - preambleLen); i++) {
       if (!preamble(buffer, i)) {
@@ -135,8 +135,8 @@ void manchester(Uint16List buffer) {
     i2 = i;
     errors = 0;
     /* mark bits until encoding breaks */
-    for (; i < maximum_i; i += 2, i2++) {
-      bit = single_manchester(a, b, buffer[i], buffer[i + 1]);
+    for (; i < maxi; i += 2, i2++) {
+      bit = singleManchester(a, b, buffer[i], buffer[i + 1]);
       a = buffer[i];
       b = buffer[i + 1];
       if (bit == badSample) {
@@ -163,32 +163,33 @@ void messages(Uint16List buffer) {
     if (buffer[i] > 1) {
       continue;
     }
-    var frame_len = longFrame;
-    var data_i = 0;
-    adsb_frame.fillRange(0, adsb_frame.length, 0);
+    var frameLen = longFrame;
+    var datai = 0;
+    adsbFrame.fillRange(0, adsbFrame.length, 0);
     for (;
-        i < buffer.length && buffer[i] <= 1 && data_i < frame_len;
-        i++, data_i++) {
+        // ignore: invariant_booleans
+        i < buffer.length && buffer[i] <= 1 && datai < frameLen;
+        i++, datai++) {
       if (buffer[i] != 0) {
-        final index = data_i ~/ 8;
-        final shift = 7 - (data_i % 8);
-        adsb_frame[index] |= 1 << shift;
+        final index = datai ~/ 8;
+        final shift = 7 - (datai % 8);
+        adsbFrame[index] |= 1 << shift;
       }
-      if (data_i == 7) {
-        if (adsb_frame[0] == 0) {
+      if (datai == 7) {
+        if (adsbFrame[0] == 0) {
           break;
         }
-        if (adsb_frame[0] & 0x80 != 0) {
-          frame_len = longFrame;
+        if (adsbFrame[0] & 0x80 != 0) {
+          frameLen = longFrame;
         } else {
-          frame_len = shortFrame;
+          frameLen = shortFrame;
         }
       }
     }
-    if (data_i < frame_len - 1) {
+    if (datai < frameLen - 1) {
       continue;
     }
-    display(adsb_frame, frame_len);
+    display(adsbFrame, frameLen);
   }
 }
 

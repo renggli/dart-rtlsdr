@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:rtlsdr/rtlsdr.dart';
@@ -44,15 +45,17 @@ class UnderRunAnalyzer implements Analyzer {
 
   @override
   String toString() => lostSamples > 0
-      ? 'Lost $lostSamples (${100 * lostSamples / seenSamples}%) in $seenSamples samples in buffer ${lostSamplesPerBuffer.keys.join(', ')}.'
+      ? 'Lost $lostSamples (${100 * lostSamples / seenSamples}%) in '
+          '$seenSamples samples in buffer '
+          '${lostSamplesPerBuffer.keys.join(', ')}.'
       : 'Lost no samples in $seenSamples samples.';
 }
 
 class SampleAnalyzer implements Analyzer {
   int nsamples = 0;
   Duration interval = Duration.zero;
-  int nsamples_total = 0;
-  Duration interval_total = Duration.zero;
+  int nsamplesTotal = 0;
+  Duration intervalTotal = Duration.zero;
   DateTime? recentTime;
 
   @override
@@ -70,19 +73,19 @@ class SampleAnalyzer implements Analyzer {
       return;
     }
 
-    nsamples_total += nsamples;
-    interval_total += interval;
+    nsamplesTotal += nsamples;
+    intervalTotal += interval;
 
     final currentSampleRate = 1e6 * nsamples / interval.inMicroseconds;
-    print('current sample rate: ${currentSampleRate.round()}');
+    stdout.writeln('current sample rate: ${currentSampleRate.round()}');
     final currentPpm = 1e6 * (currentSampleRate / sampleRate - 1.0);
-    print('current ppm: ${currentPpm.round()}');
+    stdout.writeln('current ppm: ${currentPpm.round()}');
 
     final cumulativeSampleRate =
-        1e6 * nsamples_total / interval_total.inMicroseconds;
-    print('cumulative sample rate: ${cumulativeSampleRate.round()}');
+        1e6 * nsamplesTotal / intervalTotal.inMicroseconds;
+    stdout.writeln('cumulative sample rate: ${cumulativeSampleRate.round()}');
     final cumulativePpm = 1e6 * (cumulativeSampleRate / sampleRate - 1.0);
-    print('cumulative ppm: ${cumulativePpm.round()}');
+    stdout.writeln('cumulative ppm: ${cumulativePpm.round()}');
 
     recentTime = timeNow;
     nsamples = 0;
@@ -102,7 +105,7 @@ Future<void> main() async {
       }
     });
   } finally {
-    analyzerList.forEach(print);
+    analyzerList.forEach(stdout.writeln);
     device.close();
   }
 }

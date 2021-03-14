@@ -4,6 +4,7 @@ import 'package:characters/characters.dart';
 import 'package:more/char_matcher.dart';
 import 'package:more/more.dart';
 
+// ignore_for_file: lines_longer_than_80_chars
 final declarations = [
   'uint32_t rtlsdr_get_device_count(void)',
   'char* rtlsdr_get_device_name(uint32_t index)',
@@ -83,15 +84,15 @@ class Method {
 
   String get dartMethodName => dartName.toFirstLowerCase();
 
-  String get dartTypeName => 'Dart${dartName}';
+  String get dartTypeName => 'Dart$dartName';
 
   String get dartArguments =>
       arguments.map((arg) => '${arg.type.dartType} ${arg.name}').join(', ');
 
   String get dartMethodDeclaration =>
-      '${result.dartType} ${dartMethodName}(${dartArguments})';
+      '${result.dartType} $dartMethodName($dartArguments)';
 
-  String get nativeTypeName => 'Native${dartName}';
+  String get nativeTypeName => 'Native$dartName';
 
   String get nativeName => 'rtlsdr_$name';
 
@@ -218,6 +219,7 @@ extension CaseString on String {
 Future<void> generateMethodTypes(List<Method> methods) async {
   final file = File('lib/src/generated/method_types.dart');
   final out = file.openWrite();
+  out.writeln('// ignore_for_file: lines_longer_than_80_chars');
   out.writeln("import 'dart:ffi';");
   out.writeln("import 'package:ffi/ffi.dart';");
   out.writeln();
@@ -247,7 +249,7 @@ Future<void> generateAbstractBindings(List<Method> methods) async {
   out.writeln('abstract class AbstractBindings {');
   for (final method in methods) {
     out.writeln('${method.dartMethodDeclaration};');
-    out.writeln('');
+    out.writeln();
   }
   out.writeln('}');
   await out.close();
@@ -359,6 +361,7 @@ Future<void> main() async {
   final methods = declarations.map((declaration) {
     try {
       return Method(declaration);
+      // ignore: avoid_catching_errors
     } on Error catch (error) {
       throw ArgumentError.value(declaration, 'declaration', error.toString());
     }

@@ -34,7 +34,7 @@ extension SamplingExtension on RtlSdr {
     final result = bindings.setDirectSampling(
         handle, DirectSamplingMode.values.indexOf(mode));
     RtlSdrException.checkError(
-        result, 'Failed to set direct sampling mode to ${mode}.');
+        result, 'Failed to set direct sampling mode to $mode.');
   }
 }
 

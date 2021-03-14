@@ -116,12 +116,12 @@ class RtlSdr {
   void open() {
     if (isClosed) {
       if (!isValid) {
-        throw RtlSdrException(0, 'Invalid device ${index}.');
+        throw RtlSdrException(0, 'Invalid device $index.');
       }
       final pointer = malloc<Pointer<DeviceHandle>>();
       try {
         final result = bindings.open(pointer, index);
-        RtlSdrException.checkError(result, 'Unable to open device ${index}.');
+        RtlSdrException.checkError(result, 'Unable to open device $index.');
         _handle = pointer.value;
       } finally {
         malloc.free(pointer);
@@ -135,7 +135,7 @@ class RtlSdr {
       _closeDataStream();
       try {
         final result = bindings.close(handle);
-        RtlSdrException.checkError(result, 'Unable to close device ${index}.');
+        RtlSdrException.checkError(result, 'Unable to close device $index.');
       } finally {
         _handle = null;
       }

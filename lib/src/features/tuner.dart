@@ -22,7 +22,7 @@ extension TunerExtension on RtlSdr {
     final result =
         bindings.setTunerGainMode(handle, TunerGainMode.values.indexOf(mode));
     RtlSdrException.checkError(
-        result, 'Failed to set manual tuner gain mode to ${mode}.');
+        result, 'Failed to set manual tuner gain mode to $mode.');
   }
 
   /// Get a list of all gains supported by the tuner in dB.
@@ -81,7 +81,7 @@ extension TunerExtension on RtlSdr {
     RtlSdrException.checkError(
         result,
         'Failed to set intermediate frequency '
-        'gain at ${stage} to ${gain}dB.');
+        'gain at $stage to ${gain}dB.');
   }
 }
 

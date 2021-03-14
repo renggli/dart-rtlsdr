@@ -127,7 +127,7 @@ void main() {
       );
       final device = RtlSdr();
       expect(
-          () => device.open(),
+          device.open,
           throwsA(isRtlSdrException.having((error) => error.message, 'message',
               'Unable to open device 0.')));
       expect(device.isClosed, isTrue);
