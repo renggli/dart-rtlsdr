@@ -1,3 +1,7 @@
+## 0.0.6 (unpublished)
+
+- Dart 2.14 requirement.
+
 ## 0.0.4
 
 - Dart 2.12 and null-safety

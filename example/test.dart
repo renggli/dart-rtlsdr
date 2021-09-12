@@ -6,7 +6,7 @@ import 'package:rtlsdr/rtlsdr.dart';
 const sampleRate = 2048000;
 
 mixin Analyzer {
-  void call(Uint8List buffer);
+  void update(Uint8List buffer);
 }
 
 class UnderRunAnalyzer implements Analyzer {
@@ -19,7 +19,7 @@ class UnderRunAnalyzer implements Analyzer {
   Map<int, int> lostSamplesPerBuffer = {};
 
   @override
-  void call(Uint8List buffer) {
+  void update(Uint8List buffer) {
     _index++;
     if (buffer.isEmpty) {
       return;
@@ -59,7 +59,7 @@ class SampleAnalyzer implements Analyzer {
   DateTime? recentTime;
 
   @override
-  void call(Uint8List buffer) {
+  void update(Uint8List buffer) {
     final timeNow = DateTime.now();
     if (recentTime == null) {
       recentTime = timeNow;
@@ -69,7 +69,7 @@ class SampleAnalyzer implements Analyzer {
     nsamples += buffer.length ~/ 2;
     interval = timeNow.difference(recentTime!);
 
-    if (interval < const Duration(seconds: 10)) {
+    if (interval < const Duration(seconds: 2)) {
       return;
     }
 
@@ -93,15 +93,14 @@ class SampleAnalyzer implements Analyzer {
 }
 
 Future<void> main() async {
-  final device = RtlSdr();
-  device.open();
+  final device = RtlSdr()..open();
   final analyzerList = [UnderRunAnalyzer(), SampleAnalyzer()];
   try {
     device.testMode = true;
     device.sampleRate = sampleRate;
-    await device.stream.take(10).forEach((buffer) {
+    await device.stream.take(100).forEach((buffer) {
       for (final analyzer in analyzerList) {
-        analyzer(buffer);
+        analyzer.update(buffer);
       }
     });
   } finally {
