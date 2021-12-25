@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:characters/characters.dart';
-import 'package:more/char_matcher.dart';
 import 'package:more/more.dart';
 
 // ignore_for_file: lines_longer_than_80_chars

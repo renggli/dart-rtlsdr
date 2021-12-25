@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:rtlsdr/rtlsdr.dart';
 import 'package:rtlsdr/src/ffi/bindings.dart';
-import 'package:rtlsdr/src/utils/errors.dart';
 import 'package:test/test.dart';
 
 void put(Pointer<Utf8> pointer, String value) {
