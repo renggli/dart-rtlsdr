@@ -2,7 +2,7 @@ import 'dart:ffi';
 import 'dart:io';
 
 /// Paths to search the library in.
-late Set<String> libraryPaths = _defaultLibraryPaths();
+final Set<String> libraryPaths = _defaultLibraryPaths();
 
 Set<String> _defaultLibraryPaths() {
   final result = <String>{''};
@@ -23,7 +23,7 @@ Set<String> _defaultLibraryPaths() {
 }
 
 /// Library names to search for.
-late Set<String> libraryNames = _defaultLibraryNames();
+final Set<String> libraryNames = _defaultLibraryNames();
 
 Set<String> _defaultLibraryNames() {
   final result = <String>{};

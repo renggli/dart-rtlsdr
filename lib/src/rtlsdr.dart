@@ -13,13 +13,6 @@ import 'utils/isolate.dart';
 
 /// The RTL-SDR device.
 class RtlSdr {
-  /// Returns an iterable of all [RtlSdr] devices accessible on this machine.
-  static Iterable<RtlSdr> get devices {
-    final result = bindings.getDeviceCount();
-    RtlSdrException.checkError(result, 'Unable to read number of devices.');
-    return 0.to(result).map((index) => RtlSdr(index));
-  }
-
   /// Returns the [RtlSdr] device with the given [serial] number.
   factory RtlSdr.fromSerial(String serial) {
     final utf8Serial = serial.toNativeUtf8(allocator: malloc);
@@ -35,6 +28,13 @@ class RtlSdr {
 
   /// Constructor for the device with the given [index].
   RtlSdr([this.index = 0]);
+
+  /// Returns an iterable of all [RtlSdr] devices accessible on this machine.
+  static Iterable<RtlSdr> get devices {
+    final result = bindings.getDeviceCount();
+    RtlSdrException.checkError(result, 'Unable to read number of devices.');
+    return 0.to(result).map((index) => RtlSdr(index));
+  }
 
   /// The device index to identify the device.
   final int index;

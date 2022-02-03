@@ -58,16 +58,12 @@ final declarations = [
   'uint32_t rtlsdr_get_version(void)',
 ];
 
+final _methodRegExp = RegExp(r'^(.*\s+)rtlsdr_([^(]+)\((.*)\)$');
+final _paramRegExp = RegExp(r'(.*?)(\w+)$');
+
 class Method {
-  late String declaration;
-  late Type result;
-  late String name;
-  late List<Parameter> arguments;
-
-  static final _parser = RegExp(r'^(.*\s+)rtlsdr_([^(]+)\((.*)\)$');
-
   Method(this.declaration) {
-    final match = _parser.matchAsPrefix(declaration)!;
+    final match = _methodRegExp.matchAsPrefix(declaration)!;
     result = Type(match.group(1)!.trim());
     name = match.group(2)!.trim();
     final args = match.group(3)!.trim();
@@ -77,6 +73,11 @@ class Method {
       arguments = args.split(',').map((param) => Parameter(param)).toList();
     }
   }
+
+  final String declaration;
+  late Type result;
+  late String name;
+  late List<Parameter> arguments;
 
   String get dartName =>
       name.split('_').map((value) => value.toFirstUpperCase()).join();
@@ -105,14 +106,8 @@ class Method {
 }
 
 class Parameter {
-  late String declaration;
-  late Type type;
-  late String name;
-
-  static final _parser = RegExp(r'(.*?)(\w+)$');
-
   Parameter(this.declaration) {
-    final match = _parser.matchAsPrefix(declaration)!;
+    final match = _paramRegExp.matchAsPrefix(declaration)!;
     type = Type(match.group(1)!.trim());
     name = match
         .group(2)!
@@ -122,17 +117,19 @@ class Parameter {
         .join()
         .toFirstLowerCase();
   }
+
+  final String declaration;
+  late Type type;
+  late String name;
 }
 
 class Type {
-  final String declaration;
-
-  late String nativeType = _getNativeType(declaration);
-
-  late String dartType = _getDartType(declaration);
-
   Type(String declaration)
       : declaration = CharMatcher.whitespace().removeFrom(declaration);
+
+  final String declaration;
+  late String nativeType = _getNativeType(declaration);
+  late String dartType = _getDartType(declaration);
 
   static String _getNativeType(String type) {
     switch (type) {

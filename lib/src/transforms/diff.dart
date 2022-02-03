@@ -23,11 +23,10 @@ class DiffConverter<T extends num, L extends List<T>> extends Converter<L, L> {
 
 class DiffSink<T extends num, L extends List<T>>
     extends ChunkedConversionSink<L> {
-  final Sink<L> sink;
-
-  T previous = 0 as T;
-
   DiffSink(this.sink);
+
+  final Sink<L> sink;
+  T previous = 0 as T;
 
   @override
   void add(L chunk) {

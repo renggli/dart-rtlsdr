@@ -6,12 +6,12 @@ import '../ffi/types.dart';
 import 'errors.dart';
 
 class ReadIsolate {
+  ReadIsolate(this.address, this.bufferCount, this.bufferSize, this.sendPort);
+
   final int address;
   final int bufferCount;
   final int bufferSize;
   final SendPort sendPort;
-
-  ReadIsolate(this.address, this.bufferCount, this.bufferSize, this.sendPort);
 }
 
 ReadIsolate? _arguments;

@@ -33,6 +33,8 @@ const Map<int, String> errorMessages = {
 };
 
 class RtlSdrException implements Exception {
+  RtlSdrException(this.code, this.message);
+
   /// Throws an [RtlSdrException], if the given [device] is not open.
   static void checkOpen(RtlSdr device) {
     if (device.isClosed) {
@@ -46,8 +48,6 @@ class RtlSdrException implements Exception {
       throw RtlSdrException(code, message);
     }
   }
-
-  RtlSdrException(this.code, this.message);
 
   final int code;
 
