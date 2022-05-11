@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:ffi/ffi.dart';
 
 import '../ffi/types.dart';
@@ -51,7 +50,7 @@ abstract class AbstractBindings {
 
   int getTunerType(Pointer<DeviceHandle> dev);
 
-  int getTunerGains(Pointer<DeviceHandle> dev, Pointer<IntPtr> gains);
+  int getTunerGains(Pointer<DeviceHandle> dev, Pointer<Int> gains);
 
   int setTunerGain(Pointer<DeviceHandle> dev, int gain);
 
@@ -98,7 +97,7 @@ abstract class AbstractBindings {
   int resetBuffer(Pointer<DeviceHandle> dev);
 
   int readSync(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int len,
-      Pointer<IntPtr> nRead);
+      Pointer<Int> nRead);
 
   int waitAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx);
 

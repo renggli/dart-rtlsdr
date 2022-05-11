@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:ffi/ffi.dart';
 
 import '../ffi/types.dart';
@@ -145,7 +144,7 @@ class LazyBindings implements AbstractBindings {
   DartGetTunerType? _getTunerType;
 
   @override
-  int getTunerGains(Pointer<DeviceHandle> dev, Pointer<IntPtr> gains) =>
+  int getTunerGains(Pointer<DeviceHandle> dev, Pointer<Int> gains) =>
       (_getTunerGains ??=
           _library.lookupFunction<NativeGetTunerGains, DartGetTunerGains>(
               'rtlsdr_get_tuner_gains'))(dev, gains);
@@ -289,7 +288,7 @@ class LazyBindings implements AbstractBindings {
 
   @override
   int readSync(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int len,
-          Pointer<IntPtr> nRead) =>
+          Pointer<Int> nRead) =>
       (_readSync ??= _library.lookupFunction<NativeReadSync, DartReadSync>(
           'rtlsdr_read_sync'))(dev, buf, len, nRead);
   DartReadSync? _readSync;

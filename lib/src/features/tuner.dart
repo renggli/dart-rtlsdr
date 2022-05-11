@@ -30,14 +30,13 @@ extension TunerExtension on RtlSdr {
     RtlSdrException.checkOpen(this);
     final count = bindings.getTunerGains(handle, nullptr);
     if (count > 0) {
-      final gains = malloc<Int32>(count);
+      final gains = malloc<Int>(count);
       try {
-        final result = bindings.getTunerGains(handle, gains.cast<IntPtr>());
+        final result = bindings.getTunerGains(handle, gains);
         RtlSdrException.checkError(result, 'Failed to get tuner gains.');
-        return gains
-            .asTypedList(result)
-            .map((value) => value / 10.0)
-            .toList(growable: false);
+        return List.generate(
+            result, (index) => gains.elementAt(index).value / 10.0,
+            growable: false);
       } finally {
         malloc.free(gains);
       }

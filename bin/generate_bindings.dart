@@ -136,8 +136,9 @@ class Type {
       case 'char':
         return 'Utf8';
       case 'int':
+        return 'Int';
       case 'size_t':
-        return 'IntPtr';
+        return 'Size';
       case 'int8_t':
         return 'Int8';
       case 'int16_t':

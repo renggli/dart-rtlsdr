@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:ffi/ffi.dart';
 
 import '../ffi/types.dart';
@@ -295,7 +294,7 @@ class TestBindings implements AbstractBindings {
   int getTunerType(Pointer<DeviceHandle> dev) => _getTunerType(dev);
 
   @override
-  int getTunerGains(Pointer<DeviceHandle> dev, Pointer<IntPtr> gains) =>
+  int getTunerGains(Pointer<DeviceHandle> dev, Pointer<Int> gains) =>
       _getTunerGains(dev, gains);
 
   @override
@@ -379,7 +378,7 @@ class TestBindings implements AbstractBindings {
 
   @override
   int readSync(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int len,
-          Pointer<IntPtr> nRead) =>
+          Pointer<Int> nRead) =>
       _readSync(dev, buf, len, nRead);
 
   @override
