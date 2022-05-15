@@ -4,7 +4,7 @@ import 'package:ffi/ffi.dart';
 
 import '../ffi/bindings.dart';
 import '../rtlsdr.dart';
-import '../utils/errors.dart';
+import '../utils/exception.dart';
 
 extension TunerExtension on RtlSdr {
   /// Get the tuner type.
@@ -13,7 +13,7 @@ extension TunerExtension on RtlSdr {
     final result = bindings.getTunerType(handle);
     return 0 <= result && result < TunerType.values.length
         ? TunerType.values[result]
-        : throw RtlSdrException(result, 'Failed to get tuner type.');
+        : throw RtlSdrException('Failed to get tuner type: $result');
   }
 
   /// Set the gain mode for the device.
@@ -22,7 +22,7 @@ extension TunerExtension on RtlSdr {
     final result =
         bindings.setTunerGainMode(handle, TunerGainMode.values.indexOf(mode));
     RtlSdrException.checkError(
-        result, 'Failed to set manual tuner gain mode to $mode.');
+        result, 'Failed to set manual tuner gain mode to $mode');
   }
 
   /// Get a list of all gains supported by the tuner in dB.
@@ -33,7 +33,7 @@ extension TunerExtension on RtlSdr {
       final gains = malloc<Int>(count);
       try {
         final result = bindings.getTunerGains(handle, gains);
-        RtlSdrException.checkError(result, 'Failed to get tuner gains.');
+        RtlSdrException.checkError(result, 'Failed to get tuner gains');
         return List.generate(
             result, (index) => gains.elementAt(index).value / 10.0,
             growable: false);
@@ -41,14 +41,14 @@ extension TunerExtension on RtlSdr {
         malloc.free(gains);
       }
     }
-    throw RtlSdrException(count, 'Failed to get tuner gain count.');
+    throw RtlSdrException('Failed to get tuner gain count: $count');
   }
 
   /// Get actual gain the device is configured to in dB.
   double get tunerGain {
     RtlSdrException.checkOpen(this);
     final result = bindings.getTunerGain(handle);
-    RtlSdrException.checkError(result, 'Failed to read tuner gain.');
+    RtlSdrException.checkError(result, 'Failed to read tuner gain');
     return result / 10.0;
   }
 
@@ -57,8 +57,7 @@ extension TunerExtension on RtlSdr {
   set tunerGain(double gain) {
     RtlSdrException.checkOpen(this);
     final result = bindings.setTunerGain(handle, (10.0 * gain).round());
-    RtlSdrException.checkError(
-        result, 'Failed to set tuner gain to ${gain}dB.');
+    RtlSdrException.checkError(result, 'Failed to set tuner gain to ${gain}dB');
   }
 
   /// Set the bandwidth for the device in Hz, 0 means automatic selection.
@@ -66,7 +65,7 @@ extension TunerExtension on RtlSdr {
     RtlSdrException.checkOpen(this);
     final result = bindings.setTunerBandwidth(handle, bandwidth);
     RtlSdrException.checkError(
-        result, 'Failed to set tuner bandwidth to ${bandwidth}Hz.');
+        result, 'Failed to set tuner bandwidth to ${bandwidth}Hz');
   }
 
   /// Set the intermediate frequency gain for the device.
@@ -80,7 +79,7 @@ extension TunerExtension on RtlSdr {
     RtlSdrException.checkError(
         result,
         'Failed to set intermediate frequency '
-        'gain at $stage to ${gain}dB.');
+        'gain at $stage to ${gain}dB');
   }
 }
 

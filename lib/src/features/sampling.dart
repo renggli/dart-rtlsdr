@@ -1,13 +1,13 @@
 import '../ffi/bindings.dart';
 import '../rtlsdr.dart';
-import '../utils/errors.dart';
+import '../utils/exception.dart';
 
 extension SamplingExtension on RtlSdr {
   /// Gets the actual sample rate in Hz the device is configured to.
   int get sampleRate {
     RtlSdrException.checkOpen(this);
     final result = bindings.getSampleRate(handle);
-    RtlSdrException.checkError(result, 'Failed to get sample rate.');
+    RtlSdrException.checkError(result, 'Failed to get sample rate');
     return result;
   }
 
@@ -16,7 +16,7 @@ extension SamplingExtension on RtlSdr {
     RtlSdrException.checkOpen(this);
     final result = bindings.setSampleRate(handle, rate);
     RtlSdrException.checkError(
-        result, 'Failed to set sample rate to ${rate}Hz.');
+        result, 'Failed to set sample rate to ${rate}Hz');
   }
 
   /// Gets the actual sample rate in Hz the device is configured to.
@@ -25,7 +25,7 @@ extension SamplingExtension on RtlSdr {
     final result = bindings.getDirectSampling(handle);
     return 0 <= result && result < DirectSamplingMode.values.length
         ? DirectSamplingMode.values[result]
-        : throw RtlSdrException(result, 'Failed to get direct sampling mode.');
+        : throw RtlSdrException('Failed to get direct sampling mode');
   }
 
   /// Sets the direct sampling mode.
@@ -34,7 +34,7 @@ extension SamplingExtension on RtlSdr {
     final result = bindings.setDirectSampling(
         handle, DirectSamplingMode.values.indexOf(mode));
     RtlSdrException.checkError(
-        result, 'Failed to set direct sampling mode to $mode.');
+        result, 'Failed to set direct sampling mode to $mode');
   }
 }
 

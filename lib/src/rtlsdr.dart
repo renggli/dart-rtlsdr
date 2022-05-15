@@ -8,7 +8,7 @@ import 'package:more/collection.dart';
 
 import 'ffi/bindings.dart';
 import 'ffi/types.dart';
-import 'utils/errors.dart';
+import 'utils/exception.dart';
 import 'utils/isolate.dart';
 
 /// The RTL-SDR device.
@@ -19,7 +19,7 @@ class RtlSdr {
     try {
       final index = bindings.getIndexBySerial(utf8Serial);
       RtlSdrException.checkError(
-          index, 'Unable to find device with serial "$serial".');
+          index, 'Unable to find device with serial "$serial"');
       return RtlSdr(index);
     } finally {
       malloc.free(utf8Serial);
@@ -32,7 +32,7 @@ class RtlSdr {
   /// Returns an iterable of all [RtlSdr] devices accessible on this machine.
   static Iterable<RtlSdr> get devices {
     final result = bindings.getDeviceCount();
-    RtlSdrException.checkError(result, 'Unable to read number of devices.');
+    RtlSdrException.checkError(result, 'Unable to read number of devices');
     return 0.to(result).map((index) => RtlSdr(index));
   }
 
@@ -56,7 +56,7 @@ class RtlSdr {
       final result =
           bindings.getDeviceUsbStrings(index, manufacturer, nullptr, nullptr);
       RtlSdrException.checkError(
-          result, 'Unable to get manufacturer of device $index.');
+          result, 'Unable to get manufacturer of device $index');
       return manufacturer.toDartString();
     } finally {
       malloc.free(manufacturer);
@@ -72,7 +72,7 @@ class RtlSdr {
       final result =
           bindings.getDeviceUsbStrings(index, nullptr, product, nullptr);
       RtlSdrException.checkError(
-          result, 'Unable to get product of device $index.');
+          result, 'Unable to get product of device $index');
       return product.toDartString();
     } finally {
       malloc.free(product);
@@ -88,7 +88,7 @@ class RtlSdr {
       final result =
           bindings.getDeviceUsbStrings(index, nullptr, nullptr, serial);
       RtlSdrException.checkError(
-          result, 'Unable to get serial of device $index.');
+          result, 'Unable to get serial of device $index');
       return serial.toDartString();
     } finally {
       malloc.free(serial);
@@ -116,12 +116,12 @@ class RtlSdr {
   void open() {
     if (isClosed) {
       if (!isValid) {
-        throw RtlSdrException(0, 'Invalid device $index.');
+        throw RtlSdrException('Invalid device $index');
       }
       final pointer = malloc<Pointer<DeviceHandle>>();
       try {
         final result = bindings.open(pointer, index);
-        RtlSdrException.checkError(result, 'Unable to open device $index.');
+        RtlSdrException.checkError(result, 'Unable to open device $index');
         _handle = pointer.value;
       } finally {
         malloc.free(pointer);
@@ -135,7 +135,7 @@ class RtlSdr {
       _closeDataStream();
       try {
         final result = bindings.close(handle);
-        RtlSdrException.checkError(result, 'Unable to close device $index.');
+        RtlSdrException.checkError(result, 'Unable to close device $index');
       } finally {
         _handle = null;
       }

@@ -3,7 +3,7 @@ import 'dart:isolate';
 
 import '../ffi/bindings.dart';
 import '../ffi/types.dart';
-import 'errors.dart';
+import 'exception.dart';
 
 class ReadIsolate {
   ReadIsolate(this.address, this.bufferCount, this.bufferSize, this.sendPort);
@@ -20,7 +20,7 @@ void readIsolate(ReadIsolate arguments) {
   _arguments = arguments;
   final handle = Pointer<DeviceHandle>.fromAddress(arguments.address);
   final resetBuffer = bindings.resetBuffer(handle);
-  RtlSdrException.checkError(resetBuffer, 'Failed to reset buffers.');
+  RtlSdrException.checkError(resetBuffer, 'Failed to reset buffers');
   final readAsync = bindings.readAsync(handle, asyncCallbackPointer, nullptr,
       arguments.bufferCount, arguments.bufferSize);
   RtlSdrException.checkError(readAsync, 'Failed to read asynchronously');

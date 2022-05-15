@@ -14,4 +14,4 @@ export 'src/transforms/copy_double.dart' show ToTypedDoubleListExtension;
 export 'src/transforms/copy_int.dart' show ToTypedIntListExtension;
 export 'src/transforms/diff.dart' show DiffConverterExtension;
 export 'src/transforms/phase.dart' show PhaseExtension;
-export 'src/utils/errors.dart';
+export 'src/utils/exception.dart';
