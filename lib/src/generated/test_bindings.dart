@@ -167,247 +167,246 @@ class TestBindings implements AbstractBindings {
     _getVersion = getVersion ?? (() => throw UnimplementedError('getVersion'));
   }
 
-  late DartGetDeviceCount _getDeviceCount;
-  late DartGetDeviceName _getDeviceName;
-  late DartGetDeviceUsbStrings _getDeviceUsbStrings;
-  late DartGetIndexBySerial _getIndexBySerial;
-  late DartOpen _open;
-  late DartClose _close;
-  late DartSetXtalFreq _setXtalFreq;
-  late DartGetXtalFreq _getXtalFreq;
-  late DartGetUsbStrings _getUsbStrings;
-  late DartWriteEeprom _writeEeprom;
-  late DartReadEeprom _readEeprom;
-  late DartSetCenterFreq _setCenterFreq;
-  late DartSetCenterFreq64 _setCenterFreq64;
-  late DartSetHarmonicRx _setHarmonicRx;
-  late DartIsTunerPLLLocked _isTunerPLLLocked;
-  late DartGetCenterFreq _getCenterFreq;
-  late DartGetCenterFreq64 _getCenterFreq64;
-  late DartSetFreqCorrection _setFreqCorrection;
-  late DartGetFreqCorrection _getFreqCorrection;
-  late DartGetTunerType _getTunerType;
-  late DartGetTunerGains _getTunerGains;
-  late DartSetTunerGain _setTunerGain;
-  late DartSetAndGetTunerBandwidth _setAndGetTunerBandwidth;
-  late DartSetTunerBandwidth _setTunerBandwidth;
-  late DartSetTunerBandCenter _setTunerBandCenter;
-  late DartSetTunerSideband _setTunerSideband;
-  late DartGetTunerGain _getTunerGain;
-  late DartSetTunerGainExt _setTunerGainExt;
-  late DartSetTunerIfGain _setTunerIfGain;
-  late DartSetTunerGainMode _setTunerGainMode;
-  late DartSetTunerIfMode _setTunerIfMode;
-  late DartSetSampleRate _setSampleRate;
-  late DartGetSampleRate _getSampleRate;
-  late DartSetTestmode _setTestmode;
-  late DartSetAgcMode _setAgcMode;
-  late DartSetDirectSampling _setDirectSampling;
-  late DartGetDirectSampling _getDirectSampling;
-  late DartSetDsMode _setDsMode;
-  late DartSetOffsetTuning _setOffsetTuning;
-  late DartGetOffsetTuning _getOffsetTuning;
-  late DartSetDithering _setDithering;
-  late DartResetBuffer _resetBuffer;
-  late DartReadSync _readSync;
-  late DartWaitAsync _waitAsync;
-  late DartReadAsync _readAsync;
-  late DartCancelAsync _cancelAsync;
-  late DartIrQuery _irQuery;
-  late DartSetBiasTee _setBiasTee;
-  late DartSetBiasTeeGpio _setBiasTeeGpio;
-  late DartGetVerId _getVerId;
-  late DartGetVersion _getVersion;
-
   @override
   int getDeviceCount() => _getDeviceCount();
+  late DartGetDeviceCount _getDeviceCount;
 
   @override
   Pointer<Utf8> getDeviceName(int index) => _getDeviceName(index);
+  late DartGetDeviceName _getDeviceName;
 
   @override
   int getDeviceUsbStrings(int index, Pointer<Utf8> manufact,
           Pointer<Utf8> product, Pointer<Utf8> serial) =>
       _getDeviceUsbStrings(index, manufact, product, serial);
+  late DartGetDeviceUsbStrings _getDeviceUsbStrings;
 
   @override
   int getIndexBySerial(Pointer<Utf8> serial) => _getIndexBySerial(serial);
+  late DartGetIndexBySerial _getIndexBySerial;
 
   @override
   int open(Pointer<Pointer<DeviceHandle>> dev, int index) => _open(dev, index);
+  late DartOpen _open;
 
   @override
   int close(Pointer<DeviceHandle> dev) => _close(dev);
+  late DartClose _close;
 
   @override
   int setXtalFreq(Pointer<DeviceHandle> dev, int rtlFreq, int tunerFreq) =>
       _setXtalFreq(dev, rtlFreq, tunerFreq);
+  late DartSetXtalFreq _setXtalFreq;
 
   @override
   int getXtalFreq(Pointer<DeviceHandle> dev, Pointer<Uint32> rtlFreq,
           Pointer<Uint32> tunerFreq) =>
       _getXtalFreq(dev, rtlFreq, tunerFreq);
+  late DartGetXtalFreq _getXtalFreq;
 
   @override
   int getUsbStrings(Pointer<DeviceHandle> dev, Pointer<Utf8> manufact,
           Pointer<Utf8> product, Pointer<Utf8> serial) =>
       _getUsbStrings(dev, manufact, product, serial);
+  late DartGetUsbStrings _getUsbStrings;
 
   @override
   int writeEeprom(Pointer<DeviceHandle> dev, Pointer<Uint8> data, int offset,
           int len) =>
       _writeEeprom(dev, data, offset, len);
+  late DartWriteEeprom _writeEeprom;
 
   @override
   int readEeprom(Pointer<DeviceHandle> dev, Pointer<Uint8> data, int offset,
           int len) =>
       _readEeprom(dev, data, offset, len);
+  late DartReadEeprom _readEeprom;
 
   @override
   int setCenterFreq(Pointer<DeviceHandle> dev, int freq) =>
       _setCenterFreq(dev, freq);
+  late DartSetCenterFreq _setCenterFreq;
 
   @override
   int setCenterFreq64(Pointer<DeviceHandle> dev, int freq) =>
       _setCenterFreq64(dev, freq);
+  late DartSetCenterFreq64 _setCenterFreq64;
 
   @override
   int setHarmonicRx(Pointer<DeviceHandle> dev, int harmonic) =>
       _setHarmonicRx(dev, harmonic);
+  late DartSetHarmonicRx _setHarmonicRx;
 
   @override
   int isTunerPLLLocked(Pointer<DeviceHandle> dev) => _isTunerPLLLocked(dev);
+  late DartIsTunerPLLLocked _isTunerPLLLocked;
 
   @override
   int getCenterFreq(Pointer<DeviceHandle> dev) => _getCenterFreq(dev);
+  late DartGetCenterFreq _getCenterFreq;
 
   @override
   int getCenterFreq64(Pointer<DeviceHandle> dev) => _getCenterFreq64(dev);
+  late DartGetCenterFreq64 _getCenterFreq64;
 
   @override
   int setFreqCorrection(Pointer<DeviceHandle> dev, int ppm) =>
       _setFreqCorrection(dev, ppm);
+  late DartSetFreqCorrection _setFreqCorrection;
 
   @override
   int getFreqCorrection(Pointer<DeviceHandle> dev) => _getFreqCorrection(dev);
+  late DartGetFreqCorrection _getFreqCorrection;
 
   @override
   int getTunerType(Pointer<DeviceHandle> dev) => _getTunerType(dev);
+  late DartGetTunerType _getTunerType;
 
   @override
   int getTunerGains(Pointer<DeviceHandle> dev, Pointer<Int> gains) =>
       _getTunerGains(dev, gains);
+  late DartGetTunerGains _getTunerGains;
 
   @override
   int setTunerGain(Pointer<DeviceHandle> dev, int gain) =>
       _setTunerGain(dev, gain);
+  late DartSetTunerGain _setTunerGain;
 
   @override
   int setAndGetTunerBandwidth(Pointer<DeviceHandle> dev, int bw,
           Pointer<Uint32> appliedBw, int applyBw) =>
       _setAndGetTunerBandwidth(dev, bw, appliedBw, applyBw);
+  late DartSetAndGetTunerBandwidth _setAndGetTunerBandwidth;
 
   @override
   int setTunerBandwidth(Pointer<DeviceHandle> dev, int bw) =>
       _setTunerBandwidth(dev, bw);
+  late DartSetTunerBandwidth _setTunerBandwidth;
 
   @override
   int setTunerBandCenter(Pointer<DeviceHandle> dev, int ifBandCenterFreq) =>
       _setTunerBandCenter(dev, ifBandCenterFreq);
+  late DartSetTunerBandCenter _setTunerBandCenter;
 
   @override
   int setTunerSideband(Pointer<DeviceHandle> dev, int sideband) =>
       _setTunerSideband(dev, sideband);
+  late DartSetTunerSideband _setTunerSideband;
 
   @override
   int getTunerGain(Pointer<DeviceHandle> dev) => _getTunerGain(dev);
+  late DartGetTunerGain _getTunerGain;
 
   @override
   int setTunerGainExt(
           Pointer<DeviceHandle> dev, int lnaGain, int mixerGain, int vgaGain) =>
       _setTunerGainExt(dev, lnaGain, mixerGain, vgaGain);
+  late DartSetTunerGainExt _setTunerGainExt;
 
   @override
   int setTunerIfGain(Pointer<DeviceHandle> dev, int stage, int gain) =>
       _setTunerIfGain(dev, stage, gain);
+  late DartSetTunerIfGain _setTunerIfGain;
 
   @override
   int setTunerGainMode(Pointer<DeviceHandle> dev, int manual) =>
       _setTunerGainMode(dev, manual);
+  late DartSetTunerGainMode _setTunerGainMode;
 
   @override
   int setTunerIfMode(Pointer<DeviceHandle> dev, int ifMode) =>
       _setTunerIfMode(dev, ifMode);
+  late DartSetTunerIfMode _setTunerIfMode;
 
   @override
   int setSampleRate(Pointer<DeviceHandle> dev, int rate) =>
       _setSampleRate(dev, rate);
+  late DartSetSampleRate _setSampleRate;
 
   @override
   int getSampleRate(Pointer<DeviceHandle> dev) => _getSampleRate(dev);
+  late DartGetSampleRate _getSampleRate;
 
   @override
   int setTestmode(Pointer<DeviceHandle> dev, int on) => _setTestmode(dev, on);
+  late DartSetTestmode _setTestmode;
 
   @override
   int setAgcMode(Pointer<DeviceHandle> dev, int on) => _setAgcMode(dev, on);
+  late DartSetAgcMode _setAgcMode;
 
   @override
   int setDirectSampling(Pointer<DeviceHandle> dev, int on) =>
       _setDirectSampling(dev, on);
+  late DartSetDirectSampling _setDirectSampling;
 
   @override
   int getDirectSampling(Pointer<DeviceHandle> dev) => _getDirectSampling(dev);
+  late DartGetDirectSampling _getDirectSampling;
 
   @override
   int setDsMode(Pointer<DeviceHandle> dev, int mode, int freqThreshold) =>
       _setDsMode(dev, mode, freqThreshold);
+  late DartSetDsMode _setDsMode;
 
   @override
   int setOffsetTuning(Pointer<DeviceHandle> dev, int on) =>
       _setOffsetTuning(dev, on);
+  late DartSetOffsetTuning _setOffsetTuning;
 
   @override
   int getOffsetTuning(Pointer<DeviceHandle> dev) => _getOffsetTuning(dev);
+  late DartGetOffsetTuning _getOffsetTuning;
 
   @override
   int setDithering(Pointer<DeviceHandle> dev, int dither) =>
       _setDithering(dev, dither);
+  late DartSetDithering _setDithering;
 
   @override
   int resetBuffer(Pointer<DeviceHandle> dev) => _resetBuffer(dev);
+  late DartResetBuffer _resetBuffer;
 
   @override
   int readSync(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int len,
           Pointer<Int> nRead) =>
       _readSync(dev, buf, len, nRead);
+  late DartReadSync _readSync;
 
   @override
   int waitAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx) =>
       _waitAsync(dev, cb, ctx);
+  late DartWaitAsync _waitAsync;
 
   @override
   int readAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx,
           int bufNum, int bufLen) =>
       _readAsync(dev, cb, ctx, bufNum, bufLen);
+  late DartReadAsync _readAsync;
 
   @override
   int cancelAsync(Pointer<DeviceHandle> dev) => _cancelAsync(dev);
+  late DartCancelAsync _cancelAsync;
 
   @override
   int irQuery(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int bufLen) =>
       _irQuery(dev, buf, bufLen);
+  late DartIrQuery _irQuery;
 
   @override
   int setBiasTee(Pointer<DeviceHandle> dev, int on) => _setBiasTee(dev, on);
+  late DartSetBiasTee _setBiasTee;
 
   @override
   int setBiasTeeGpio(Pointer<DeviceHandle> dev, int gpio, int on) =>
       _setBiasTeeGpio(dev, gpio, on);
+  late DartSetBiasTeeGpio _setBiasTeeGpio;
 
   @override
   Pointer<Utf8> getVerId() => _getVerId();
+  late DartGetVerId _getVerId;
 
   @override
   int getVersion() => _getVersion();
+  late DartGetVersion _getVersion;
 }

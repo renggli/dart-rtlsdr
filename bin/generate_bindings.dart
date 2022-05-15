@@ -302,13 +302,10 @@ Future<void> generateEagerBindings(List<Method> methods) async {
   out.writeln(';');
   out.writeln();
   for (final method in methods) {
-    out.writeln('final ${method.dartTypeName} _${method.dartMethodName};');
-  }
-  out.writeln();
-  for (final method in methods) {
     out.writeln('@override');
     out.writeln('${method.dartMethodDeclaration} =>');
     out.writeln('_${method.dartMethodName}(${method.argumentNames});');
+    out.writeln('final ${method.dartTypeName} _${method.dartMethodName};');
     out.writeln();
   }
   out.writeln('}');
@@ -340,13 +337,10 @@ Future<void> generateTestBindings(List<Method> methods) async {
   out.writeln('}');
   out.writeln();
   for (final method in methods) {
-    out.writeln('late ${method.dartTypeName} _${method.dartMethodName};');
-  }
-  out.writeln();
-  for (final method in methods) {
     out.writeln('@override');
     out.writeln('${method.dartMethodDeclaration} =>');
     out.writeln('_${method.dartMethodName}(${method.argumentNames});');
+    out.writeln('late ${method.dartTypeName} _${method.dartMethodName};');
     out.writeln();
   }
   out.writeln('}');
