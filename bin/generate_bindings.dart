@@ -156,7 +156,7 @@ class Type {
       case 'uint64_t':
         return 'Uint64';
       case 'void*':
-        return 'Pointer<Uint8>';
+        return 'Pointer<Void>';
       case 'rtlsdr_dev_t':
         return 'DeviceHandle';
       case 'rtlsdr_read_async_cb_t':
@@ -184,7 +184,7 @@ class Type {
       case 'size_t':
         return 'int';
       case 'void*':
-        return 'Pointer<Uint8>';
+        return 'Pointer<Void>';
       case 'rtlsdr_dev_t':
         return 'DeviceHandle';
       case 'rtlsdr_read_async_cb_t':

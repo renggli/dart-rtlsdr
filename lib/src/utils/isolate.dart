@@ -29,5 +29,5 @@ void readIsolate(ReadIsolate arguments) {
 final asyncCallbackPointer =
     Pointer.fromFunction<ReadAsyncCallback>(asyncCallback);
 
-void asyncCallback(Pointer<Uint8> buffer, int length, int key) =>
+void asyncCallback(Pointer<Uint8> buffer, int length, Pointer<Void> context) =>
     _arguments?.sendPort.send(buffer.asTypedList(length));

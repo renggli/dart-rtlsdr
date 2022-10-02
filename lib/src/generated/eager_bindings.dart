@@ -339,18 +339,18 @@ class EagerBindings implements AbstractBindings {
   final DartResetBuffer _resetBuffer;
 
   @override
-  int readSync(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int len,
+  int readSync(Pointer<DeviceHandle> dev, Pointer<Void> buf, int len,
           Pointer<Int> nRead) =>
       _readSync(dev, buf, len, nRead);
   final DartReadSync _readSync;
 
   @override
-  int waitAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx) =>
+  int waitAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx) =>
       _waitAsync(dev, cb, ctx);
   final DartWaitAsync _waitAsync;
 
   @override
-  int readAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx,
+  int readAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx,
           int bufNum, int bufLen) =>
       _readAsync(dev, cb, ctx, bufNum, bufLen);
   final DartReadAsync _readAsync;

@@ -288,20 +288,20 @@ class LazyBindings implements AbstractBindings {
   DartResetBuffer? _resetBuffer;
 
   @override
-  int readSync(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int len,
+  int readSync(Pointer<DeviceHandle> dev, Pointer<Void> buf, int len,
           Pointer<Int> nRead) =>
       (_readSync ??= _library.lookupFunction<NativeReadSync, DartReadSync>(
           'rtlsdr_read_sync'))(dev, buf, len, nRead);
   DartReadSync? _readSync;
 
   @override
-  int waitAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx) =>
+  int waitAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx) =>
       (_waitAsync ??= _library.lookupFunction<NativeWaitAsync, DartWaitAsync>(
           'rtlsdr_wait_async'))(dev, cb, ctx);
   DartWaitAsync? _waitAsync;
 
   @override
-  int readAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx,
+  int readAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx,
           int bufNum, int bufLen) =>
       (_readAsync ??= _library.lookupFunction<NativeReadAsync, DartReadAsync>(
           'rtlsdr_read_async'))(dev, cb, ctx, bufNum, bufLen);

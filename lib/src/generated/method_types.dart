@@ -216,21 +216,21 @@ typedef DartResetBuffer = int Function(Pointer<DeviceHandle> dev);
 
 // int rtlsdr_read_sync(rtlsdr_dev_t *dev, void *buf, int len, int *n_read)
 typedef NativeReadSync = Int Function(
-    Pointer<DeviceHandle> dev, Pointer<Uint8> buf, Int len, Pointer<Int> nRead);
+    Pointer<DeviceHandle> dev, Pointer<Void> buf, Int len, Pointer<Int> nRead);
 typedef DartReadSync = int Function(
-    Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int len, Pointer<Int> nRead);
+    Pointer<DeviceHandle> dev, Pointer<Void> buf, int len, Pointer<Int> nRead);
 
 // int rtlsdr_wait_async(rtlsdr_dev_t *dev, rtlsdr_read_async_cb_t cb, void *ctx)
 typedef NativeWaitAsync = Int Function(
-    Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx);
+    Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx);
 typedef DartWaitAsync = int Function(
-    Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx);
+    Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx);
 
 // int rtlsdr_read_async(rtlsdr_dev_t *dev, rtlsdr_read_async_cb_t cb, void *ctx, uint32_t buf_num, uint32_t buf_len)
 typedef NativeReadAsync = Int Function(Pointer<DeviceHandle> dev, Pointer cb,
-    Pointer<Uint8> ctx, Uint32 bufNum, Uint32 bufLen);
+    Pointer<Void> ctx, Uint32 bufNum, Uint32 bufLen);
 typedef DartReadAsync = int Function(Pointer<DeviceHandle> dev, Pointer cb,
-    Pointer<Uint8> ctx, int bufNum, int bufLen);
+    Pointer<Void> ctx, int bufNum, int bufLen);
 
 // int rtlsdr_cancel_async(rtlsdr_dev_t *dev)
 typedef NativeCancelAsync = Int Function(Pointer<DeviceHandle> dev);

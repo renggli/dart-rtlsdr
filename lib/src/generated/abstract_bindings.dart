@@ -97,12 +97,12 @@ abstract class AbstractBindings {
 
   int resetBuffer(Pointer<DeviceHandle> dev);
 
-  int readSync(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int len,
+  int readSync(Pointer<DeviceHandle> dev, Pointer<Void> buf, int len,
       Pointer<Int> nRead);
 
-  int waitAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx);
+  int waitAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx);
 
-  int readAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Uint8> ctx,
+  int readAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx,
       int bufNum, int bufLen);
 
   int cancelAsync(Pointer<DeviceHandle> dev);
