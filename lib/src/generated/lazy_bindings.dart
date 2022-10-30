@@ -1,3 +1,5 @@
+// AUTO-GENERATED CODE: DO NOT EDIT
+
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';

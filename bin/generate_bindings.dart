@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:characters/characters.dart';
 import 'package:more/more.dart';
 
 // ignore_for_file: lines_longer_than_80_chars
@@ -80,9 +79,9 @@ class Method {
   late List<Parameter> arguments;
 
   String get dartName =>
-      name.split('_').map((value) => value.toFirstUpperCase()).join();
+      name.split('_').map((value) => value.toUpperCaseFirstCharacter()).join();
 
-  String get dartMethodName => dartName.toFirstLowerCase();
+  String get dartMethodName => dartName.toLowerCaseFirstCharacter();
 
   String get dartTypeName => 'Dart$dartName';
 
@@ -113,9 +112,9 @@ class Parameter {
         .group(2)!
         .trim()
         .split('_')
-        .map((value) => value.toFirstUpperCase())
+        .map((value) => value.toUpperCaseFirstCharacter())
         .join()
-        .toFirstLowerCase();
+        .toLowerCaseFirstCharacter();
   }
 
   final String declaration;
@@ -201,23 +200,18 @@ class Type {
 Future<void> format(File file) async =>
     Process.run('dart', ['format', '--fix', file.absolute.path]);
 
-extension CaseString on String {
-  String toFirstUpperCase() {
-    final iterator = characters.iterator..moveNext();
-    return iterator.current.toUpperCase() + iterator.stringAfter;
-  }
-
-  String toFirstLowerCase() {
-    final iterator = characters.iterator..moveNext();
-    return iterator.current.toLowerCase() + iterator.stringAfter;
-  }
+void generateWarning(StringSink out) {
+  out.writeln('// AUTO-GENERATED CODE: DO NOT EDIT');
+  out.writeln();
 }
 
 Future<void> generateMethodTypes(List<Method> methods) async {
   final file = File('lib/src/generated/method_types.dart');
   final out = file.openWrite();
+  generateWarning(out);
   out.writeln('// ignore_for_file: lines_longer_than_80_chars');
   out.writeln("import 'dart:ffi';");
+  out.writeln();
   out.writeln("import 'package:ffi/ffi.dart';");
   out.writeln();
   out.writeln("import '../ffi/types.dart';");
@@ -237,7 +231,9 @@ Future<void> generateMethodTypes(List<Method> methods) async {
 Future<void> generateAbstractBindings(List<Method> methods) async {
   final file = File('lib/src/generated/abstract_bindings.dart');
   final out = file.openWrite();
+  generateWarning(out);
   out.writeln("import 'dart:ffi';");
+  out.writeln();
   out.writeln("import 'package:ffi/ffi.dart';");
   out.writeln();
   out.writeln("import '../ffi/types.dart';");
@@ -256,7 +252,9 @@ Future<void> generateAbstractBindings(List<Method> methods) async {
 Future<void> generateLazyBindings(List<Method> methods) async {
   final file = File('lib/src/generated/lazy_bindings.dart');
   final out = file.openWrite();
+  generateWarning(out);
   out.writeln("import 'dart:ffi';");
+  out.writeln();
   out.writeln("import 'package:ffi/ffi.dart';");
   out.writeln();
   out.writeln("import '../ffi/types.dart';");
@@ -285,7 +283,9 @@ Future<void> generateLazyBindings(List<Method> methods) async {
 Future<void> generateEagerBindings(List<Method> methods) async {
   final file = File('lib/src/generated/eager_bindings.dart');
   final out = file.openWrite();
+  generateWarning(out);
   out.writeln("import 'dart:ffi';");
+  out.writeln();
   out.writeln("import 'package:ffi/ffi.dart';");
   out.writeln();
   out.writeln("import '../ffi/types.dart';");
@@ -316,7 +316,9 @@ Future<void> generateEagerBindings(List<Method> methods) async {
 Future<void> generateTestBindings(List<Method> methods) async {
   final file = File('lib/src/generated/test_bindings.dart');
   final out = file.openWrite();
+  generateWarning(out);
   out.writeln("import 'dart:ffi';");
+  out.writeln();
   out.writeln("import 'package:ffi/ffi.dart';");
   out.writeln();
   out.writeln("import '../ffi/types.dart';");
