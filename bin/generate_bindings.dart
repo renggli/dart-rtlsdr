@@ -124,7 +124,7 @@ class Parameter {
 
 class Type {
   Type(String declaration)
-      : declaration = CharMatcher.whitespace().removeFrom(declaration);
+      : declaration = const CharMatcher.whitespace().removeFrom(declaration);
 
   final String declaration;
   late String nativeType = _getNativeType(declaration);

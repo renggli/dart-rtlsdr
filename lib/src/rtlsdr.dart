@@ -164,7 +164,7 @@ class RtlSdr {
   void _setupDataStream() {
     RtlSdrException.checkOpen(this);
     _receiverPort = ReceivePort();
-    _receiverPort!.listen((data) => _streamController?.add(data));
+    _receiverPort!.listen((data) => _streamController?.add(data as Uint8List));
     Isolate.spawn(
       readIsolate,
       ReadIsolate(handle.address, 0, 0, _receiverPort!.sendPort),

@@ -41,7 +41,7 @@ extension WindowInt32ListExtension<T> on Stream<Int32List> {
       (data, start, stop) => Int32List.sublistView(data, start, stop));
 }
 
-Stream<T> _window<T extends List>(Stream<T> stream, int size,
+Stream<T> _window<T extends List<int>>(Stream<T> stream, int size,
         T Function(T list, int start, int stop) sublist) =>
     stream.expand((data) {
       final result = <T>[];

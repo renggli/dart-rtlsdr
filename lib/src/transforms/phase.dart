@@ -17,7 +17,7 @@ extension PhaseExtension on Stream<Uint8List> {
 final _phase = _precomputePhase();
 
 Int16List _precomputePhase() {
-  final scale = (1 << 12) / pi;
+  const scale = (1 << 12) / pi;
   final result = Int16List(256 * 256);
   for (var i = 0; i < 256; i++) {
     for (var q = 0; q < 256; q++) {
