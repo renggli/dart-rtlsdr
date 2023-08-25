@@ -22,7 +22,7 @@ class DiffConverter<T extends num, L extends List<T>> extends Converter<L, L> {
 }
 
 class DiffSink<T extends num, L extends List<T>>
-    extends ChunkedConversionSink<L> {
+    implements ChunkedConversionSink<L> {
   DiffSink(this.sink);
 
   final Sink<L> sink;

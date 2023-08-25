@@ -1,6 +1,6 @@
 ## 0.0.6 (unpublished)
 
-- Dart 2.19 requirement.
+- Dart 3.0 requirement.
 
 ## 0.0.4
 
