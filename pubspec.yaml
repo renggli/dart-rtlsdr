@@ -2,7 +2,7 @@ name: rtlsdr
 version: 0.0.6
 
 homepage: https://github.com/renggli/dart-rtlsdr
-description: Dart bindings for Software Defined Radio (librtlsdr).
+description: FFI bindings to access librtlsdr and read Software-Defined Radio signals using Dart streams.
 topics:
   - sdr
   - ffi
