@@ -23,45 +23,30 @@ class TestBindings implements AbstractBindings {
     DartWriteEeprom? writeEeprom,
     DartReadEeprom? readEeprom,
     DartSetCenterFreq? setCenterFreq,
-    DartSetCenterFreq64? setCenterFreq64,
-    DartSetHarmonicRx? setHarmonicRx,
-    DartIsTunerPLLLocked? isTunerPLLLocked,
     DartGetCenterFreq? getCenterFreq,
-    DartGetCenterFreq64? getCenterFreq64,
     DartSetFreqCorrection? setFreqCorrection,
     DartGetFreqCorrection? getFreqCorrection,
     DartGetTunerType? getTunerType,
     DartGetTunerGains? getTunerGains,
     DartSetTunerGain? setTunerGain,
-    DartSetAndGetTunerBandwidth? setAndGetTunerBandwidth,
     DartSetTunerBandwidth? setTunerBandwidth,
-    DartSetTunerBandCenter? setTunerBandCenter,
-    DartSetTunerSideband? setTunerSideband,
     DartGetTunerGain? getTunerGain,
-    DartSetTunerGainExt? setTunerGainExt,
     DartSetTunerIfGain? setTunerIfGain,
     DartSetTunerGainMode? setTunerGainMode,
-    DartSetTunerIfMode? setTunerIfMode,
     DartSetSampleRate? setSampleRate,
     DartGetSampleRate? getSampleRate,
     DartSetTestmode? setTestmode,
     DartSetAgcMode? setAgcMode,
     DartSetDirectSampling? setDirectSampling,
     DartGetDirectSampling? getDirectSampling,
-    DartSetDsMode? setDsMode,
     DartSetOffsetTuning? setOffsetTuning,
     DartGetOffsetTuning? getOffsetTuning,
-    DartSetDithering? setDithering,
     DartResetBuffer? resetBuffer,
     DartReadSync? readSync,
     DartWaitAsync? waitAsync,
     DartReadAsync? readAsync,
     DartCancelAsync? cancelAsync,
-    DartIrQuery? irQuery,
     DartSetBiasTee? setBiasTee,
-    DartSetBiasTeeGpio? setBiasTeeGpio,
-    DartGetVerId? getVerId,
-    DartGetVersion? getVersion,
   }) {
     _getDeviceCount =
         getDeviceCount ?? (() => throw UnimplementedError('getDeviceCount'));
@@ -87,16 +72,8 @@ class TestBindings implements AbstractBindings {
         ((dev, data, offset, len) => throw UnimplementedError('readEeprom'));
     _setCenterFreq = setCenterFreq ??
         ((dev, freq) => throw UnimplementedError('setCenterFreq'));
-    _setCenterFreq64 = setCenterFreq64 ??
-        ((dev, freq) => throw UnimplementedError('setCenterFreq64'));
-    _setHarmonicRx = setHarmonicRx ??
-        ((dev, harmonic) => throw UnimplementedError('setHarmonicRx'));
-    _isTunerPLLLocked = isTunerPLLLocked ??
-        ((dev) => throw UnimplementedError('isTunerPLLLocked'));
     _getCenterFreq =
         getCenterFreq ?? ((dev) => throw UnimplementedError('getCenterFreq'));
-    _getCenterFreq64 = getCenterFreq64 ??
-        ((dev) => throw UnimplementedError('getCenterFreq64'));
     _setFreqCorrection = setFreqCorrection ??
         ((dev, ppm) => throw UnimplementedError('setFreqCorrection'));
     _getFreqCorrection = getFreqCorrection ??
@@ -107,27 +84,14 @@ class TestBindings implements AbstractBindings {
         ((dev, gains) => throw UnimplementedError('getTunerGains'));
     _setTunerGain = setTunerGain ??
         ((dev, gain) => throw UnimplementedError('setTunerGain'));
-    _setAndGetTunerBandwidth = setAndGetTunerBandwidth ??
-        ((dev, bw, appliedBw, applyBw) =>
-            throw UnimplementedError('setAndGetTunerBandwidth'));
     _setTunerBandwidth = setTunerBandwidth ??
         ((dev, bw) => throw UnimplementedError('setTunerBandwidth'));
-    _setTunerBandCenter = setTunerBandCenter ??
-        ((dev, ifBandCenterFreq) =>
-            throw UnimplementedError('setTunerBandCenter'));
-    _setTunerSideband = setTunerSideband ??
-        ((dev, sideband) => throw UnimplementedError('setTunerSideband'));
     _getTunerGain =
         getTunerGain ?? ((dev) => throw UnimplementedError('getTunerGain'));
-    _setTunerGainExt = setTunerGainExt ??
-        ((dev, lnaGain, mixerGain, vgaGain) =>
-            throw UnimplementedError('setTunerGainExt'));
     _setTunerIfGain = setTunerIfGain ??
         ((dev, stage, gain) => throw UnimplementedError('setTunerIfGain'));
     _setTunerGainMode = setTunerGainMode ??
         ((dev, manual) => throw UnimplementedError('setTunerGainMode'));
-    _setTunerIfMode = setTunerIfMode ??
-        ((dev, ifMode) => throw UnimplementedError('setTunerIfMode'));
     _setSampleRate = setSampleRate ??
         ((dev, rate) => throw UnimplementedError('setSampleRate'));
     _getSampleRate =
@@ -140,14 +104,10 @@ class TestBindings implements AbstractBindings {
         ((dev, on) => throw UnimplementedError('setDirectSampling'));
     _getDirectSampling = getDirectSampling ??
         ((dev) => throw UnimplementedError('getDirectSampling'));
-    _setDsMode = setDsMode ??
-        ((dev, mode, freqThreshold) => throw UnimplementedError('setDsMode'));
     _setOffsetTuning = setOffsetTuning ??
         ((dev, on) => throw UnimplementedError('setOffsetTuning'));
     _getOffsetTuning = getOffsetTuning ??
         ((dev) => throw UnimplementedError('getOffsetTuning'));
-    _setDithering = setDithering ??
-        ((dev, dither) => throw UnimplementedError('setDithering'));
     _resetBuffer =
         resetBuffer ?? ((dev) => throw UnimplementedError('resetBuffer'));
     _readSync = readSync ??
@@ -159,14 +119,8 @@ class TestBindings implements AbstractBindings {
             throw UnimplementedError('readAsync'));
     _cancelAsync =
         cancelAsync ?? ((dev) => throw UnimplementedError('cancelAsync'));
-    _irQuery =
-        irQuery ?? ((dev, buf, bufLen) => throw UnimplementedError('irQuery'));
     _setBiasTee =
         setBiasTee ?? ((dev, on) => throw UnimplementedError('setBiasTee'));
-    _setBiasTeeGpio = setBiasTeeGpio ??
-        ((dev, gpio, on) => throw UnimplementedError('setBiasTeeGpio'));
-    _getVerId = getVerId ?? (() => throw UnimplementedError('getVerId'));
-    _getVersion = getVersion ?? (() => throw UnimplementedError('getVersion'));
   }
 
   @override
@@ -230,26 +184,8 @@ class TestBindings implements AbstractBindings {
   late DartSetCenterFreq _setCenterFreq;
 
   @override
-  int setCenterFreq64(Pointer<DeviceHandle> dev, int freq) =>
-      _setCenterFreq64(dev, freq);
-  late DartSetCenterFreq64 _setCenterFreq64;
-
-  @override
-  int setHarmonicRx(Pointer<DeviceHandle> dev, int harmonic) =>
-      _setHarmonicRx(dev, harmonic);
-  late DartSetHarmonicRx _setHarmonicRx;
-
-  @override
-  int isTunerPLLLocked(Pointer<DeviceHandle> dev) => _isTunerPLLLocked(dev);
-  late DartIsTunerPLLLocked _isTunerPLLLocked;
-
-  @override
   int getCenterFreq(Pointer<DeviceHandle> dev) => _getCenterFreq(dev);
   late DartGetCenterFreq _getCenterFreq;
-
-  @override
-  int getCenterFreq64(Pointer<DeviceHandle> dev) => _getCenterFreq64(dev);
-  late DartGetCenterFreq64 _getCenterFreq64;
 
   @override
   int setFreqCorrection(Pointer<DeviceHandle> dev, int ppm) =>
@@ -275,35 +211,13 @@ class TestBindings implements AbstractBindings {
   late DartSetTunerGain _setTunerGain;
 
   @override
-  int setAndGetTunerBandwidth(Pointer<DeviceHandle> dev, int bw,
-          Pointer<Uint32> appliedBw, int applyBw) =>
-      _setAndGetTunerBandwidth(dev, bw, appliedBw, applyBw);
-  late DartSetAndGetTunerBandwidth _setAndGetTunerBandwidth;
-
-  @override
   int setTunerBandwidth(Pointer<DeviceHandle> dev, int bw) =>
       _setTunerBandwidth(dev, bw);
   late DartSetTunerBandwidth _setTunerBandwidth;
 
   @override
-  int setTunerBandCenter(Pointer<DeviceHandle> dev, int ifBandCenterFreq) =>
-      _setTunerBandCenter(dev, ifBandCenterFreq);
-  late DartSetTunerBandCenter _setTunerBandCenter;
-
-  @override
-  int setTunerSideband(Pointer<DeviceHandle> dev, int sideband) =>
-      _setTunerSideband(dev, sideband);
-  late DartSetTunerSideband _setTunerSideband;
-
-  @override
   int getTunerGain(Pointer<DeviceHandle> dev) => _getTunerGain(dev);
   late DartGetTunerGain _getTunerGain;
-
-  @override
-  int setTunerGainExt(
-          Pointer<DeviceHandle> dev, int lnaGain, int mixerGain, int vgaGain) =>
-      _setTunerGainExt(dev, lnaGain, mixerGain, vgaGain);
-  late DartSetTunerGainExt _setTunerGainExt;
 
   @override
   int setTunerIfGain(Pointer<DeviceHandle> dev, int stage, int gain) =>
@@ -314,11 +228,6 @@ class TestBindings implements AbstractBindings {
   int setTunerGainMode(Pointer<DeviceHandle> dev, int manual) =>
       _setTunerGainMode(dev, manual);
   late DartSetTunerGainMode _setTunerGainMode;
-
-  @override
-  int setTunerIfMode(Pointer<DeviceHandle> dev, int ifMode) =>
-      _setTunerIfMode(dev, ifMode);
-  late DartSetTunerIfMode _setTunerIfMode;
 
   @override
   int setSampleRate(Pointer<DeviceHandle> dev, int rate) =>
@@ -347,11 +256,6 @@ class TestBindings implements AbstractBindings {
   late DartGetDirectSampling _getDirectSampling;
 
   @override
-  int setDsMode(Pointer<DeviceHandle> dev, int mode, int freqThreshold) =>
-      _setDsMode(dev, mode, freqThreshold);
-  late DartSetDsMode _setDsMode;
-
-  @override
   int setOffsetTuning(Pointer<DeviceHandle> dev, int on) =>
       _setOffsetTuning(dev, on);
   late DartSetOffsetTuning _setOffsetTuning;
@@ -359,11 +263,6 @@ class TestBindings implements AbstractBindings {
   @override
   int getOffsetTuning(Pointer<DeviceHandle> dev) => _getOffsetTuning(dev);
   late DartGetOffsetTuning _getOffsetTuning;
-
-  @override
-  int setDithering(Pointer<DeviceHandle> dev, int dither) =>
-      _setDithering(dev, dither);
-  late DartSetDithering _setDithering;
 
   @override
   int resetBuffer(Pointer<DeviceHandle> dev) => _resetBuffer(dev);
@@ -391,24 +290,6 @@ class TestBindings implements AbstractBindings {
   late DartCancelAsync _cancelAsync;
 
   @override
-  int irQuery(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int bufLen) =>
-      _irQuery(dev, buf, bufLen);
-  late DartIrQuery _irQuery;
-
-  @override
   int setBiasTee(Pointer<DeviceHandle> dev, int on) => _setBiasTee(dev, on);
   late DartSetBiasTee _setBiasTee;
-
-  @override
-  int setBiasTeeGpio(Pointer<DeviceHandle> dev, int gpio, int on) =>
-      _setBiasTeeGpio(dev, gpio, on);
-  late DartSetBiasTeeGpio _setBiasTeeGpio;
-
-  @override
-  Pointer<Utf8> getVerId() => _getVerId();
-  late DartGetVerId _getVerId;
-
-  @override
-  int getVersion() => _getVersion();
-  late DartGetVersion _getVersion;
 }

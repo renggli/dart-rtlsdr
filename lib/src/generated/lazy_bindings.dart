@@ -97,36 +97,10 @@ class LazyBindings implements AbstractBindings {
   DartSetCenterFreq? _setCenterFreq;
 
   @override
-  int setCenterFreq64(Pointer<DeviceHandle> dev, int freq) =>
-      (_setCenterFreq64 ??=
-          _library.lookupFunction<NativeSetCenterFreq64, DartSetCenterFreq64>(
-              'rtlsdr_set_center_freq64'))(dev, freq);
-  DartSetCenterFreq64? _setCenterFreq64;
-
-  @override
-  int setHarmonicRx(Pointer<DeviceHandle> dev, int harmonic) =>
-      (_setHarmonicRx ??=
-          _library.lookupFunction<NativeSetHarmonicRx, DartSetHarmonicRx>(
-              'rtlsdr_set_harmonic_rx'))(dev, harmonic);
-  DartSetHarmonicRx? _setHarmonicRx;
-
-  @override
-  int isTunerPLLLocked(Pointer<DeviceHandle> dev) => (_isTunerPLLLocked ??=
-      _library.lookupFunction<NativeIsTunerPLLLocked, DartIsTunerPLLLocked>(
-          'rtlsdr_is_tuner_PLL_locked'))(dev);
-  DartIsTunerPLLLocked? _isTunerPLLLocked;
-
-  @override
   int getCenterFreq(Pointer<DeviceHandle> dev) => (_getCenterFreq ??=
       _library.lookupFunction<NativeGetCenterFreq, DartGetCenterFreq>(
           'rtlsdr_get_center_freq'))(dev);
   DartGetCenterFreq? _getCenterFreq;
-
-  @override
-  int getCenterFreq64(Pointer<DeviceHandle> dev) => (_getCenterFreq64 ??=
-      _library.lookupFunction<NativeGetCenterFreq64, DartGetCenterFreq64>(
-          'rtlsdr_get_center_freq64'))(dev);
-  DartGetCenterFreq64? _getCenterFreq64;
 
   @override
   int setFreqCorrection(Pointer<DeviceHandle> dev, int ppm) =>
@@ -160,46 +134,16 @@ class LazyBindings implements AbstractBindings {
   DartSetTunerGain? _setTunerGain;
 
   @override
-  int setAndGetTunerBandwidth(Pointer<DeviceHandle> dev, int bw,
-          Pointer<Uint32> appliedBw, int applyBw) =>
-      (_setAndGetTunerBandwidth ??= _library.lookupFunction<
-              NativeSetAndGetTunerBandwidth, DartSetAndGetTunerBandwidth>(
-          'rtlsdr_set_and_get_tuner_bandwidth'))(dev, bw, appliedBw, applyBw);
-  DartSetAndGetTunerBandwidth? _setAndGetTunerBandwidth;
-
-  @override
   int setTunerBandwidth(Pointer<DeviceHandle> dev, int bw) =>
       (_setTunerBandwidth ??= _library.lookupFunction<NativeSetTunerBandwidth,
           DartSetTunerBandwidth>('rtlsdr_set_tuner_bandwidth'))(dev, bw);
   DartSetTunerBandwidth? _setTunerBandwidth;
 
   @override
-  int setTunerBandCenter(Pointer<DeviceHandle> dev, int ifBandCenterFreq) =>
-      (_setTunerBandCenter ??= _library
-          .lookupFunction<NativeSetTunerBandCenter, DartSetTunerBandCenter>(
-              'rtlsdr_set_tuner_band_center'))(dev, ifBandCenterFreq);
-  DartSetTunerBandCenter? _setTunerBandCenter;
-
-  @override
-  int setTunerSideband(Pointer<DeviceHandle> dev, int sideband) =>
-      (_setTunerSideband ??=
-          _library.lookupFunction<NativeSetTunerSideband, DartSetTunerSideband>(
-              'rtlsdr_set_tuner_sideband'))(dev, sideband);
-  DartSetTunerSideband? _setTunerSideband;
-
-  @override
   int getTunerGain(Pointer<DeviceHandle> dev) => (_getTunerGain ??=
       _library.lookupFunction<NativeGetTunerGain, DartGetTunerGain>(
           'rtlsdr_get_tuner_gain'))(dev);
   DartGetTunerGain? _getTunerGain;
-
-  @override
-  int setTunerGainExt(
-          Pointer<DeviceHandle> dev, int lnaGain, int mixerGain, int vgaGain) =>
-      (_setTunerGainExt ??=
-          _library.lookupFunction<NativeSetTunerGainExt, DartSetTunerGainExt>(
-              'rtlsdr_set_tuner_gain_ext'))(dev, lnaGain, mixerGain, vgaGain);
-  DartSetTunerGainExt? _setTunerGainExt;
 
   @override
   int setTunerIfGain(Pointer<DeviceHandle> dev, int stage, int gain) =>
@@ -214,13 +158,6 @@ class LazyBindings implements AbstractBindings {
           _library.lookupFunction<NativeSetTunerGainMode, DartSetTunerGainMode>(
               'rtlsdr_set_tuner_gain_mode'))(dev, manual);
   DartSetTunerGainMode? _setTunerGainMode;
-
-  @override
-  int setTunerIfMode(Pointer<DeviceHandle> dev, int ifMode) =>
-      (_setTunerIfMode ??=
-          _library.lookupFunction<NativeSetTunerIfMode, DartSetTunerIfMode>(
-              'rtlsdr_set_tuner_if_mode'))(dev, ifMode);
-  DartSetTunerIfMode? _setTunerIfMode;
 
   @override
   int setSampleRate(Pointer<DeviceHandle> dev, int rate) => (_setSampleRate ??=
@@ -259,12 +196,6 @@ class LazyBindings implements AbstractBindings {
   DartGetDirectSampling? _getDirectSampling;
 
   @override
-  int setDsMode(Pointer<DeviceHandle> dev, int mode, int freqThreshold) =>
-      (_setDsMode ??= _library.lookupFunction<NativeSetDsMode, DartSetDsMode>(
-          'rtlsdr_set_ds_mode'))(dev, mode, freqThreshold);
-  DartSetDsMode? _setDsMode;
-
-  @override
   int setOffsetTuning(Pointer<DeviceHandle> dev, int on) =>
       (_setOffsetTuning ??=
           _library.lookupFunction<NativeSetOffsetTuning, DartSetOffsetTuning>(
@@ -276,12 +207,6 @@ class LazyBindings implements AbstractBindings {
       _library.lookupFunction<NativeGetOffsetTuning, DartGetOffsetTuning>(
           'rtlsdr_get_offset_tuning'))(dev);
   DartGetOffsetTuning? _getOffsetTuning;
-
-  @override
-  int setDithering(Pointer<DeviceHandle> dev, int dither) => (_setDithering ??=
-      _library.lookupFunction<NativeSetDithering, DartSetDithering>(
-          'rtlsdr_set_dithering'))(dev, dither);
-  DartSetDithering? _setDithering;
 
   @override
   int resetBuffer(Pointer<DeviceHandle> dev) => (_resetBuffer ??=
@@ -316,32 +241,8 @@ class LazyBindings implements AbstractBindings {
   DartCancelAsync? _cancelAsync;
 
   @override
-  int irQuery(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int bufLen) =>
-      (_irQuery ??= _library.lookupFunction<NativeIrQuery, DartIrQuery>(
-          'rtlsdr_ir_query'))(dev, buf, bufLen);
-  DartIrQuery? _irQuery;
-
-  @override
   int setBiasTee(Pointer<DeviceHandle> dev, int on) => (_setBiasTee ??=
       _library.lookupFunction<NativeSetBiasTee, DartSetBiasTee>(
           'rtlsdr_set_bias_tee'))(dev, on);
   DartSetBiasTee? _setBiasTee;
-
-  @override
-  int setBiasTeeGpio(Pointer<DeviceHandle> dev, int gpio, int on) =>
-      (_setBiasTeeGpio ??=
-          _library.lookupFunction<NativeSetBiasTeeGpio, DartSetBiasTeeGpio>(
-              'rtlsdr_set_bias_tee_gpio'))(dev, gpio, on);
-  DartSetBiasTeeGpio? _setBiasTeeGpio;
-
-  @override
-  Pointer<Utf8> getVerId() => (_getVerId ??= _library
-      .lookupFunction<NativeGetVerId, DartGetVerId>('rtlsdr_get_ver_id'))();
-  DartGetVerId? _getVerId;
-
-  @override
-  int getVersion() => (_getVersion ??=
-      _library.lookupFunction<NativeGetVersion, DartGetVersion>(
-          'rtlsdr_get_version'))();
-  DartGetVersion? _getVersion;
 }

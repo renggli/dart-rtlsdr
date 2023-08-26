@@ -37,15 +37,7 @@ abstract class AbstractBindings {
 
   int setCenterFreq(Pointer<DeviceHandle> dev, int freq);
 
-  int setCenterFreq64(Pointer<DeviceHandle> dev, int freq);
-
-  int setHarmonicRx(Pointer<DeviceHandle> dev, int harmonic);
-
-  int isTunerPLLLocked(Pointer<DeviceHandle> dev);
-
   int getCenterFreq(Pointer<DeviceHandle> dev);
-
-  int getCenterFreq64(Pointer<DeviceHandle> dev);
 
   int setFreqCorrection(Pointer<DeviceHandle> dev, int ppm);
 
@@ -57,25 +49,13 @@ abstract class AbstractBindings {
 
   int setTunerGain(Pointer<DeviceHandle> dev, int gain);
 
-  int setAndGetTunerBandwidth(Pointer<DeviceHandle> dev, int bw,
-      Pointer<Uint32> appliedBw, int applyBw);
-
   int setTunerBandwidth(Pointer<DeviceHandle> dev, int bw);
 
-  int setTunerBandCenter(Pointer<DeviceHandle> dev, int ifBandCenterFreq);
-
-  int setTunerSideband(Pointer<DeviceHandle> dev, int sideband);
-
   int getTunerGain(Pointer<DeviceHandle> dev);
-
-  int setTunerGainExt(
-      Pointer<DeviceHandle> dev, int lnaGain, int mixerGain, int vgaGain);
 
   int setTunerIfGain(Pointer<DeviceHandle> dev, int stage, int gain);
 
   int setTunerGainMode(Pointer<DeviceHandle> dev, int manual);
-
-  int setTunerIfMode(Pointer<DeviceHandle> dev, int ifMode);
 
   int setSampleRate(Pointer<DeviceHandle> dev, int rate);
 
@@ -89,13 +69,9 @@ abstract class AbstractBindings {
 
   int getDirectSampling(Pointer<DeviceHandle> dev);
 
-  int setDsMode(Pointer<DeviceHandle> dev, int mode, int freqThreshold);
-
   int setOffsetTuning(Pointer<DeviceHandle> dev, int on);
 
   int getOffsetTuning(Pointer<DeviceHandle> dev);
-
-  int setDithering(Pointer<DeviceHandle> dev, int dither);
 
   int resetBuffer(Pointer<DeviceHandle> dev);
 
@@ -109,13 +85,5 @@ abstract class AbstractBindings {
 
   int cancelAsync(Pointer<DeviceHandle> dev);
 
-  int irQuery(Pointer<DeviceHandle> dev, Pointer<Uint8> buf, int bufLen);
-
   int setBiasTee(Pointer<DeviceHandle> dev, int on);
-
-  int setBiasTeeGpio(Pointer<DeviceHandle> dev, int gpio, int on);
-
-  Pointer<Utf8> getVerId();
-
-  int getVersion();
 }

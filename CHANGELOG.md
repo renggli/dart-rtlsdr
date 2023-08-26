@@ -1,4 +1,4 @@
-## 0.0.6 (unpublished)
+## 0.0.6
 
 - Dart 3.0 requirement.
 
