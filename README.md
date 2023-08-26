@@ -33,26 +33,24 @@ Tutorial
 ```dart
 import 'package:rtlsdr/rtlsdr.dart';
 
-void main() {
+void main() async {
   // Grab the first RTLSDR device and print its name.
-  final device = getDevices()[0];
+  final device = RtlSdr.devices.first;
   print(device.name);
 
-  // Open device and tune-in.
-  final open = device.open();
+  // Open device.
+  device.open();
   try {
-    open.centerFrequency = 105800000;
-    open.sampleRate = 2048000;
+    // Tune in.
+    device.centerFrequency = 105800000;
+    device.sampleRate = 2048000;
 
-    // Read some data.
-    open.resetBuffer();
-    open.readAsync((data) {
-      print('${data.sublist(0, 100).join(', ')} ...');
-      return false; // continue?
-    });
+    // Print some samples from the first chunk.
+    final data = await device.stream.first;
+    print(data.take(25));
   } finally {
     // Close the device at the end.
-    open.close();
+    device.close();
   }
 }
 ```

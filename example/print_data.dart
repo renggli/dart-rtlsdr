@@ -5,8 +5,7 @@ import 'package:rtlsdr/rtlsdr.dart';
 
 /// Asynchronously processes 10 packages of IQ-data.
 Future<void> main() async {
-  final device = RtlSdr();
-  device.open();
+  final device = RtlSdr()..open();
   try {
     device.centerFrequency = 105800000;
     device.sampleRate = 256000;
