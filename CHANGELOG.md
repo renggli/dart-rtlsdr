@@ -1,6 +1,7 @@
 ## 0.0.6
 
 - Dart 3.0 requirement.
+- Remove unofficial bindings.
 
 ## 0.0.4
 

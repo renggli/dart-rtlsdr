@@ -32,11 +32,12 @@ Tutorial
 
 ```dart
 import 'package:rtlsdr/rtlsdr.dart';
+import 'dart:io';
 
 void main() async {
   // Grab the first RTLSDR device and print its name.
   final device = RtlSdr.devices.first;
-  print(device.name);
+  stdout.writeln(device.name);
 
   // Open device.
   device.open();
@@ -47,7 +48,7 @@ void main() async {
 
     // Print some samples from the first chunk.
     final data = await device.stream.first;
-    print(data.take(25));
+    stdout.writeln(data.take(25));
   } finally {
     // Close the device at the end.
     device.close();
