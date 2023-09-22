@@ -48,11 +48,9 @@ bool preamble(Uint16List buffer, int offset) {
       case 9:
         //high = min16(high, buf[i+i2]);
         high = buffer[offset + i];
-        break;
       default:
         //low  = max16(low,  buf[i+i2]);
         low = buffer[offset + i];
-        break;
     }
     if (high <= low) {
       return false;

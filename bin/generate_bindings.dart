@@ -54,7 +54,7 @@ class Method {
     if (args == 'void') {
       arguments = [];
     } else {
-      arguments = args.split(',').map((param) => Parameter(param)).toList();
+      arguments = args.split(',').map(Parameter.new).toList();
     }
   }
 

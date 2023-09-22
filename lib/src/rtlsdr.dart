@@ -33,7 +33,7 @@ class RtlSdr {
   static Iterable<RtlSdr> get devices {
     final result = bindings.getDeviceCount();
     RtlSdrException.checkError(result, 'Unable to read number of devices');
-    return 0.to(result).map((index) => RtlSdr(index));
+    return 0.to(result).map(RtlSdr.new);
   }
 
   /// The device index to identify the device.
