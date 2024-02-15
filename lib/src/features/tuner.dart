@@ -34,8 +34,7 @@ extension TunerExtension on RtlSdr {
       try {
         final result = bindings.getTunerGains(handle, gains);
         RtlSdrException.checkError(result, 'Failed to get tuner gains');
-        return List.generate(
-            result, (index) => gains.elementAt(index).value / 10.0,
+        return List.generate(result, (index) => (gains + index).value / 10.0,
             growable: false);
       } finally {
         malloc.free(gains);
