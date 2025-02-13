@@ -164,10 +164,12 @@ void messages(Uint16List buffer) {
     var frameLen = longFrame;
     var datai = 0;
     adsbFrame.fillRange(0, adsbFrame.length, 0);
-    for (;
-        // ignore: invariant_booleans
-        i < buffer.length && buffer[i] <= 1 && datai < frameLen;
-        i++, datai++) {
+    for (
+      ;
+      // ignore: invariant_booleans
+      i < buffer.length && buffer[i] <= 1 && datai < frameLen;
+      i++, datai++
+    ) {
       if (buffer[i] != 0) {
         final index = datai ~/ 8;
         final shift = 7 - (datai % 8);
@@ -211,8 +213,9 @@ void display(Uint8List buffer, int len) {
   stdout.writeln('DF=$df CA=$ca');
   final icaoAddress =
       buffer[1] << 16 | buffer[2] << 8 | buffer[3]; // ICAO aircraft address
-  stdout
-      .writeln('ICAO Address=${icaoAddress.toRadixString(16).padLeft(6, '0')}');
+  stdout.writeln(
+    'ICAO Address=${icaoAddress.toRadixString(16).padLeft(6, '0')}',
+  );
   if (len <= shortFrame) {
     return;
   }

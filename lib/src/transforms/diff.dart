@@ -9,8 +9,9 @@ extension DiffConverterExtension<T extends num, L extends List<T>>
 class DiffConverter<T extends num, L extends List<T>> extends Converter<L, L> {
   @override
   L convert(L input) {
-    final sink =
-        ChunkedConversionSink<L>.withCallback((result) => input = result.first);
+    final sink = ChunkedConversionSink<L>.withCallback(
+      (result) => input = result.first,
+    );
     startChunkedConversion(sink)
       ..add(input)
       ..close();

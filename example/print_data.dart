@@ -15,10 +15,12 @@ Future<void> main() async {
         final b = (data[i + 1] - 127.0) / 127.0;
         final r = sqrt(a * a + b * b);
         final p = atan2(b, a) * 180 / pi;
-        stdout.writeln('I = ${a.toStringAsFixed(3)}  '
-            'Q = ${b.toStringAsFixed(3)}  '
-            'r = ${r.toStringAsFixed(3)}  '
-            'p = ${p.toStringAsFixed(3)}  ');
+        stdout.writeln(
+          'I = ${a.toStringAsFixed(3)}  '
+          'Q = ${b.toStringAsFixed(3)}  '
+          'r = ${r.toStringAsFixed(3)}  '
+          'p = ${p.toStringAsFixed(3)}  ',
+        );
       }
     });
   } finally {

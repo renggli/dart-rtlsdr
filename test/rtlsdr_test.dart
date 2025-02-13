@@ -20,15 +20,11 @@ void main() {
   tearDown(() => bindings = TestBindings());
   group('constructors', () {
     test('no devices', () {
-      bindings = TestBindings(
-        getDeviceCount: () => 0,
-      );
+      bindings = TestBindings(getDeviceCount: () => 0);
       expect(RtlSdr.devices, isEmpty);
     });
     test('multiple devices', () {
-      bindings = TestBindings(
-        getDeviceCount: () => 3,
-      );
+      bindings = TestBindings(getDeviceCount: () => 3);
       final devices = RtlSdr.devices.toList();
       expect(devices, hasLength(3));
       for (var i = 0; i < devices.length; i++) {
@@ -94,9 +90,7 @@ void main() {
       expect(device.serial, 'Serial 3');
     });
     test('valid', () {
-      bindings = TestBindings(
-        getDeviceName: (index) => ''.toNativeUtf8(),
-      );
+      bindings = TestBindings(getDeviceName: (index) => ''.toNativeUtf8());
       final device = RtlSdr(4);
       expect(device.isValid, isFalse);
     });
@@ -126,9 +120,15 @@ void main() {
       );
       final device = RtlSdr();
       expect(
-          device.open,
-          throwsA(isRtlSdrException.having(
-              (error) => error.message, 'message', 'Unable to open device 0')));
+        device.open,
+        throwsA(
+          isRtlSdrException.having(
+            (error) => error.message,
+            'message',
+            'Unable to open device 0',
+          ),
+        ),
+      );
       expect(device.isClosed, isTrue);
     });
   });
@@ -155,7 +155,7 @@ void main() {
           await Stream.fromIterable([input1, input2]).toDiff().toList();
       expect(output, [
         [-81, 123, -63, 145],
-        [-58, 36, -190, -5]
+        [-58, 36, -190, -5],
       ]);
     });
     test('toPhase', () async {

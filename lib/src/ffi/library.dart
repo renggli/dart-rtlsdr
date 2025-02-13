@@ -9,8 +9,13 @@ Set<String> _defaultLibraryPaths() {
   if (Platform.isWindows) {
     // No clue where too look.
   } else if (Platform.isMacOS || Platform.isIOS) {
-    result.addAll(
-        ['~/lib', '/usr/local/lib', '/lib', '/usr/lib', '/opt/homebrew/lib']);
+    result.addAll([
+      '~/lib',
+      '/usr/local/lib',
+      '/lib',
+      '/usr/lib',
+      '/opt/homebrew/lib',
+    ]);
     final libraryPath = Platform.environment['DYLD_LIBRARY_PATH'] ?? '';
     result.addAll(libraryPath.split(':'));
     final fallbackLibraryPath =

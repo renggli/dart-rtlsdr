@@ -1,3 +1,7 @@
+## 0.0.7
+
+- Dart 3.7 requirement.
+
 ## 0.0.6
 
 - Dart 3.0 requirement.

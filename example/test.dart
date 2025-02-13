@@ -44,11 +44,12 @@ class UnderRunAnalyzer implements Analyzer {
   }
 
   @override
-  String toString() => lostSamples > 0
-      ? 'Lost $lostSamples (${100 * lostSamples / seenSamples}%) in '
-          '$seenSamples samples in buffer '
-          '${lostSamplesPerBuffer.keys.join(', ')}.'
-      : 'Lost no samples in $seenSamples samples.';
+  String toString() =>
+      lostSamples > 0
+          ? 'Lost $lostSamples (${100 * lostSamples / seenSamples}%) in '
+              '$seenSamples samples in buffer '
+              '${lostSamplesPerBuffer.keys.join(', ')}.'
+          : 'Lost no samples in $seenSamples samples.';
 }
 
 class SampleAnalyzer implements Analyzer {

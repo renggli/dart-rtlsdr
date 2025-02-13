@@ -16,7 +16,9 @@ extension SamplingExtension on RtlSdr {
     RtlSdrException.checkOpen(this);
     final result = bindings.setSampleRate(handle, rate);
     RtlSdrException.checkError(
-        result, 'Failed to set sample rate to ${rate}Hz');
+      result,
+      'Failed to set sample rate to ${rate}Hz',
+    );
   }
 
   /// Gets the actual sample rate in Hz the device is configured to.
@@ -32,9 +34,13 @@ extension SamplingExtension on RtlSdr {
   set directSamplingMode(DirectSamplingMode mode) {
     RtlSdrException.checkOpen(this);
     final result = bindings.setDirectSampling(
-        handle, DirectSamplingMode.values.indexOf(mode));
+      handle,
+      DirectSamplingMode.values.indexOf(mode),
+    );
     RtlSdrException.checkError(
-        result, 'Failed to set direct sampling mode to $mode');
+      result,
+      'Failed to set direct sampling mode to $mode',
+    );
   }
 }
 

@@ -12,8 +12,12 @@ abstract class AbstractBindings {
 
   Pointer<Utf8> getDeviceName(int index);
 
-  int getDeviceUsbStrings(int index, Pointer<Utf8> manufact,
-      Pointer<Utf8> product, Pointer<Utf8> serial);
+  int getDeviceUsbStrings(
+    int index,
+    Pointer<Utf8> manufact,
+    Pointer<Utf8> product,
+    Pointer<Utf8> serial,
+  );
 
   int getIndexBySerial(Pointer<Utf8> serial);
 
@@ -23,17 +27,32 @@ abstract class AbstractBindings {
 
   int setXtalFreq(Pointer<DeviceHandle> dev, int rtlFreq, int tunerFreq);
 
-  int getXtalFreq(Pointer<DeviceHandle> dev, Pointer<Uint32> rtlFreq,
-      Pointer<Uint32> tunerFreq);
+  int getXtalFreq(
+    Pointer<DeviceHandle> dev,
+    Pointer<Uint32> rtlFreq,
+    Pointer<Uint32> tunerFreq,
+  );
 
-  int getUsbStrings(Pointer<DeviceHandle> dev, Pointer<Utf8> manufact,
-      Pointer<Utf8> product, Pointer<Utf8> serial);
+  int getUsbStrings(
+    Pointer<DeviceHandle> dev,
+    Pointer<Utf8> manufact,
+    Pointer<Utf8> product,
+    Pointer<Utf8> serial,
+  );
 
   int writeEeprom(
-      Pointer<DeviceHandle> dev, Pointer<Uint8> data, int offset, int len);
+    Pointer<DeviceHandle> dev,
+    Pointer<Uint8> data,
+    int offset,
+    int len,
+  );
 
   int readEeprom(
-      Pointer<DeviceHandle> dev, Pointer<Uint8> data, int offset, int len);
+    Pointer<DeviceHandle> dev,
+    Pointer<Uint8> data,
+    int offset,
+    int len,
+  );
 
   int setCenterFreq(Pointer<DeviceHandle> dev, int freq);
 
@@ -75,13 +94,22 @@ abstract class AbstractBindings {
 
   int resetBuffer(Pointer<DeviceHandle> dev);
 
-  int readSync(Pointer<DeviceHandle> dev, Pointer<Void> buf, int len,
-      Pointer<Int> nRead);
+  int readSync(
+    Pointer<DeviceHandle> dev,
+    Pointer<Void> buf,
+    int len,
+    Pointer<Int> nRead,
+  );
 
   int waitAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx);
 
-  int readAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx,
-      int bufNum, int bufLen);
+  int readAsync(
+    Pointer<DeviceHandle> dev,
+    Pointer cb,
+    Pointer<Void> ctx,
+    int bufNum,
+    int bufLen,
+  );
 
   int cancelAsync(Pointer<DeviceHandle> dev);
 

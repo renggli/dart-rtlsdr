@@ -21,13 +21,19 @@ void readIsolate(ReadIsolate arguments) {
   final handle = Pointer<DeviceHandle>.fromAddress(arguments.address);
   final resetBuffer = bindings.resetBuffer(handle);
   RtlSdrException.checkError(resetBuffer, 'Failed to reset buffers');
-  final readAsync = bindings.readAsync(handle, asyncCallbackPointer, nullptr,
-      arguments.bufferCount, arguments.bufferSize);
+  final readAsync = bindings.readAsync(
+    handle,
+    asyncCallbackPointer,
+    nullptr,
+    arguments.bufferCount,
+    arguments.bufferSize,
+  );
   RtlSdrException.checkError(readAsync, 'Failed to read asynchronously');
 }
 
-final asyncCallbackPointer =
-    Pointer.fromFunction<ReadAsyncCallback>(asyncCallback);
+final asyncCallbackPointer = Pointer.fromFunction<ReadAsyncCallback>(
+  asyncCallback,
+);
 
 void asyncCallback(Pointer<Uint8> buffer, int length, Pointer<Void> context) =>
     _arguments?.sendPort.send(buffer.asTypedList(length));

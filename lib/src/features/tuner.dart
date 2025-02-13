@@ -19,10 +19,14 @@ extension TunerExtension on RtlSdr {
   /// Set the gain mode for the device.
   set tunerGainMode(TunerGainMode mode) {
     RtlSdrException.checkOpen(this);
-    final result =
-        bindings.setTunerGainMode(handle, TunerGainMode.values.indexOf(mode));
+    final result = bindings.setTunerGainMode(
+      handle,
+      TunerGainMode.values.indexOf(mode),
+    );
     RtlSdrException.checkError(
-        result, 'Failed to set manual tuner gain mode to $mode');
+      result,
+      'Failed to set manual tuner gain mode to $mode',
+    );
   }
 
   /// Get a list of all gains supported by the tuner in dB.
@@ -34,8 +38,11 @@ extension TunerExtension on RtlSdr {
       try {
         final result = bindings.getTunerGains(handle, gains);
         RtlSdrException.checkError(result, 'Failed to get tuner gains');
-        return List.generate(result, (index) => (gains + index).value / 10.0,
-            growable: false);
+        return List.generate(
+          result,
+          (index) => (gains + index).value / 10.0,
+          growable: false,
+        );
       } finally {
         malloc.free(gains);
       }
@@ -64,7 +71,9 @@ extension TunerExtension on RtlSdr {
     RtlSdrException.checkOpen(this);
     final result = bindings.setTunerBandwidth(handle, bandwidth);
     RtlSdrException.checkError(
-        result, 'Failed to set tuner bandwidth to ${bandwidth}Hz');
+      result,
+      'Failed to set tuner bandwidth to ${bandwidth}Hz',
+    );
   }
 
   /// Set the intermediate frequency gain for the device.
@@ -73,12 +82,16 @@ extension TunerExtension on RtlSdr {
   /// - [gain] in dB, -30 means -3.0 dB.
   void tunerIntermediateFrequencyGain(int stage, double gain) {
     RtlSdrException.checkOpen(this);
-    final result =
-        bindings.setTunerIfGain(handle, stage, (10.0 * gain).round());
+    final result = bindings.setTunerIfGain(
+      handle,
+      stage,
+      (10.0 * gain).round(),
+    );
     RtlSdrException.checkError(
-        result,
-        'Failed to set intermediate frequency '
-        'gain at $stage to ${gain}dB');
+      result,
+      'Failed to set intermediate frequency '
+      'gain at $stage to ${gain}dB',
+    );
   }
 }
 

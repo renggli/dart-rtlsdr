@@ -52,47 +52,63 @@ class TestBindings implements AbstractBindings {
         getDeviceCount ?? (() => throw UnimplementedError('getDeviceCount'));
     _getDeviceName =
         getDeviceName ?? ((index) => throw UnimplementedError('getDeviceName'));
-    _getDeviceUsbStrings = getDeviceUsbStrings ??
+    _getDeviceUsbStrings =
+        getDeviceUsbStrings ??
         ((index, manufact, product, serial) =>
             throw UnimplementedError('getDeviceUsbStrings'));
-    _getIndexBySerial = getIndexBySerial ??
+    _getIndexBySerial =
+        getIndexBySerial ??
         ((serial) => throw UnimplementedError('getIndexBySerial'));
     _open = open ?? ((dev, index) => throw UnimplementedError('open'));
     _close = close ?? ((dev) => throw UnimplementedError('close'));
-    _setXtalFreq = setXtalFreq ??
+    _setXtalFreq =
+        setXtalFreq ??
         ((dev, rtlFreq, tunerFreq) => throw UnimplementedError('setXtalFreq'));
-    _getXtalFreq = getXtalFreq ??
+    _getXtalFreq =
+        getXtalFreq ??
         ((dev, rtlFreq, tunerFreq) => throw UnimplementedError('getXtalFreq'));
-    _getUsbStrings = getUsbStrings ??
+    _getUsbStrings =
+        getUsbStrings ??
         ((dev, manufact, product, serial) =>
             throw UnimplementedError('getUsbStrings'));
-    _writeEeprom = writeEeprom ??
+    _writeEeprom =
+        writeEeprom ??
         ((dev, data, offset, len) => throw UnimplementedError('writeEeprom'));
-    _readEeprom = readEeprom ??
+    _readEeprom =
+        readEeprom ??
         ((dev, data, offset, len) => throw UnimplementedError('readEeprom'));
-    _setCenterFreq = setCenterFreq ??
+    _setCenterFreq =
+        setCenterFreq ??
         ((dev, freq) => throw UnimplementedError('setCenterFreq'));
     _getCenterFreq =
         getCenterFreq ?? ((dev) => throw UnimplementedError('getCenterFreq'));
-    _setFreqCorrection = setFreqCorrection ??
+    _setFreqCorrection =
+        setFreqCorrection ??
         ((dev, ppm) => throw UnimplementedError('setFreqCorrection'));
-    _getFreqCorrection = getFreqCorrection ??
+    _getFreqCorrection =
+        getFreqCorrection ??
         ((dev) => throw UnimplementedError('getFreqCorrection'));
     _getTunerType =
         getTunerType ?? ((dev) => throw UnimplementedError('getTunerType'));
-    _getTunerGains = getTunerGains ??
+    _getTunerGains =
+        getTunerGains ??
         ((dev, gains) => throw UnimplementedError('getTunerGains'));
-    _setTunerGain = setTunerGain ??
+    _setTunerGain =
+        setTunerGain ??
         ((dev, gain) => throw UnimplementedError('setTunerGain'));
-    _setTunerBandwidth = setTunerBandwidth ??
+    _setTunerBandwidth =
+        setTunerBandwidth ??
         ((dev, bw) => throw UnimplementedError('setTunerBandwidth'));
     _getTunerGain =
         getTunerGain ?? ((dev) => throw UnimplementedError('getTunerGain'));
-    _setTunerIfGain = setTunerIfGain ??
+    _setTunerIfGain =
+        setTunerIfGain ??
         ((dev, stage, gain) => throw UnimplementedError('setTunerIfGain'));
-    _setTunerGainMode = setTunerGainMode ??
+    _setTunerGainMode =
+        setTunerGainMode ??
         ((dev, manual) => throw UnimplementedError('setTunerGainMode'));
-    _setSampleRate = setSampleRate ??
+    _setSampleRate =
+        setSampleRate ??
         ((dev, rate) => throw UnimplementedError('setSampleRate'));
     _getSampleRate =
         getSampleRate ?? ((dev) => throw UnimplementedError('getSampleRate'));
@@ -100,21 +116,27 @@ class TestBindings implements AbstractBindings {
         setTestmode ?? ((dev, on) => throw UnimplementedError('setTestmode'));
     _setAgcMode =
         setAgcMode ?? ((dev, on) => throw UnimplementedError('setAgcMode'));
-    _setDirectSampling = setDirectSampling ??
+    _setDirectSampling =
+        setDirectSampling ??
         ((dev, on) => throw UnimplementedError('setDirectSampling'));
-    _getDirectSampling = getDirectSampling ??
+    _getDirectSampling =
+        getDirectSampling ??
         ((dev) => throw UnimplementedError('getDirectSampling'));
-    _setOffsetTuning = setOffsetTuning ??
+    _setOffsetTuning =
+        setOffsetTuning ??
         ((dev, on) => throw UnimplementedError('setOffsetTuning'));
-    _getOffsetTuning = getOffsetTuning ??
+    _getOffsetTuning =
+        getOffsetTuning ??
         ((dev) => throw UnimplementedError('getOffsetTuning'));
     _resetBuffer =
         resetBuffer ?? ((dev) => throw UnimplementedError('resetBuffer'));
-    _readSync = readSync ??
+    _readSync =
+        readSync ??
         ((dev, buf, len, nRead) => throw UnimplementedError('readSync'));
     _waitAsync =
         waitAsync ?? ((dev, cb, ctx) => throw UnimplementedError('waitAsync'));
-    _readAsync = readAsync ??
+    _readAsync =
+        readAsync ??
         ((dev, cb, ctx, bufNum, bufLen) =>
             throw UnimplementedError('readAsync'));
     _cancelAsync =
@@ -132,9 +154,12 @@ class TestBindings implements AbstractBindings {
   late DartGetDeviceName _getDeviceName;
 
   @override
-  int getDeviceUsbStrings(int index, Pointer<Utf8> manufact,
-          Pointer<Utf8> product, Pointer<Utf8> serial) =>
-      _getDeviceUsbStrings(index, manufact, product, serial);
+  int getDeviceUsbStrings(
+    int index,
+    Pointer<Utf8> manufact,
+    Pointer<Utf8> product,
+    Pointer<Utf8> serial,
+  ) => _getDeviceUsbStrings(index, manufact, product, serial);
   late DartGetDeviceUsbStrings _getDeviceUsbStrings;
 
   @override
@@ -155,27 +180,38 @@ class TestBindings implements AbstractBindings {
   late DartSetXtalFreq _setXtalFreq;
 
   @override
-  int getXtalFreq(Pointer<DeviceHandle> dev, Pointer<Uint32> rtlFreq,
-          Pointer<Uint32> tunerFreq) =>
-      _getXtalFreq(dev, rtlFreq, tunerFreq);
+  int getXtalFreq(
+    Pointer<DeviceHandle> dev,
+    Pointer<Uint32> rtlFreq,
+    Pointer<Uint32> tunerFreq,
+  ) => _getXtalFreq(dev, rtlFreq, tunerFreq);
   late DartGetXtalFreq _getXtalFreq;
 
   @override
-  int getUsbStrings(Pointer<DeviceHandle> dev, Pointer<Utf8> manufact,
-          Pointer<Utf8> product, Pointer<Utf8> serial) =>
-      _getUsbStrings(dev, manufact, product, serial);
+  int getUsbStrings(
+    Pointer<DeviceHandle> dev,
+    Pointer<Utf8> manufact,
+    Pointer<Utf8> product,
+    Pointer<Utf8> serial,
+  ) => _getUsbStrings(dev, manufact, product, serial);
   late DartGetUsbStrings _getUsbStrings;
 
   @override
-  int writeEeprom(Pointer<DeviceHandle> dev, Pointer<Uint8> data, int offset,
-          int len) =>
-      _writeEeprom(dev, data, offset, len);
+  int writeEeprom(
+    Pointer<DeviceHandle> dev,
+    Pointer<Uint8> data,
+    int offset,
+    int len,
+  ) => _writeEeprom(dev, data, offset, len);
   late DartWriteEeprom _writeEeprom;
 
   @override
-  int readEeprom(Pointer<DeviceHandle> dev, Pointer<Uint8> data, int offset,
-          int len) =>
-      _readEeprom(dev, data, offset, len);
+  int readEeprom(
+    Pointer<DeviceHandle> dev,
+    Pointer<Uint8> data,
+    int offset,
+    int len,
+  ) => _readEeprom(dev, data, offset, len);
   late DartReadEeprom _readEeprom;
 
   @override
@@ -269,9 +305,12 @@ class TestBindings implements AbstractBindings {
   late DartResetBuffer _resetBuffer;
 
   @override
-  int readSync(Pointer<DeviceHandle> dev, Pointer<Void> buf, int len,
-          Pointer<Int> nRead) =>
-      _readSync(dev, buf, len, nRead);
+  int readSync(
+    Pointer<DeviceHandle> dev,
+    Pointer<Void> buf,
+    int len,
+    Pointer<Int> nRead,
+  ) => _readSync(dev, buf, len, nRead);
   late DartReadSync _readSync;
 
   @override
@@ -280,9 +319,13 @@ class TestBindings implements AbstractBindings {
   late DartWaitAsync _waitAsync;
 
   @override
-  int readAsync(Pointer<DeviceHandle> dev, Pointer cb, Pointer<Void> ctx,
-          int bufNum, int bufLen) =>
-      _readAsync(dev, cb, ctx, bufNum, bufLen);
+  int readAsync(
+    Pointer<DeviceHandle> dev,
+    Pointer cb,
+    Pointer<Void> ctx,
+    int bufNum,
+    int bufLen,
+  ) => _readAsync(dev, cb, ctx, bufNum, bufLen);
   late DartReadAsync _readAsync;
 
   @override

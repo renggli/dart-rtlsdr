@@ -3,12 +3,12 @@ import 'dart:typed_data';
 
 extension WindowListExtension<T> on Stream<List<T>> {
   Stream<List<T>> window(int size) => expand((list) {
-        final result = <List<T>>[];
-        for (var i = 0; i < list.length; i += size) {
-          result.add(list.sublist(i, i + size));
-        }
-        return result;
-      });
+    final result = <List<T>>[];
+    for (var i = 0; i < list.length; i += size) {
+      result.add(list.sublist(i, i + size));
+    }
+    return result;
+  });
 }
 
 extension WindowUint8ListExtension<T> on Stream<Uint8List> {
@@ -41,12 +41,14 @@ extension WindowInt32ListExtension<T> on Stream<Int32List> {
       _window<Int32List>(this, size, Int32List.sublistView);
 }
 
-Stream<T> _window<T extends List<int>>(Stream<T> stream, int size,
-        T Function(T list, int start, int stop) sublist) =>
-    stream.expand((data) {
-      final result = <T>[];
-      for (var i = 0; i < data.length; i += size) {
-        result.add(sublist(data, i, i + size));
-      }
-      return result;
-    });
+Stream<T> _window<T extends List<int>>(
+  Stream<T> stream,
+  int size,
+  T Function(T list, int start, int stop) sublist,
+) => stream.expand((data) {
+  final result = <T>[];
+  for (var i = 0; i < data.length; i += size) {
+    result.add(sublist(data, i, i + size));
+  }
+  return result;
+});

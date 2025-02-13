@@ -16,7 +16,9 @@ extension FrequencyExtension on RtlSdr {
     RtlSdrException.checkOpen(this);
     final result = bindings.setCenterFreq(handle, frequency);
     RtlSdrException.checkError(
-        result, 'Failed to set center frequency to ${frequency}Hz');
+      result,
+      'Failed to set center frequency to ${frequency}Hz',
+    );
   }
 
   /// Get actual frequency correction value of the device in parts per million.
@@ -32,6 +34,8 @@ extension FrequencyExtension on RtlSdr {
     RtlSdrException.checkOpen(this);
     final result = bindings.setFreqCorrection(handle, ppm);
     RtlSdrException.checkError(
-        result, 'Failed to set frequency correction to ${ppm}ppm');
+      result,
+      'Failed to set frequency correction to ${ppm}ppm',
+    );
   }
 }

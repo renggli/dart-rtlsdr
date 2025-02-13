@@ -19,7 +19,9 @@ class RtlSdr {
     try {
       final index = bindings.getIndexBySerial(utf8Serial);
       RtlSdrException.checkError(
-          index, 'Unable to find device with serial "$serial"');
+        index,
+        'Unable to find device with serial "$serial"',
+      );
       return RtlSdr(index);
     } finally {
       malloc.free(utf8Serial);
@@ -53,10 +55,16 @@ class RtlSdr {
   String _getManufacturer() {
     final manufacturer = malloc<Uint8>(256).cast<Utf8>();
     try {
-      final result =
-          bindings.getDeviceUsbStrings(index, manufacturer, nullptr, nullptr);
+      final result = bindings.getDeviceUsbStrings(
+        index,
+        manufacturer,
+        nullptr,
+        nullptr,
+      );
       RtlSdrException.checkError(
-          result, 'Unable to get manufacturer of device $index');
+        result,
+        'Unable to get manufacturer of device $index',
+      );
       return manufacturer.toDartString();
     } finally {
       malloc.free(manufacturer);
@@ -69,10 +77,16 @@ class RtlSdr {
   String _getProduct() {
     final product = malloc<Uint8>(256).cast<Utf8>();
     try {
-      final result =
-          bindings.getDeviceUsbStrings(index, nullptr, product, nullptr);
+      final result = bindings.getDeviceUsbStrings(
+        index,
+        nullptr,
+        product,
+        nullptr,
+      );
       RtlSdrException.checkError(
-          result, 'Unable to get product of device $index');
+        result,
+        'Unable to get product of device $index',
+      );
       return product.toDartString();
     } finally {
       malloc.free(product);
@@ -85,10 +99,16 @@ class RtlSdr {
   String _getSerial() {
     final serial = malloc<Uint8>(256).cast<Utf8>();
     try {
-      final result =
-          bindings.getDeviceUsbStrings(index, nullptr, nullptr, serial);
+      final result = bindings.getDeviceUsbStrings(
+        index,
+        nullptr,
+        nullptr,
+        serial,
+      );
       RtlSdrException.checkError(
-          result, 'Unable to get serial of device $index');
+        result,
+        'Unable to get serial of device $index',
+      );
       return serial.toDartString();
     } finally {
       malloc.free(serial);

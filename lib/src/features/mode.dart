@@ -8,7 +8,9 @@ extension ModeExtension on RtlSdr {
     RtlSdrException.checkOpen(this);
     final result = bindings.setTestmode(handle, enable ? 1 : 0);
     RtlSdrException.checkError(
-        result, 'Failed to ${enable ? 'enable' : 'disable'} test mode');
+      result,
+      'Failed to ${enable ? 'enable' : 'disable'} test mode',
+    );
   }
 
   /// Enable or disable the internal digital AGC of the RTL2832.
@@ -16,7 +18,9 @@ extension ModeExtension on RtlSdr {
     RtlSdrException.checkOpen(this);
     final result = bindings.setAgcMode(handle, enable ? 1 : 0);
     RtlSdrException.checkError(
-        result, 'Failed to ${enable ? 'enable' : 'disable'} AGC mode');
+      result,
+      'Failed to ${enable ? 'enable' : 'disable'} AGC mode',
+    );
   }
 
   /// Get enabled state of the offset tuning.
@@ -33,6 +37,8 @@ extension ModeExtension on RtlSdr {
     RtlSdrException.checkOpen(this);
     final result = bindings.setOffsetTuning(handle, enable ? 1 : 0);
     RtlSdrException.checkError(
-        result, 'Failed to ${enable ? 'enable' : 'disable'} offset tuning');
+      result,
+      'Failed to ${enable ? 'enable' : 'disable'} offset tuning',
+    );
   }
 }

@@ -5,13 +5,13 @@ extension PhaseExtension on Stream<Uint8List> {
   /// In-place converts a stream of IQ data into a stream of phase data, scaled
   /// to pi = 1 << 14.
   Stream<Int16List> toPhase() => map((input) {
-        final phase = _phase;
-        final result = Int16List.sublistView(input, 0, input.length);
-        for (var i = 0, j = 0; i < result.length; i++, j += 2) {
-          result[i] = phase[(input[j] << 8) | input[j + 1]];
-        }
-        return result;
-      });
+    final phase = _phase;
+    final result = Int16List.sublistView(input, 0, input.length);
+    for (var i = 0, j = 0; i < result.length; i++, j += 2) {
+      result[i] = phase[(input[j] << 8) | input[j + 1]];
+    }
+    return result;
+  });
 }
 
 final _phase = _precomputePhase();

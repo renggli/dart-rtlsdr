@@ -83,7 +83,8 @@ class Method {
   String get nativeArguments =>
       arguments.map((arg) => '${arg.type.nativeType} ${arg.name}').join(', ');
 
-  String lookupFunction(String library) => '$library.lookupFunction'
+  String lookupFunction(String library) =>
+      '$library.lookupFunction'
       '<$nativeTypeName, $dartTypeName>(\'$nativeName\')';
 
   String get argumentNames => arguments.map((arg) => arg.name).join(', ');
@@ -93,13 +94,14 @@ class Parameter {
   Parameter(this.declaration) {
     final match = _paramRegExp.matchAsPrefix(declaration)!;
     type = Type(match.group(1)!.trim());
-    name = match
-        .group(2)!
-        .trim()
-        .split('_')
-        .map((value) => value.toUpperCaseFirstCharacter())
-        .join()
-        .toLowerCaseFirstCharacter();
+    name =
+        match
+            .group(2)!
+            .trim()
+            .split('_')
+            .map((value) => value.toUpperCaseFirstCharacter())
+            .join()
+            .toLowerCaseFirstCharacter();
   }
 
   final String declaration;
@@ -109,7 +111,7 @@ class Parameter {
 
 class Type {
   Type(String declaration)
-      : declaration = const CharMatcher.whitespace().removeFrom(declaration);
+    : declaration = const CharMatcher.whitespace().removeFrom(declaration);
 
   final String declaration;
   late String nativeType = _getNativeType(declaration);
@@ -203,10 +205,14 @@ Future<void> generateMethodTypes(List<Method> methods) async {
   out.writeln();
   for (final method in methods) {
     out.writeln('// ${method.declaration}');
-    out.writeln('typedef ${method.nativeTypeName} = '
-        '${method.result.nativeType} Function(${method.nativeArguments});');
-    out.writeln('typedef ${method.dartTypeName} = '
-        '${method.result.dartType} Function(${method.dartArguments});');
+    out.writeln(
+      'typedef ${method.nativeTypeName} = '
+      '${method.result.nativeType} Function(${method.nativeArguments});',
+    );
+    out.writeln(
+      'typedef ${method.dartTypeName} = '
+      '${method.result.dartType} Function(${method.dartArguments});',
+    );
     out.writeln();
   }
   await out.close();
@@ -255,8 +261,10 @@ Future<void> generateLazyBindings(List<Method> methods) async {
   for (final method in methods) {
     out.writeln('@override');
     out.writeln('${method.dartMethodDeclaration} =>');
-    out.writeln('(_${method.dartMethodName} ??= '
-        '${method.lookupFunction('_library')})(${method.argumentNames});');
+    out.writeln(
+      '(_${method.dartMethodName} ??= '
+      '${method.lookupFunction('_library')})(${method.argumentNames});',
+    );
     out.writeln('${method.dartTypeName}? _${method.dartMethodName};');
     out.writeln();
   }
@@ -280,10 +288,15 @@ Future<void> generateEagerBindings(List<Method> methods) async {
   out.writeln('/// External bindings that get resolved initially.');
   out.writeln('class EagerBindings implements AbstractBindings {');
   out.writeln('EagerBindings(DynamicLibrary library) : ');
-  out.writeln(methods
-      .map((method) => '_${method.dartMethodName} = '
-          '${method.lookupFunction('library')}')
-      .join(',\n'));
+  out.writeln(
+    methods
+        .map(
+          (method) =>
+              '_${method.dartMethodName} = '
+              '${method.lookupFunction('library')}',
+        )
+        .join(',\n'),
+  );
   out.writeln(';');
   out.writeln();
   for (final method in methods) {
@@ -318,8 +331,10 @@ Future<void> generateTestBindings(List<Method> methods) async {
   }
   out.writeln('}) {');
   for (final method in methods) {
-    out.writeln('_${method.dartMethodName} = ${method.dartMethodName} '
-        '?? ((${method.argumentNames}) => throw UnimplementedError(\'${method.dartMethodName}\'));');
+    out.writeln(
+      '_${method.dartMethodName} = ${method.dartMethodName} '
+      '?? ((${method.argumentNames}) => throw UnimplementedError(\'${method.dartMethodName}\'));',
+    );
   }
   out.writeln('}');
   out.writeln();
@@ -336,14 +351,20 @@ Future<void> generateTestBindings(List<Method> methods) async {
 }
 
 Future<void> main() async {
-  final methods = declarations.map((declaration) {
-    try {
-      return Method(declaration);
-      // ignore: avoid_catching_errors
-    } on Error catch (error) {
-      throw ArgumentError.value(declaration, 'declaration', error.toString());
-    }
-  }).toList(growable: false);
+  final methods = declarations
+      .map((declaration) {
+        try {
+          return Method(declaration);
+          // ignore: avoid_catching_errors
+        } on Error catch (error) {
+          throw ArgumentError.value(
+            declaration,
+            'declaration',
+            error.toString(),
+          );
+        }
+      })
+      .toList(growable: false);
   await generateMethodTypes(methods);
   await generateAbstractBindings(methods);
   await generateLazyBindings(methods);
