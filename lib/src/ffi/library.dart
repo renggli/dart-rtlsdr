@@ -47,8 +47,9 @@ Set<String> _defaultLibraryNames() {
 DynamicLibrary loadLibrary() {
   for (final path in libraryPaths) {
     for (final name in libraryNames) {
-      final fullName =
-          path.isEmpty ? name : '$path${Platform.pathSeparator}$name';
+      final fullName = path.isEmpty
+          ? name
+          : '$path${Platform.pathSeparator}$name';
       try {
         return DynamicLibrary.open(fullName);
       } on ArgumentError {

@@ -15,11 +15,10 @@ class LazyBindings implements AbstractBindings {
   final DynamicLibrary _library;
 
   @override
-  int getDeviceCount() =>
-      (_getDeviceCount ??= _library
-          .lookupFunction<NativeGetDeviceCount, DartGetDeviceCount>(
-            'rtlsdr_get_device_count',
-          ))();
+  int getDeviceCount() => (_getDeviceCount ??= _library
+      .lookupFunction<NativeGetDeviceCount, DartGetDeviceCount>(
+        'rtlsdr_get_device_count',
+      ))();
   DartGetDeviceCount? _getDeviceCount;
 
   @override
@@ -108,12 +107,9 @@ class LazyBindings implements AbstractBindings {
     int offset,
     int len,
   ) => (_readEeprom ??= _library
-      .lookupFunction<NativeReadEeprom, DartReadEeprom>('rtlsdr_read_eeprom'))(
-    dev,
-    data,
-    offset,
-    len,
-  );
+      .lookupFunction<NativeReadEeprom, DartReadEeprom>(
+        'rtlsdr_read_eeprom',
+      ))(dev, data, offset, len);
   DartReadEeprom? _readEeprom;
 
   @override
@@ -221,10 +217,9 @@ class LazyBindings implements AbstractBindings {
 
   @override
   int setAgcMode(Pointer<DeviceHandle> dev, int on) => (_setAgcMode ??= _library
-      .lookupFunction<NativeSetAgcMode, DartSetAgcMode>('rtlsdr_set_agc_mode'))(
-    dev,
-    on,
-  );
+      .lookupFunction<NativeSetAgcMode, DartSetAgcMode>(
+        'rtlsdr_set_agc_mode',
+      ))(dev, on);
   DartSetAgcMode? _setAgcMode;
 
   @override
@@ -303,9 +298,8 @@ class LazyBindings implements AbstractBindings {
 
   @override
   int setBiasTee(Pointer<DeviceHandle> dev, int on) => (_setBiasTee ??= _library
-      .lookupFunction<NativeSetBiasTee, DartSetBiasTee>('rtlsdr_set_bias_tee'))(
-    dev,
-    on,
-  );
+      .lookupFunction<NativeSetBiasTee, DartSetBiasTee>(
+        'rtlsdr_set_bias_tee',
+      ))(dev, on);
   DartSetBiasTee? _setBiasTee;
 }

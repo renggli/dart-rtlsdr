@@ -94,14 +94,13 @@ class Parameter {
   Parameter(this.declaration) {
     final match = _paramRegExp.matchAsPrefix(declaration)!;
     type = Type(match.group(1)!.trim());
-    name =
-        match
-            .group(2)!
-            .trim()
-            .split('_')
-            .map((value) => value.toUpperCaseFirstCharacter())
-            .join()
-            .toLowerCaseFirstCharacter();
+    name = match
+        .group(2)!
+        .trim()
+        .split('_')
+        .map((value) => value.toUpperCaseFirstCharacter())
+        .join()
+        .toLowerCaseFirstCharacter();
   }
 
   final String declaration;

@@ -151,8 +151,10 @@ void main() {
     test('toDiff', () async {
       final input1 = Int16List.fromList([-81, 42, -21, 124]);
       final input2 = Int16List.fromList([66, 102, -88, -93]);
-      final output =
-          await Stream.fromIterable([input1, input2]).toDiff().toList();
+      final output = await Stream.fromIterable([
+        input1,
+        input2,
+      ]).toDiff().toList();
       expect(output, [
         [-81, 123, -63, 145],
         [-58, 36, -190, -5],
