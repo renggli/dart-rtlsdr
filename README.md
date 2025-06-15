@@ -5,8 +5,7 @@
 [![GitHub Stars](https://img.shields.io/github/stars/renggli/dart-rtlsdr.svg)](https://github.com/renggli/dart-rtlsdr/stargazers)
 [![GitHub License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://raw.githubusercontent.com/renggli/dart-rtlsdr/master/LICENSE)
 
-Dart bindings for Software Defined Radio
-========================================
+# Dart bindings for Software Defined Radio
 
 This library provides a simple Dart interface to devices supported by the RTL-SDR project. It wraps much of the functionality provided by the [librtlsdr library](https://github.com/librtlsdr/librtlsdr) in a convenient and typesafe way.
 
@@ -14,11 +13,9 @@ This library is open source, stable and well tested. Development happens on [Git
 
 The package is hosted on [dart packages](https://pub.dev/packages/rtlsdr). Up-to-date [class documentation](https://pub.dev/documentation/rtlsdr/) is created with every release.
 
+## Installation
 
-Installation
-------------
-
-First, make sure you have the most recent version of *librtlsdr* installed on your system, either through the [developer](https://github.com/librtlsdr/librtlsdr/releases) or your favorite package manager. Make sure the library is accessible to Dart.
+First, make sure you have the most recent version of _librtlsdr_ installed on your system, either through the [developer](https://github.com/librtlsdr/librtlsdr/releases) or your favorite package manager. Make sure the library is accessible to Dart.
 
 Then follow the installation instructions on [dart packages](https://pub.dev/packages/rtlsdr/install).
 
@@ -26,9 +23,7 @@ Then follow the installation instructions on [dart packages](https://pub.dev/pac
 import 'package:rtlsdr/rtlsdr.dart';
 ```
 
-
-Tutorial
---------
+## Tutorial
 
 ```dart
 import 'package:rtlsdr/rtlsdr.dart';
