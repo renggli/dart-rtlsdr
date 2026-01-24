@@ -2,8 +2,16 @@ import 'dart:math';
 import 'dart:typed_data';
 
 extension PhaseExtension on Stream<Uint8List> {
-  /// In-place converts a stream of IQ data into a stream of phase data, scaled
-  /// to pi = 1 << 14.
+  /// In-place converts a stream of IQ data into a stream of phase data.
+  ///
+  /// The phase data is scaled to pi = 1 << 14.
+  ///
+  /// Example:
+  /// ```dart
+  /// device.stream
+  ///   .toPhase()
+  ///   .listen((phases) => print(phases));
+  /// ```
   Stream<Int16List> toPhase() => map((input) {
     final phase = _phase;
     final result = Int16List.sublistView(input, 0, input.length);

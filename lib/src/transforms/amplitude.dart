@@ -2,6 +2,16 @@ import 'dart:typed_data';
 
 extension AmplitudeExtension on Stream<Uint8List> {
   /// In-place converts a stream of IQ data to a stream of peak amplitude data.
+  ///
+  /// The input is a [Stream<Uint8List>] of interleaved I- and Q-samples.
+  /// The output is a [Stream<Uint16List>] of peak amplitudes.
+  ///
+  /// Example:
+  /// ```dart
+  /// device.stream
+  ///   .toAmplitude()
+  ///   .listen((amplitudes) => print(amplitudes));
+  /// ```
   Stream<Uint16List> toAmplitude() => map((input) {
     final amplitude = _amplitude;
     final result = Uint16List.sublistView(input, 0, input.length);

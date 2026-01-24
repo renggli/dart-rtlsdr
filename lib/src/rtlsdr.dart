@@ -12,8 +12,29 @@ import 'utils/exception.dart';
 import 'utils/isolate.dart';
 
 /// The RTL-SDR device.
+///
+/// This is the main entry point for interacting with an RTL-SDR device.
+///
+/// Example:
+/// ```dart
+/// // Open the first available device.
+/// final device = RtlSdr();
+/// try {
+///   print('Device name: ${device.name}');
+///   print('Tuner type: ${device.tunerType}');
+/// } finally {
+///   device.close();
+/// }
+/// ```
 class RtlSdr {
   /// Returns the [RtlSdr] device with the given [serial] number.
+  ///
+  /// Throws an [RtlSdrException] if no device with the given [serial] is found.
+  ///
+  /// Example:
+  /// ```dart
+  /// final device = RtlSdr.fromSerial('00000001');
+  /// ```
   factory RtlSdr.fromSerial(String serial) {
     final utf8Serial = serial.toNativeUtf8(allocator: malloc);
     try {
@@ -28,10 +49,19 @@ class RtlSdr {
     }
   }
 
-  /// Constructor for the device with the given [index].
+  /// Creates a new [RtlSdr] instance for the device with the given [index].
+  ///
+  /// The [index] defaults to 0, which corresponds to the first available device.
   RtlSdr([this.index = 0]);
 
-  /// Returns an iterable of all [RtlSdr] devices accessible on this machine.
+  /// Returns an iterable of all [RtlSdr] devices connected to this machine.
+  ///
+  /// Example:
+  /// ```dart
+  /// for (final device in RtlSdr.devices) {
+  ///   print('Found device: ${device.name}');
+  /// }
+  /// ```
   static Iterable<RtlSdr> get devices {
     final result = bindings.getDeviceCount();
     RtlSdrException.checkError(result, 'Unable to read number of devices');
@@ -115,16 +145,18 @@ class RtlSdr {
     }
   }
 
-  /// Internal device handle, or null.
+  /// The internal device handle, or `null` if the device is closed.
   Pointer<DeviceHandle>? _handle;
 
-  /// Tests if this device is open.
+  /// Returns `true` if this device is open.
   bool get isOpen => _handle != null;
 
-  /// Tests if this device is closed.
+  /// Returns `true` if this device is closed.
   bool get isClosed => _handle == null;
 
-  /// Device handle, attempts to open the device if no handle.
+  /// The device handle.
+  ///
+  /// Attempts to open the device if it is currently closed.
   Pointer<DeviceHandle> get handle {
     if (isClosed) {
       open();
@@ -133,6 +165,8 @@ class RtlSdr {
   }
 
   /// Opens the device for interaction, if it is not already open.
+  ///
+  /// Throws an [RtlSdrException] if the device cannot be opened.
   void open() {
     if (isClosed) {
       if (!isValid) {
@@ -150,6 +184,8 @@ class RtlSdr {
   }
 
   /// Closes the device, if it is not already closed.
+  ///
+  /// This releases all resources associated with the device.
   void close() {
     if (isOpen) {
       _closeDataStream();
@@ -172,6 +208,17 @@ class RtlSdr {
   Isolate? _isolate;
 
   /// Returns a broadcast stream of the device data.
+  ///
+  /// The stream works with a generator that pulls data from the device and
+  /// pushes it to the stream. The generator is active only when there are
+  /// listeners on the stream.
+  ///
+  /// Example:
+  /// ```dart
+  /// device.stream.listen((data) {
+  ///   print('Received ${data.length} bytes');
+  /// });
+  /// ```
   Stream<Uint8List> get stream {
     RtlSdrException.checkOpen(this);
     _streamController ??= StreamController<Uint8List>.broadcast(

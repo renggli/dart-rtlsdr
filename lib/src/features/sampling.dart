@@ -4,6 +4,11 @@ import '../utils/exception.dart';
 
 extension SamplingExtension on RtlSdr {
   /// Gets the actual sample rate in Hz the device is configured to.
+  ///
+  /// Example:
+  /// ```dart
+  /// print('Sample rate: ${device.sampleRate}Hz');
+  /// ```
   int get sampleRate {
     RtlSdrException.checkOpen(this);
     final result = bindings.getSampleRate(handle);
@@ -12,6 +17,11 @@ extension SamplingExtension on RtlSdr {
   }
 
   /// Sets the actual sample rate in Hz the device is configured to.
+  ///
+  /// Example:
+  /// ```dart
+  /// device.sampleRate = 2048000;
+  /// ```
   set sampleRate(int rate) {
     RtlSdrException.checkOpen(this);
     final result = bindings.setSampleRate(handle, rate);
@@ -22,6 +32,11 @@ extension SamplingExtension on RtlSdr {
   }
 
   /// Gets the actual sample rate in Hz the device is configured to.
+  ///
+  /// Example:
+  /// ```dart
+  /// print('Direct sampling mode: ${device.directSamplingMode}');
+  /// ```
   DirectSamplingMode get directSamplingMode {
     RtlSdrException.checkOpen(this);
     final result = bindings.getDirectSampling(handle);
@@ -31,6 +46,11 @@ extension SamplingExtension on RtlSdr {
   }
 
   /// Sets the direct sampling mode.
+  ///
+  /// Example:
+  /// ```dart
+  /// device.directSamplingMode = DirectSamplingMode.disabled;
+  /// ```
   set directSamplingMode(DirectSamplingMode mode) {
     RtlSdrException.checkOpen(this);
     final result = bindings.setDirectSampling(

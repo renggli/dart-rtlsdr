@@ -3,6 +3,11 @@ import 'dart:convert';
 extension DiffConverterExtension<T extends num, L extends List<T>>
     on Stream<L> {
   /// Returns a stream with the difference between consecutive elements.
+  ///
+  /// Example:
+  /// ```dart
+  /// stream.toDiff().listen((diff) => print(diff));
+  /// ```
   Stream<L> toDiff() => transform(DiffConverter<T, L>());
 }
 

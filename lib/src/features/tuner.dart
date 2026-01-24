@@ -8,6 +8,11 @@ import '../utils/exception.dart';
 
 extension TunerExtension on RtlSdr {
   /// Get the tuner type.
+  ///
+  /// Example:
+  /// ```dart
+  /// print('Tuner type: ${device.tunerType}');
+  /// ```
   TunerType get tunerType {
     RtlSdrException.checkOpen(this);
     final result = bindings.getTunerType(handle);
@@ -17,6 +22,11 @@ extension TunerExtension on RtlSdr {
   }
 
   /// Set the gain mode for the device.
+  ///
+  /// Example:
+  /// ```dart
+  /// device.tunerGainMode = TunerGainMode.manual;
+  /// ```
   set tunerGainMode(TunerGainMode mode) {
     RtlSdrException.checkOpen(this);
     final result = bindings.setTunerGainMode(
@@ -30,6 +40,11 @@ extension TunerExtension on RtlSdr {
   }
 
   /// Get a list of all gains supported by the tuner in dB.
+  ///
+  /// Example:
+  /// ```dart
+  /// print('Supported gains: ${device.tunerGains}');
+  /// ```
   List<double> get tunerGains {
     RtlSdrException.checkOpen(this);
     final count = bindings.getTunerGains(handle, nullptr);
@@ -51,6 +66,11 @@ extension TunerExtension on RtlSdr {
   }
 
   /// Get actual gain the device is configured to in dB.
+  ///
+  /// Example:
+  /// ```dart
+  /// print('Current gain: ${device.tunerGain}dB');
+  /// ```
   double get tunerGain {
     RtlSdrException.checkOpen(this);
     final result = bindings.getTunerGain(handle);
@@ -59,7 +79,13 @@ extension TunerExtension on RtlSdr {
   }
 
   /// Set the gain for the device in dB.
+  ///
   /// Manual gain mode must be enabled for this to work.
+  ///
+  /// Example:
+  /// ```dart
+  /// device.tunerGain = 10.0;
+  /// ```
   set tunerGain(double gain) {
     RtlSdrException.checkOpen(this);
     final result = bindings.setTunerGain(handle, (10.0 * gain).round());
@@ -67,6 +93,11 @@ extension TunerExtension on RtlSdr {
   }
 
   /// Set the bandwidth for the device in Hz, 0 means automatic selection.
+  ///
+  /// Example:
+  /// ```dart
+  /// device.tunerBandwidth = 0;
+  /// ```
   set tunerBandwidth(int bandwidth) {
     RtlSdrException.checkOpen(this);
     final result = bindings.setTunerBandwidth(handle, bandwidth);
@@ -80,6 +111,11 @@ extension TunerExtension on RtlSdr {
   ///
   /// - [stage] intermediate frequency gain stage number (1 to 6 for E4000)
   /// - [gain] in dB, -30 means -3.0 dB.
+  ///
+  /// Example:
+  /// ```dart
+  /// device.tunerIntermediateFrequencyGain(1, -3.0);
+  /// ```
   void tunerIntermediateFrequencyGain(int stage, double gain) {
     RtlSdrException.checkOpen(this);
     final result = bindings.setTunerIfGain(
