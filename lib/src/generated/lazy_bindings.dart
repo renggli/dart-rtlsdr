@@ -10,7 +10,7 @@ import 'method_types.dart';
 
 /// External bindings that get resolved with the first call.
 class LazyBindings implements AbstractBindings {
-  LazyBindings(this._library);
+  new(this._library);
 
   final DynamicLibrary _library;
 

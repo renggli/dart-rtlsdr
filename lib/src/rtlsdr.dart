@@ -35,7 +35,7 @@ class RtlSdr {
   /// ```dart
   /// final device = RtlSdr.fromSerial('00000001');
   /// ```
-  factory RtlSdr.fromSerial(String serial) {
+  factory fromSerial(String serial) {
     final utf8Serial = serial.toNativeUtf8(allocator: malloc);
     try {
       final index = bindings.getIndexBySerial(utf8Serial);
@@ -52,7 +52,7 @@ class RtlSdr {
   /// Creates a new [RtlSdr] instance for the device with the given [index].
   ///
   /// The [index] defaults to 0, which corresponds to the first available device.
-  RtlSdr([this.index = 0]);
+  new([this.index = 0]);
 
   /// Returns an iterable of all [RtlSdr] devices connected to this machine.
   ///

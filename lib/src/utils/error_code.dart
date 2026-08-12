@@ -25,7 +25,7 @@ enum ErrorCode {
   ),
   other(-99, 'LIBUSB_ERROR_OTHER', 'Other error');
 
-  const ErrorCode(this.code, this.id, this.message);
+  new(this.code, this.id, this.message);
 
   final int code;
   final String id;

@@ -10,7 +10,7 @@ import 'method_types.dart';
 
 /// External bindings that get resolved initially.
 class EagerBindings implements AbstractBindings {
-  EagerBindings(DynamicLibrary library)
+  new(DynamicLibrary library)
     : _getDeviceCount = library
           .lookupFunction<NativeGetDeviceCount, DartGetDeviceCount>(
             'rtlsdr_get_device_count',

@@ -46,7 +46,7 @@ final _methodRegExp = RegExp(r'^(.*\s+)rtlsdr_([^(]+)\((.*)\)$');
 final _paramRegExp = RegExp(r'(.*?)(\w+)$');
 
 class Method {
-  Method(this.declaration) {
+  new(this.declaration) {
     final match = _methodRegExp.matchAsPrefix(declaration)!;
     result = Type(match.group(1)!.trim());
     name = match.group(2)!.trim();
@@ -91,7 +91,7 @@ class Method {
 }
 
 class Parameter {
-  Parameter(this.declaration) {
+  new(this.declaration) {
     final match = _paramRegExp.matchAsPrefix(declaration)!;
     type = Type(match.group(1)!.trim());
     name = match
@@ -109,7 +109,7 @@ class Parameter {
 }
 
 class Type {
-  Type(String declaration)
+  new(String declaration)
     : declaration = const CharMatcher.whitespace().removeFrom(declaration);
 
   final String declaration;

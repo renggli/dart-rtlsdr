@@ -6,7 +6,7 @@ import '../ffi/types.dart';
 import 'exception.dart';
 
 class ReadIsolate {
-  ReadIsolate(this.address, this.bufferCount, this.bufferSize, this.sendPort);
+  new(this.address, this.bufferCount, this.bufferSize, this.sendPort);
 
   final int address;
   final int bufferCount;

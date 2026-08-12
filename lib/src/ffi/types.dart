@@ -1,8 +1,11 @@
 import 'dart:ffi';
 
 // Handle of the RTL device.
-final class DeviceHandle extends Opaque {}
+final class DeviceHandle extends Opaque;
 
 // Callback for async processing.
-typedef ReadAsyncCallback =
-    Void Function(Pointer<Uint8> buffer, Uint32 length, Pointer<Void> context);
+typedef ReadAsyncCallback = Void Function(
+  Pointer<Uint8> buffer,
+  Uint32 length,
+  Pointer<Void> context,
+);

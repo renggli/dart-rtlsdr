@@ -2,7 +2,7 @@ import '../rtlsdr.dart';
 import 'error_code.dart';
 
 class RtlSdrException implements Exception {
-  RtlSdrException(this.message, [this.errorCode]);
+  new(this.message, [this.errorCode]);
 
   final String message;
   final ErrorCode? errorCode;

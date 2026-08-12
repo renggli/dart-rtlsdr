@@ -10,7 +10,7 @@ import 'method_types.dart';
 
 /// External bindings for testing.
 class TestBindings implements AbstractBindings {
-  TestBindings({
+  new({
     DartGetDeviceCount? getDeviceCount,
     DartGetDeviceName? getDeviceName,
     DartGetDeviceUsbStrings? getDeviceUsbStrings,
