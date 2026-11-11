@@ -8,7 +8,7 @@ topics:
   - ffi
 
 environment:
-  sdk: ^3.13.0
+  sdk: ^3.14.0
 dependencies:
   characters: ^1.4.1
   ffi: ^2.2.0
